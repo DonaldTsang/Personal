@@ -4,8 +4,12 @@ import hashlib
 
 digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' + \
 	'abcdefghijklmnopqrstuvwxyz.-:+=^!/*?()[]@%$#'
+	# This is the same character set as Z85 excluding &<>
+	# It does not includes _,;"'|\~`
 
 """
+This is a binary-to-text encoding tool with a variety of options
+
 Bytes (or string)
 	v unicode2num --+
 Intger              +--encode
@@ -108,6 +112,8 @@ def de_block(string, exp, shift):
 ################################################################################
 
 def unicode2num(string, exp):
+	if isinstance(string, str):
+		string = string.encode('utf-8')
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp > 0, "Error: exponent not positive"
@@ -144,6 +150,8 @@ def decode(string, exp, shift):
 ################################################################################
 
 def message_encode(string, exp, shift):
+	if isinstance(string, str):
+		string = string.encode('utf-8')
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp > 0, "Error: exponent not positive"
@@ -168,8 +176,9 @@ def message_decode(string, exp, shift):
 	return result
 
 def pass_check(password):
+	if isinstance(password, str):
+		password = password.encode('utf-8')
 	assert isinstance(password, bytes), "Error: password not bytes"
-	password = password.encode('utf-8')
 	sha_256 = hashlib.sha256(password).digest()
 	sha_384 = hashlib.sha384(password).digest()
 	sha_512 = hashlib.sha512(password).digest()
