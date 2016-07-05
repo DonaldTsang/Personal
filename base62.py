@@ -35,8 +35,8 @@ def check_block(exp):
 		return False
 
 def en_block(num, exp):
-	assert isinstance(num, int)
 	assert isinstance(num, int), "Error: message not integer"
+	assert isinstance(exp, int), "Error: exponent not integer"
 	assert 0 <= num < (2 ** exp), "Error: number out of range"
 	assert check_block(exp) != False, "Error: bad exponent"
 	base, limit = check_block(exp)

@@ -81,6 +81,7 @@ def shifting(exp, shift):
 
 def en_block(num, exp, shift):
 	assert isinstance(num, int), "Error: message not integer"
+	assert isinstance(exp, int), "Error: exponent not integer"
 	assert 0 <= num < (2 ** exp), "Error: number out of range"
 	base, limit = shifting(exp, shift)
 	if num == 0:
