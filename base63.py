@@ -6,6 +6,19 @@ digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_'
 
 # base=63, exp=448 (56 bytes), limit=75
 
+"""
+Bytes (or string)
+	v unicode2num --+
+Intger              +--encode
+	v en_block -----+
+Encoded string
+	v de_block -----+
+Integer             +--decode
+	v num2unicode --+
+Bytes string
+
+"""
+
 def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
@@ -77,7 +90,6 @@ def decode448(string):
 
 def message_encode448(string):
 	assert isinstance(string, bytes), "Error: message not bytes"
-	assert exp % 8 == 0, "Error: exponent not multiple of 8"
 	string = chop(string, 56)
 	result = ''
 	for steak in string:
@@ -85,10 +97,18 @@ def message_encode448(string):
 	return result
 
 def message_decode(string):
-	assert isinstance(string, str), "Error: message not bytes"
-	assert exp % 8 == 0, "Error: exponent not multiple of 8"
+	assert isinstance(string, str), "Error: message not string"
 	string = chop(string, 75)
 	result = b''
 	for steak in string:
 		result += decode448(steak)
 	return result
+
+def divmod62(x):
+	a, q, r = 0, x, 0
+	while q >= 62:
+		r = q & 63 # r = q % 64
+		q >>= 6 # q = q
+		a += q # a = a + q
+		q += r # q = q + r
+	return a, q # div and mod

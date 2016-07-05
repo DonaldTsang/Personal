@@ -4,6 +4,19 @@ import re
 
 digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
+"""
+Bytes (or string)
+	v unicode2num --+
+Intger              +--encode
+	v en_block -----+
+Encoded string
+	v de_block -----+
+Integer             +--decode
+	v num2unicode --+
+Bytes string
+
+"""
+
 def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
@@ -90,6 +103,7 @@ def decode(string, exp):
 def message_encode(string, exp):
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
+	assert exp > 0, "Error: exponent not positive"
 	assert exp % 8 == 0, "Error: exponent not multiple of 8"
 	base, limit = check_block(exp)
 	string = chop(string, exp // 8)
@@ -99,8 +113,9 @@ def message_encode(string, exp):
 	return result
 
 def message_decode(string, exp, shift):
-	assert isinstance(string, str), "Error: message not bytes"
+	assert isinstance(string, str), "Error: message not string"
 	assert isinstance(exp, int), "Error: exponent not integer"
+	assert exp > 0, "Error: exponent not positive"
 	assert exp % 8 == 0, "Error: exponent not multiple of 8"
 	base, limit = check_block(exp)
 	string = chop(string, limit)

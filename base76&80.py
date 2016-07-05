@@ -5,6 +5,19 @@ import hashlib
 digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' + \
 	'abcdefghijklmnopqrstuvwxyz.-:+=^!/*?()[]@%$#'
 
+"""
+Bytes (or string)
+	v unicode2num --+
+Intger              +--encode
+	v en_block -----+
+Encoded string
+	v de_block -----+
+Integer             +--decode
+	v num2unicode --+
+Bytes string
+
+"""
+
 def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
@@ -132,6 +145,7 @@ def decode(string, exp, shift):
 def message_encode(string, exp, shift):
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
+	assert exp > 0, "Error: exponent not positive"
 	assert exp % 8 == 0, "Error: exponent not multiple of 8"
 	base, limit = shifting(exp, shift)
 	string = chop(string, exp // 8)
@@ -141,8 +155,9 @@ def message_encode(string, exp, shift):
 	return result
 
 def message_decode(string, exp, shift):
-	assert isinstance(string, str), "Error: message not bytes"
+	assert isinstance(string, str), "Error: message not string"
 	assert isinstance(exp, int), "Error: exponent not integer"
+	assert exp > 0, "Error: exponent not positive"
 	assert exp % 8 == 0, "Error: exponent not multiple of 8"
 	base, limit = shifting(exp, shift)
 	string = chop(string, limit)
@@ -152,6 +167,7 @@ def message_decode(string, exp, shift):
 	return result
 
 def pass_check(password):
+	assert isinstance(password, bytes), "Error: password not bytes"
 	password = password.encode('utf-8')
 	sha_256 = hashlib.sha256(password).digest()
 	sha_384 = hashlib.sha384(password).digest()
