@@ -104,9 +104,9 @@ def message_decode(string):
 		result += decode448(steak)
 	return result
 
-def divmod62(x):
+def divmod63(x):
 	a, q, r = 0, x, 0
-	while q >= 62:
+	while q >= 63:
 		r = q & 63 # r = q % 64
 		q >>= 6 # q = q
 		a += q # a = a + q
