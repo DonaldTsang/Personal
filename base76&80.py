@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import re
 import hashlib
 
 digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' + \
@@ -99,8 +100,9 @@ def en_block(num, exp, shift):
 def de_block(string, exp, shift):
 	assert isinstance(string, str), "Error: message not string"
 	base, limit = shifting(exp, shift)
-	assert len(string) <= limit, "Error: too long"
-	# assert True == bool(re.fullmatch('[0-9A-Za-z]{1,%d}' % limit, string))
+	assert len(string) <= limit, "Error: string too long"
+	regex = re.fullmatch('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}' % limit, string)
+	assert bool(regex) == True, "Error: unexpected character(s)"
 	string = string[::-1].lstrip("0")
 	num = 0
 	for char in string:
