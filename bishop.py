@@ -298,20 +298,19 @@ def drunken_bishop_unused(passwd):
 
 from random import randint, shuffle
 
-def password_gen(total, upcase, lowcase, numbers, others = 0, characters = ''):
+def password_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	assert isinstance(total, int)
 	assert isinstance(upcase, int)
 	assert isinstance(lowcase, int)
 	assert isinstance(numbers, int)
 	assert isinstance(others, int)
-	assert isinstance(characters, str)
+	assert isinstance(chars, str)
 	assert total >= ( upcase + lowcase + numbers + others )
 	up_char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 	low_char = 'abcdefghijklmnopqrstuvwxyz'
 	num_char = '0123456789'
-	characters = '+-_=.:/' if characters == '' else characters
-	characters = characters
-	royale = up_char + low_char + num_char + characters
+	chars = '+-_=.:/' if chars == '' else chars
+	royale = up_char + low_char + num_char + chars
 	result = ''
 	for i in range(upcase):
 		result += up_char[randint(0, 25)]
