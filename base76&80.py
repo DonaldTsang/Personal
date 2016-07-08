@@ -33,8 +33,7 @@ def check_block_76(exp): # for 160/192/224/256-bits
 	assert 4 < exp <= 8, "Error: exponent out of range"
 	limit = exp * 5 + 1
 	base = exp + 68
-	if base == 73:
-		base = 72
+	base -= 1 if base == 73 else 0
 	return base, limit
 
 def check_block_80(exp): # for 256/320/384/448/512-bits
@@ -44,10 +43,8 @@ def check_block_80(exp): # for 256/320/384/448/512-bits
 	assert 4 <= exp <= 8, "Error: exponent out of range"
 	limit = exp * 10 + 1
 	base = exp + 73
-	if base == 77:
-		base = 76
-	elif base == 81:
-		base = 80
+	base -= 1 if base == 77 else 0
+	base -= 1 if base == 81 else 0
 	return base, limit
 
 def check_block_72(exp): # for 448/512-bits
@@ -67,8 +64,7 @@ def check_block_90(exp): # for 256/320/384/448/512-bits
 	assert 4 <= exp <= 8, "Error: exponent out of range"
 	limit = exp * 10 - 1
 	base = 98 - exp
-	if base == 94:
-		base = 95
+	base += 1 if base == 94 else 0 
 	return base, limit
 """
 
