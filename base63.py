@@ -7,14 +7,17 @@ Bytes (or string) > Integer > Encoded-String > Integer > Bytes
                     encode                      decode        
 """
 import re
+
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
+
 class Codex(object):
 	def __init__(self, base, exp, limit, digit):
 		self.base = base
 		self.exp = exp
 		self.limit = limit
 		self.digit = digit
+
 	def en(integer, self): # encoding integer into text
 		assert isinstance(integer, int), "Error: message not integer"
 		assert 0 <= integer < (2 ** self.exp), "Error: number out of range"
@@ -25,6 +28,7 @@ class Codex(object):
 			integer, char = divmod(integer, self.base)
 			str = (self.digit[char]) + str
 		return str.zfill(self.limit)[::-1]
+
 	def de(string, self): # decoding text into integer
 		assert isinstance(string, str)
 		assert len(string) <= self.limit, "Error: too long"
@@ -36,6 +40,7 @@ class Codex(object):
 			integer += self.digit.index(char)
 		assert integer < (2 ** self.exp), "Error: number error"
 		return integer
+
 	def u2i(string, self): # encode unicode into integer
 		string = string.encode('utf-8') if isinstance(string, str) else string
 		assert isinstance(string, bytes), "Error: message not bytes"
@@ -46,6 +51,7 @@ class Codex(object):
 			result *= 256
 			result += char
 		return result
+
 	def i2u(integer, self): # decodeing integer into unicode
 		assert isinstance(integer, int), "Error: number not integer"
 		assert 0 <= integer < (2 ** self.exp), "Error: number out of range"
@@ -55,10 +61,13 @@ class Codex(object):
 			result += [r]
 		result += ( [0] * ((self.exp // 8)-len(result)) )
 		return bytes(result)
+
 	def encode(string, self): # encoding unicode into text
 		return Codex.en(Codex.u2i(string, self), self)
+
 	def decode(string, self): # decoding text into unicode
 		return Codex.i2u(Codex.de(string, self), self)
+
 	def mess_en(string, self): # encode unicode into text
 		string = string.encode('utf-8') if isinstance(string, str) else string
 		assert isinstance(string, bytes), "Error: message not bytes"
@@ -67,6 +76,7 @@ class Codex(object):
 		for steak in string:
 			result += Codex.encode(steak, self)
 		return result
+	
 	def mess_de(string, self): # decode text into unicode
 		assert isinstance(string, str), "Error: message not string"
 		string = chop(string, self.limit)
