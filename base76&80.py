@@ -177,10 +177,14 @@ def pass_check(password):
 	if isinstance(password, str):
 		password = password.encode('utf-8')
 	assert isinstance(password, bytes), "Error: password not bytes"
+	sha_160 = hashlib.sha1(password).digest()
+	sha_224 = hashlib.sha224(password).digest()
 	sha_256 = hashlib.sha256(password).digest()
 	sha_384 = hashlib.sha384(password).digest()
 	sha_512 = hashlib.sha512(password).digest()
+	code_160 = message.encode(sha_160, 160, 0)
+	code_224 = message_encode(sha_224, 224, 0)
 	code_256 = message_encode(sha_256, 256, 1)
 	code_384 = message_encode(sha_384, 384, 1)
 	code_512 = message_encode(sha_512, 512, 1)
-	return code_256, code_384, code_512
+	return (code160, code224), code_256, code_384, code_512
