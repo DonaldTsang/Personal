@@ -54,6 +54,7 @@ def check_block_72(exp): # for 448/512-bits
 	assert 7 <= exp <= 8, "Error: exponent out of range"
 	limit = exp * 10 + 3
 	base = exp + 64
+	base -= 1 if base == 70 else 0
 	return base, limit
 
 """
