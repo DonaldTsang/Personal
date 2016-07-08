@@ -319,7 +319,7 @@ def password_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	for i in range(numbers):
 		result += num_char[randint(0, 9)]
 	for i in range(others):
-		result += characters[randint(0, len(characters)-1)]
+		result += characters[randint(0, len(chars)-1)]
 	for i in range(total - upcase - lowcase - numbers - others):
 		result += royale[randint(0, len(royale)-1)]
 	result = list(result)
