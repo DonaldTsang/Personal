@@ -229,65 +229,65 @@ def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
 
-def drunken_bishop_1x1(password):
+def drunken_bishop_1x1(passwd):
 	"""
 	A 1x1 drunken_bishop rectangle based on MD-5
 	"""
-	password = password.encode('utf-8')
-	md5 = hashlib.md5(password).hexdigest()
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	md5 = hashlib.md5(passwd).hexdigest()
 	md5_finger = chop(md5, 32)
 	return drunken_bishop_merge(md5_finger)
 
 
-def drunken_bishop_1x2(password):
+def drunken_bishop_1x2(passwd):
 	"""
 	A 1x2 drunken_bishop rectangle based on SHA-256
 	"""
-	password = password.encode('utf-8')
-	sha_256 = hashlib.sha256(password).hexdigest()
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_finger = chop(sha_256, 32)
 	return drunken_bishop_merge(sha_finger)
 
 
-def drunken_bishop_2x2(password):
+def drunken_bishop_2x2(passwd):
 	"""
 	A 2x2 drunken_bishop rectangle based on SHA-512
 	"""
-	password = password.encode('utf-8')
-	sha_512 = hashlib.sha512(password).hexdigest()
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_finger = chop(sha_512, 64)
 	return drunken_bishop_merge(sha_finger)
 
 
-def drunken_bishop_2x3(password):
+def drunken_bishop_2x3(passwd):
 	"""
 	A 2x3 drunken_bishop rectangle based on SHA-256/512
 	"""
-	password = password.encode('utf-8')
-	sha_256 = hashlib.sha256(password).hexdigest()
-	sha_512 = hashlib.sha512(password).hexdigest()
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_ultra = sha_256 + sha_512
 	sha_finger = chop(sha_ultra, 64)
 	return drunken_bishop_merge(sha_finger)
 
 
-def drunken_bishop_3x3(password):
+def drunken_bishop_3x3(passwd):
 	"""
 	A 3x3 drunken_bishop rectangle based on SHA-256/384/512
 	"""
-	password = password.encode('utf-8')
-	sha_256 = hashlib.sha256(password).hexdigest()
-	sha_384 = hashlib.sha384(password).hexdigest()
-	sha_512 = hashlib.sha512(password).hexdigest()
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_extreme = sha_256 + sha_384 + sha_512
 	sha_finger = chop(sha_extreme, 96)
 	return drunken_bishop_merge(sha_finger)
 
 
-def drunken_bishop_unused(password):
-	password = password.encode('utf-8')
-	sha_160 = hashlib.sha1(password).hexdigest()
-	sha_224 = hashlib.sha224(password).hexdigest()
+def drunken_bishop_unused(passwd):
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_160 = hashlib.sha1(passwd).hexdigest()
+	sha_224 = hashlib.sha224(passwd).hexdigest()
 	sha_unused = sha_160 + sha_224
 	sha_finger = chop(sha_unused, 32)
 	return drunken_bishop_merge(sha_finger)
@@ -297,6 +297,7 @@ def drunken_bishop_unused(password):
 
 
 from random import randint, shuffle
+
 def password_gen(total, upcase, lowcase, numbers, others = 0, characters = ''):
 	assert isinstance(total, int)
 	assert isinstance(upcase, int)

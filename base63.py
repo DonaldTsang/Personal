@@ -41,8 +41,7 @@ class Codex(object):
 		assert integer < (2 ** self.exp), "Error: number error"
 		return integer
 	def u2i(string, self): # encode unicode into integer
-		if isinstance(string, str):
-			string = string.encode('utf-8')
+		string = string.encode('utf-8') if isinstance(string, str) else string
 		assert isinstance(string, bytes), "Error: message not bytes"
 		assert len(string) <= (self.exp // 8), "Error: string too long"
 		result = 0
@@ -65,8 +64,7 @@ class Codex(object):
 	def decode(string, self): # decoding text into unicode
 		return Codex.i2u(Codex.de(string, self), self)
 	def mess_en(string, self): # encode unicode into text
-		if isinstance(string, str):
-			string = string.encode('utf-8')
+		string = string.encode('utf-8') if isinstance(string, str) else string
 		assert isinstance(string, bytes), "Error: message not bytes"
 		string = chop(string, self.exp // 8)
 		result = ''
