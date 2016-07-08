@@ -1,17 +1,13 @@
 #!/usr/bin/python
 """
-Bytes (or string)
-	v u2i-----+
-Intger        +--encode
-	v en------+
-Encoded string
-	v de------+
-Integer       +--decode
-	v i2u-----+
-Bytes string
+Bytes (or string) > Integer > Encoded-String > Integer > Bytes
+                 u2i       en               de        i2u     
+                  |         |                |         |      
+                  +---------+                +---------+      
+                    encode                      decode        
 """
 import re
-def chop(string, length):
+def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 class Codex(object):
 	def __init__(self, base, exp, limit, digit):
