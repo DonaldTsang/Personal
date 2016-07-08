@@ -1,10 +1,12 @@
 #!/usr/bin/python
 """
-Bytes (or string) > Integer > Encoded-String > Integer > Bytes
-                 u2i       en               de        i2u     
-                  |         |                |         |      
-                  +---------+                +---------+      
-                    encode                      decode        
+This is a binary-to-text encoding tool with a variety of options.
+
+Bytes ~> Integer ~> Encoded-String ~> Integer ~> Bytes
+      u2i        en                de        i2u      
+       |          |                |          |       
+       +----------+                +----------+       
+          encode                      decode                 
 """
 import re
 
