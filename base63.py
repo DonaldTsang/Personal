@@ -33,7 +33,7 @@ class Codex(object):
 
 	def de(string, self): # decoding text into integer
 		assert isinstance(string, str)
-		assert len(string) <= self.limit, "Error: too long"
+		assert len(string) <= self.limit, "Error: string too long"
 		assert True == bool(re.fullmatch('[0-9A-Za-z_]{1,%d}' % self.limit, string))
 		string = string[::-1].lstrip("0")
 		integer = 0
@@ -61,7 +61,7 @@ class Codex(object):
 		while integer != 0:
 			integer, r = divmod(integer, 256)
 			result += [r]
-		result += ( [0] * ((self.exp // 8)-len(result)) )
+		result += ([0] * ((self.exp // 8)-len(result)))
 		return bytes(result)
 
 	def encode(string, self): # encoding unicode into text
