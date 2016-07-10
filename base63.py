@@ -40,7 +40,7 @@ class Codex(object):
 		str=''
 		while integer != 0:
 			integer, char = divmod(integer, self.base)
-			str = digit[char] + str
+			str = self.digit[char] + str
 		return str.zfill(self.limit)[::-1]
 
 	def de(string, self): # decoding text into integer
@@ -51,7 +51,7 @@ class Codex(object):
 		integer = 0
 		for char in string:
 			integer *= self.base
-			integer += digit.index(char)
+			integer += self.digit.index(char)
 		assert integer < (2 ** self.exp), "Error: number error"
 		return integer
 
