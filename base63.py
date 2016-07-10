@@ -6,7 +6,7 @@ Bytes ~> Integer ~> Encoded-String ~> Integer ~> Bytes
       u2i        en                de        i2u      
        |          |                |          |       
        +----------+                +----------+       
-          encode                      decode                 
+          encode                      decode          
 """
 import re
 
@@ -14,8 +14,6 @@ def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
 class Codex(object):
-	
-	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
 
 	def __init__(self, base, exp, limit, regex):
 		self.base = base
@@ -30,7 +28,10 @@ class Codex(object):
 		assert exp % 8 == 0, "Error: exponent not multiple of 8"
 		assert isinstance(limit, int), "Error: limit not integer"
 		assert isinstance(regex, str), "Error: regex not string"
+		assert digit[0] == "0", "Error: first digit not zero"
 		return True
+	
+	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
 
 	def en(integer, self): # encoding integer into text
 		assert isinstance(integer, int), "Error: message not integer"
@@ -76,11 +77,25 @@ class Codex(object):
 		result += ([0] * ((self.exp // 8)-len(result)))
 		return bytes(result)
 
+	byte_list = [0, 2, 3, 5, 6, 7, 9, 10,
+		11, 13, 14, 15, 17, 18, 19, 21,
+		22, 23, 25, 26, 27, 29, 30, 31,
+		33, 34, 35, 37, 38, 39, 41, 42,
+		43, 45, 46, 47, 49, 50, 51, 53,
+		54, 55, 57, 58, 59, 61, 62, 63,
+		65, 66, 67, 69, 70, 71, 73, 74]
+
 	def encode(string, self): # encoding unicode into text
-		return Codex.en(Codex.u2i(string, self), self)
+		if len(string) == self.exp // 8:
+			return Codex.en(Codex.u2i(string, self), self)
+		medium = Codex.en(Codex.u2i(string, self), self)[::-1].lstrip("0")
+		return medium.zfill(self.byte_list[len(string)])[::-1]
 
 	def decode(string, self): # decoding text into unicode
-		return Codex.i2u(Codex.de(string, self), self)
+		if len(string) == self.limit:
+			return Codex.i2u(Codex.de(string, self), self)
+		medium = Codex.i2u(Codex.de(string, self), self)[::-1].lstrip(b"\x00")
+		return medium.rjust(self.byte_list.index(len(string)), b"\x00")[::-1]
 
 	def mess_en(string, self): # encode unicode into text
 		string = string.encode('utf-8') if isinstance(string, str) else string
