@@ -86,16 +86,16 @@ class Codex(object):
 		65, 66, 67, 69, 70, 71, 73, 74]
 
 	def encode(string, self): # encoding unicode into text
+		medium = Codex.en(Codex.u2i(string, self), self)
 		if len(string) == self.exp // 8:
-			return Codex.en(Codex.u2i(string, self), self)
-		medium = Codex.en(Codex.u2i(string, self), self).rstrip("0")
-		return medium.ljust(self.byte_list[len(string)], "0")
+			return medium
+		return medium.rstrip("0").ljust(self.byte_list[len(string)], "0")
 
 	def decode(string, self): # decoding text into unicode
+		medium = Codex.i2u(Codex.de(string, self), self)
 		if len(string) == self.limit:
-			return Codex.i2u(Codex.de(string, self), self)
-		medium = Codex.i2u(Codex.de(string, self), self).rstrip(b"\x00")
-		return medium.ljust(self.byte_list.index(len(string)), b"\x00")
+			return medium
+		return medium.rstrip(b"\x00").ljust(self.byte_list.index(len(string)), b"\x00")
 
 	def mess_en(string, self): # encode unicode into text
 		string = string.encode('utf-8') if isinstance(string, str) else string
