@@ -14,11 +14,23 @@ def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
 class Codex(object):
-	def __init__(self, base, exp, limit, digit):
+	
+	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
+
+	def __init__(self, base, exp, limit, regex):
 		self.base = base
 		self.exp = exp
 		self.limit = limit
-		self.digit = digit
+		self.regex = regex
+
+	def check(self):
+		assert isinstance(base, int), "Error: base not integer"
+		assert 56 <= base < 96, "Error: base out of range"
+		assert isinstance(exp, int), "Error: exponent not integer"
+		assert exp % 8 == 0, "Error: exponent not multiple of 8"
+		assert isinstance(limit, int), "Error: limit not integer"
+		assert isinstance(regex, str), "Error: regex not string"
+		return True
 
 	def en(integer, self): # encoding integer into text
 		assert isinstance(integer, int), "Error: message not integer"
@@ -28,18 +40,18 @@ class Codex(object):
 		str=''
 		while integer != 0:
 			integer, char = divmod(integer, self.base)
-			str = (self.digit[char]) + str
+			str = digit[char] + str
 		return str.zfill(self.limit)[::-1]
 
 	def de(string, self): # decoding text into integer
 		assert isinstance(string, str)
 		assert len(string) <= self.limit, "Error: string too long"
-		assert True == bool(re.fullmatch('[0-9A-Za-z_]{1,%d}' % self.limit, string))
+		assert True == bool(re.fullmatch(self.regex % self.limit, string))
 		string = string[::-1].lstrip("0")
 		integer = 0
 		for char in string:
 			integer *= self.base
-			integer += self.digit.index(char)
+			integer += digit.index(char)
 		assert integer < (2 ** self.exp), "Error: number error"
 		return integer
 
@@ -87,7 +99,7 @@ class Codex(object):
 			result += Codex.decode(steak, self)
 		return result
 
-base63 = Codex(63, 448, 75, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_")
-base62 = Codex(62, 256, 43, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
-base61 = Codex(61, 160, 27, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy")
-base60 = Codex(60, 112, 19, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwx")
+base63 = Codex(63, 448, 75, '[0-9A-Za-z_]{1,%d}')
+base62 = Codex(62, 256, 43, '[0-9A-Za-z]{1,%d}')
+base61 = Codex(61, 160, 27, '[0-9A-Za-y]{1,%d}')
+base60 = Codex(60, 112, 19, '[0-9A-Za-x]{1,%d}')
