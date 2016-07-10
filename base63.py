@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!#!/usr/bin/python
 """
 This is a binary-to-text encoding tool with a variety of options.
 
@@ -38,11 +38,11 @@ class Codex(object):
 		assert 0 <= integer < (2 ** self.exp), "Error: number out of range"
 		if integer == 0:
 			return ''.zfill(self.limit)
-		str=''
+		string=''
 		while integer != 0:
 			integer, char = divmod(integer, self.base)
-			str = self.digit[char] + str
-		return str.zfill(self.limit)[::-1]
+			string += self.digit[char]
+		return string.ljust(self.limit, "0")
 
 	def de(string, self): # decoding text into integer
 		assert isinstance(string, str)
@@ -88,14 +88,14 @@ class Codex(object):
 	def encode(string, self): # encoding unicode into text
 		if len(string) == self.exp // 8:
 			return Codex.en(Codex.u2i(string, self), self)
-		medium = Codex.en(Codex.u2i(string, self), self)[::-1].lstrip("0")
-		return medium.zfill(self.byte_list[len(string)])[::-1]
+		medium = Codex.en(Codex.u2i(string, self), self).rstrip("0")
+		return medium.ljust(self.byte_list[len(string)], "0")
 
 	def decode(string, self): # decoding text into unicode
 		if len(string) == self.limit:
 			return Codex.i2u(Codex.de(string, self), self)
-		medium = Codex.i2u(Codex.de(string, self), self)[::-1].lstrip(b"\x00")
-		return medium.rjust(self.byte_list.index(len(string)), b"\x00")[::-1]
+		medium = Codex.i2u(Codex.de(string, self), self).rstrip(b"\x00")
+		return medium.ljust(self.byte_list.index(len(string)), b"\x00")
 
 	def mess_en(string, self): # encode unicode into text
 		string = string.encode('utf-8') if isinstance(string, str) else string
