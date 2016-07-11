@@ -24,7 +24,7 @@ class Codex(object):
 		self.base = base # Radix system inside of a  block
 		self.limit = limit # Number of characters in a block
 		self.exp = exp # Number of bits contained in a block
-		self.regex = regex # Regex fullmatch systen of a block
+		self.regex = regex # Regex fullmatch system of a block
 		self.bound, self.byte = 2 ** self.exp, self.exp // 8
 
 	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
@@ -37,7 +37,6 @@ class Codex(object):
 		assert self.exp % 8 == 0, "Error: exponent not multiple of 8"
 		assert isinstance(self.limit, int), "Error: limit not integer"
 		assert self.limit > 0, "Error: limit not positive"
-		assert self.base ** self.limit >= self.bound, "Error: exponent too small"
 		assert isinstance(regex, str), "Error: regex not string"
 		assert digit[0] == "0", "Error: first digit not zero"
 
