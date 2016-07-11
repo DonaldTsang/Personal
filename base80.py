@@ -25,7 +25,7 @@ digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' + \
 def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
-def check_block_mini(exp): # for 160/192/224/256-bits
+def shifty(exp): # for 160/192/224/256-bits
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp % 32 == 0, "Error: exponent not multiple of 32"
 	exp //= 32
@@ -35,35 +35,24 @@ def check_block_mini(exp): # for 160/192/224/256-bits
 	base -= 1 if base == 73 else 0
 	return base, limit
 
-def check_block_80(exp): # for 256/320/384/448/512-bits
+def shiftx(exp, shift): # for 256/320/384/448/512-bits
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp % 64 == 0, "Error: exponent not multiple of 64"
 	exp //= 64
-	assert 4 <= exp <= 8, "Error: exponent out of range"
-	limit = exp * 10 + 1
-	base = exp + 73
+	assert isinstance(shift, int), "Error: shift not integer"
+	assert 1 <= shift <= 3, "Error: shift out of range"
+	assert (3 + shift) <= exp <= 8, "Error: exponent out of range"
+	limit = exp * 10 + shift
+	if shift == 1:
+		base = exp + 73
+	elif shift == 2:
+		base = exp + 68
+	elif shift == 3:
+		base = exp + 64
+	base -= 1 if base == 70 else 0
+	base -= 1 if base == 73 else 0
 	base -= 1 if base == 77 else 0
 	base -= 1 if base == 81 else 0
-	return base, limit
-
-def check_block_76(exp): # for 320/384/448/512-bits
-	assert isinstance(exp, int), "Error: exponent not integer"
-	assert exp % 64 == 0, "Error: exponent not multiple of 64"
-	exp //= 64
-	assert 5 <= exp <= 8, "Error: exponent out of range"
-	limit = exp * 10 + 2
-	base = exp + 68
-	base -= 1 if base == 73 else 0
-	return base, limit
-
-def check_block_72(exp): # for 384/448/512-bits
-	assert isinstance(exp, int), "Error: exponent not integer"
-	assert exp % 64 == 0, "Error: exponent not multiple of 64"
-	exp //= 64
-	assert 6 <= exp <= 8, "Error: exponent out of range"
-	limit = exp * 10 + 3
-	base = exp + 64
-	base -= 1 if base == 70 else 0
 	return base, limit
 
 """
@@ -81,16 +70,9 @@ def check_block_90(exp): # for 256/320/384/448/512-bits
 def shifting(exp, shift = 0):
 	assert isinstance(shift, int), "Error: shift not integer"
 	assert 0 <= shift <= 3, "Error: shift not 0, 1, 2, or 3"
-	if shift == -1 and exp = 128:
-		base, limit = 69, 21
-	elif shift == 0:	
-		base, limit = check_block_mini(exp)
-	elif shift == 1:
-		base, limit = check_block_80(exp)
-	elif shift == 2:
-		base, limit = check_block_76(exp)
-	elif shift == 3:
-		base, limit = check_block_72(exp)
+	if shift == -1 and exp = 128: base, limit = 69, 21
+	elif shift == 0: base, limit = shifty(exp)
+	else: base, limit = shiftx(exp, shift)
 	return base, limit
 
 ################################################################################
@@ -100,8 +82,7 @@ def en_block(num, exp = 128, shift = -1):
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert 0 <= num < (2 ** exp), "Error: number out of range"
 	base, limit = shifting(exp, shift)
-	if num == 0:
-		return ''.zfill(limit)
+	if num == 0: return ''.zfill(limit)
 	str=''
 	while num != 0:
 		num, char = divmod(num, base)
@@ -125,8 +106,7 @@ def de_block(string, exp = 128, shift = -1):
 ################################################################################
 
 def unicode2num(string, exp = 128):
-	if isinstance(string, str):
-		string = string.encode('utf-8')
+	if isinstance(string, str): string = string.encode('utf-8')
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp > 0, "Error: exponent not positive"
@@ -162,9 +142,8 @@ def decode(string, exp = 128, shift = -1):
 
 ################################################################################
 
-def message_encode(string, exp = 128, shift = -1):
-	if isinstance(string, str):
-		string = string.encode('utf-8')
+def message_en(string, exp = 128, shift = -1):
+	if isinstance(string, str): string = string.encode('utf-8')
 	assert isinstance(string, bytes), "Error: message not bytes"
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp > 0, "Error: exponent not positive"
@@ -176,7 +155,7 @@ def message_encode(string, exp = 128, shift = -1):
 		result += encode(steak, exp, shift)
 	return result
 
-def message_decode(string, exp = 128, shift = -1):
+def message_de(string, exp = 128, shift = -1):
 	assert isinstance(string, str), "Error: message not string"
 	assert isinstance(exp, int), "Error: exponent not integer"
 	assert exp > 0, "Error: exponent not positive"

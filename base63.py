@@ -20,10 +20,10 @@ def trim(string, length, char):
 
 class Codex(object):
 
-	def __init__(self, base, exp, limit, regex):
+	def __init__(self, base, limit, exp, regex):
 		self.base = base # Radix system inside of a  block
-		self.exp = exp # Number of bits contained in a block
 		self.limit = limit # Number of characters in a block
+		self.exp = exp # Number of bits contained in a block
 		self.regex = regex # Regex fullmatch systen of a block
 		self.bound, self.byte = 2 ** self.exp, self.exp // 8
 
@@ -33,8 +33,10 @@ class Codex(object):
 		assert isinstance(self.base, int), "Error: base not integer"
 		assert 56 <= self.base < 96, "Error: base out of range"
 		assert isinstance(self.exp, int), "Error: exponent not integer"
+		assert self.exp > 0, "Error: xponent not positive"
 		assert self.exp % 8 == 0, "Error: exponent not multiple of 8"
 		assert isinstance(self.limit, int), "Error: limit not integer"
+		assert self.limit > 0, "Error: limit not positive"
 		assert self.base ** self.limit >= self.bound, "Error: exponent too small"
 		assert isinstance(regex, str), "Error: regex not string"
 		assert digit[0] == "0", "Error: first digit not zero"
@@ -110,7 +112,7 @@ class Codex(object):
 		string = chop(string, self.limit)
 		return b"".join([Codex.decode(steak, self) for steak in string])
 
-base63 = Codex(63, 448, 75, '[0-9A-Za-z_]{1,%d}')
-base62 = Codex(62, 256, 43, '[0-9A-Za-z]{1,%d}')
-base61 = Codex(61, 160, 27, '[0-9A-Za-y]{1,%d}')
-base60 = Codex(60, 112, 19, '[0-9A-Za-x]{1,%d}')
+base63 = Codex(63, 75, 448, '[0-9A-Za-z_]{1,%d}')
+base62 = Codex(62, 43, 256, '[0-9A-Za-z]{1,%d}')
+base61 = Codex(61, 27, 160, '[0-9A-Za-y]{1,%d}')
+base60 = Codex(60, 19, 112, '[0-9A-Za-x]{1,%d}')
