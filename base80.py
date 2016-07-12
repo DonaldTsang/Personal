@@ -20,11 +20,13 @@ def trim(string, length, char):
 
 class Codex(object):
 
-	def __init__(self, exp, shift):
+	def __init__(self, exp, shift, base, limit, regex, byte_list):
 		self.exp = exp # Number of bits contained in a block
 		self.shift = shift # Radix system version of a block
-		self.base, self.limit = shifting(self.exp, self.shift)
-		self.regex, self.byte_list = dictionary[self.base]
+		self.base = base # Radix system inside of a block
+		self.limit = limit # Number of characters in a block
+		self.regex = regex # Regex fullmatch system of a block
+		self.byte_list = byte_list # Byte shortening of a block
 		self.bound, self.byte = 2 ** self.exp, self.exp // 8
 
 	#        |000000000111111111122222222223333333|
@@ -113,37 +115,132 @@ class Codex(object):
 
 ################################################################################
 
-def shifty(exp): # for 160/192/224/256-bits
-	assert isinstance(exp, int), "Error: exponent not integer"
-	assert exp % 32 == 0, "Error: exponent not multiple of 32"
-	exp //= 32
-	assert 5 <= exp <= 8, "Error: exponent out of range"
-	limit, base = exp * 5 + 1, exp + 68
-	base -= 1 if base == 73 else 0
-	return base, limit
+class Code(Codex):
 
-def shiftx(exp, shift): # for 256/320/384/448/512-bits
-	assert isinstance(exp, int), "Error: exponent not integer"
-	assert exp % 64 == 0, "Error: exponent not multiple of 64"
-	exp //= 64
-	assert isinstance(shift, int), "Error: shift not integer"
-	assert 1 <= shift <= 3, "Error: shift out of range"
-	assert (3 + shift) <= exp <= 8, "Error: exponent out of range"
-	limit, base = exp * 10 + shift, exp + 76 - 4 * shift
-	base += 1 if shift == 1 else 0
-	base -= 1 if base == 70 else 0
-	base -= 1 if base == 73 else 0
-	base -= 1 if base == 77 else 0
-	base -= 1 if base == 81 else 0
-	return base, limit
+	def __init__(self, exp, shift):
+		self.exp = exp # Number of bits contained in a block
+		self.shift = shift # Radix system version of a block
+		Codex.base, Codex.limit = Code.shifting(self.exp, self.shift)
+		Codex.regex, Codex.byte_list = self.dictionary[self.base]
+		self.bound, self.byte = 2 ** self.exp, self.exp // 8
 
-def shifting(exp, shift = 0):
-	assert isinstance(shift, int), "Error: shift not integer"
-	assert -1 <= shift <= 3, "Error: shift not 0, 1, 2, or 3"
-	if shift == -1 and exp == 128: base, limit = 69, 21
-	elif shift == 0: base, limit = shifty(exp)
-	else: base, limit = shiftx(exp, shift)
-	return base, limit
+	def shifty(exp): # for 160/192/224/256-bits
+		assert isinstance(exp, int), "Error: exponent not integer"
+		assert exp % 32 == 0, "Error: exponent not multiple of 32"
+		exp //= 32
+		assert 5 <= exp <= 8, "Error: exponent out of range"
+		limit, base = exp * 5 + 1, exp + 68
+		base -= 1 if base == 73 else 0
+		return base, limit
+
+	def shiftx(exp, shift): # for 256/320/384/448/512-bits
+		assert isinstance(exp, int), "Error: exponent not integer"
+		assert exp % 64 == 0, "Error: exponent not multiple of 64"
+		exp //= 64
+		assert isinstance(shift, int), "Error: shift not integer"
+		assert 1 <= shift <= 3, "Error: shift out of range"
+		assert (3 + shift) <= exp <= 8, "Error: exponent out of range"
+		limit, base = exp * 10 + shift, exp + 76 - 4 * shift
+		base += 1 if shift == 1 else 0
+		base -= 1 if base in [70, 73, 77, 81] else 0
+		return base, limit
+
+	def shifting(exp, shift = 0):
+		assert isinstance(shift, int), "Error: shift not integer"
+		assert -1 <= shift <= 3, "Error: shift not 0, 1, 2, or 3"
+		if shift == -1 and exp == 128: base, limit = 69, 21
+		assert shift != -1 and exp != 128, "Error: 128-bit break"
+		elif shift == 0: base, limit = Code.shifty(exp)
+		else: base, limit = Code.shiftx(exp, shift)
+		return base, limit
+
+	dictionary = {
+		80: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 9, 
+			11, 12, 13, 14, 16, 17, 18, 19, 
+			21, 22, 23, 25, 26, 27, 28, 30, 
+			31, 32, 33, 35, 36, 37, 38, 40, 
+			41, 42, 44, 45, 46, 47, 49, 50, 
+			51, 52, 54, 55, 56, 57, 59, 60, 
+			61, 63, 64, 65, 66, 68, 69, 70, 
+			71, 73, 74, 75, 76, 78, 79, 80]),
+		79: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}', 
+			[0, 2, 3, 4, 6, 7, 8, 9, 
+			11, 12, 13, 14, 16, 17, 18, 20, 
+			21, 22, 23, 25, 26, 27, 28, 30, 
+			31, 32, 33, 35, 36, 37, 39, 40, 
+			41, 42, 44, 45, 46, 47, 49, 50, 
+			51, 53, 54, 55, 56, 58, 59, 60]),
+		78: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 9, 
+			11, 12, 13, 15, 16, 17, 18, 20, 
+			21, 22, 23, 25, 26, 27, 29, 30, 
+			31, 32, 34, 35, 36, 37, 39, 40, 
+			41, 43, 44, 45, 46, 48, 49, 50]),
+		76: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 9, 
+			11, 12, 13, 15, 16, 17, 18, 20, 
+			21, 22, 24, 25, 26, 27, 29, 30, 
+			31, 33, 34, 35, 36, 38, 39, 40, 
+			41, 43, 44, 45, 47, 48, 49, 50, 
+			52, 53, 54, 56, 57, 58, 59, 61, 
+			62, 63, 65, 66, 67, 68, 70, 71, 
+			72, 73, 75, 76, 77, 79, 80, 81]),
+		75: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 9, 
+			11, 12, 13, 15, 16, 17, 18, 20, 
+			21, 22, 24, 25, 26, 27, 29, 30, 
+			31, 33, 34, 35, 36, 38, 39, 40, 
+			42, 43, 44, 45, 47, 48, 49, 51, 
+			52, 53, 54, 56, 57, 58, 60, 61, 
+			62, 63, 65, 66, 67, 69, 70, 71]),
+		74: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 10, 
+			11, 12, 13, 15, 16, 17, 19, 20, 
+			21, 22, 24, 25, 26, 28, 29, 30, 
+			31, 33, 34, 35, 37, 38, 39, 40, 
+			42, 43, 44, 46, 47, 48, 49, 51, 
+			52, 53, 55, 56, 57, 58, 60, 61]),
+		72: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 10, 
+			11, 12, 13, 15, 16, 17, 19, 20, 
+			21, 23, 24, 25, 26, 28, 29, 30, 
+			32, 33, 34, 36, 37, 38, 39, 41, 
+			42, 43, 45, 46, 47, 48, 50, 51, 
+			52, 54, 55, 56, 58, 59, 60, 61, 
+			63, 64, 65, 67, 68, 69, 71, 72, 
+			73, 74, 76, 77, 78, 80, 81, 82]),
+		71: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 10, 
+			11, 12, 14, 15, 16, 17, 19, 20, 
+			21, 23, 24, 25, 27, 28, 29, 30, 
+			32, 33, 34, 36, 37, 38, 40, 41, 
+			42, 43, 45, 46, 47, 49, 50, 51, 
+			53, 54, 55, 56, 58, 59, 60, 62, 
+			63, 64, 66, 67, 68, 69, 71, 72]),
+		69: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+			[0, 2, 3, 4, 6, 7, 8, 10, 
+			11, 12, 14, 15, 16, 18, 19, 20, 
+			21, 23, 24, 25, 27, 28, 29, 31, 
+			32, 33, 35, 36, 37, 38, 40, 41, 
+			42, 44, 45, 46, 48, 49, 50, 52, 
+			53, 54, 56, 57, 58, 59, 61, 62])
+	}
+
+################################################################################
+
+byte = [0, 2, 3, 5, 6, 7, 9, 10,
+	11, 13, 14, 15, 17, 18, 19, 21,
+	22, 23, 25, 26, 27, 29, 30, 31,
+	33, 34, 35, 37, 38, 39, 41, 42,
+	43, 45, 46, 47, 49, 50, 51, 53,
+	54, 55, 57, 58, 59, 61, 62, 63,
+	65, 66, 67, 69, 70, 71, 73, 74]
+
+base63 = Codex(448, k, 63, 75, '[0-9A-Za-z_]{1,%d}', byte)
+base62 = Codex(256, k, 62, 43, '[0-9A-Za-z]{1,%d}', byte)
+base61 = Codex(160, k, 61, 27, '[0-9A-Za-y]{1,%d}', byte)
+base60 = Codex(112, k, 60, 19, '[0-9A-Za-x]{1,%d}', byte)
 
 ################################################################################
 
@@ -155,86 +252,11 @@ def pass_check(password):
 	sha_256 = hashlib.sha256(password).digest()
 	sha_384 = hashlib.sha384(password).digest()
 	sha_512 = hashlib.sha512(password).digest()
-	code_128 = message_encode(md5_128, 128, -1)
-	code_256 = message_encode(sha_256, 128, -1)
-	code_384 = message_encode(sha_384, 128, -1)
-	code_512 = message_encode(sha_512, 128, -1)
+	code_128 = message_en(md5_128, Code(128, -1))
+	code_256 = message_en(sha_256, Code(128, -1))
+	code_384 = message_en(sha_384, Code(128, -1))
+	code_512 = message_en(sha_512, Code(128, -1))
 	return md5_128, code_256, code_384, code_512
-
-################################################################################
-
-dictionary = {
-	80: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 9, 
-		11, 12, 13, 14, 16, 17, 18, 19, 
-		21, 22, 23, 25, 26, 27, 28, 30, 
-		31, 32, 33, 35, 36, 37, 38, 40, 
-		41, 42, 44, 45, 46, 47, 49, 50, 
-		51, 52, 54, 55, 56, 57, 59, 60, 
-		61, 63, 64, 65, 66, 68, 69, 70, 
-		71, 73, 74, 75, 76, 78, 79, 80]),
-	79: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}', 
-		[0, 2, 3, 4, 6, 7, 8, 9, 
-		11, 12, 13, 14, 16, 17, 18, 20, 
-		21, 22, 23, 25, 26, 27, 28, 30, 
-		31, 32, 33, 35, 36, 37, 39, 40, 
-		41, 42, 44, 45, 46, 47, 49, 50, 
-		51, 53, 54, 55, 56, 58, 59, 60]),
-	78: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 9, 
-		11, 12, 13, 15, 16, 17, 18, 20, 
-		21, 22, 23, 25, 26, 27, 29, 30, 
-		31, 32, 34, 35, 36, 37, 39, 40, 
-		41, 43, 44, 45, 46, 48, 49, 50]),
-	76: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 9, 
-		11, 12, 13, 15, 16, 17, 18, 20, 
-		21, 22, 24, 25, 26, 27, 29, 30, 
-		31, 33, 34, 35, 36, 38, 39, 40, 
-		41, 43, 44, 45, 47, 48, 49, 50, 
-		52, 53, 54, 56, 57, 58, 59, 61, 
-		62, 63, 65, 66, 67, 68, 70, 71, 
-		72, 73, 75, 76, 77, 79, 80, 81]),
-	75: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 9, 
-		11, 12, 13, 15, 16, 17, 18, 20, 
-		21, 22, 24, 25, 26, 27, 29, 30, 
-		31, 33, 34, 35, 36, 38, 39, 40, 
-		42, 43, 44, 45, 47, 48, 49, 51, 
-		52, 53, 54, 56, 57, 58, 60, 61, 
-		62, 63, 65, 66, 67, 69, 70, 71]),
-	74: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 10, 
-		11, 12, 13, 15, 16, 17, 19, 20, 
-		21, 22, 24, 25, 26, 28, 29, 30, 
-		31, 33, 34, 35, 37, 38, 39, 40, 
-		42, 43, 44, 46, 47, 48, 49, 51, 
-		52, 53, 55, 56, 57, 58, 60, 61]),
-	72: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 10, 
-		11, 12, 13, 15, 16, 17, 19, 20, 
-		21, 23, 24, 25, 26, 28, 29, 30, 
-		32, 33, 34, 36, 37, 38, 39, 41, 
-		42, 43, 45, 46, 47, 48, 50, 51, 
-		52, 54, 55, 56, 58, 59, 60, 61, 
-		63, 64, 65, 67, 68, 69, 71, 72, 
-		73, 74, 76, 77, 78, 80, 81, 82]),
-	71: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 10, 
-		11, 12, 14, 15, 16, 17, 19, 20, 
-		21, 23, 24, 25, 27, 28, 29, 30, 
-		32, 33, 34, 36, 37, 38, 40, 41, 
-		42, 43, 45, 46, 47, 49, 50, 51, 
-		53, 54, 55, 56, 58, 59, 60, 62, 
-		63, 64, 66, 67, 68, 69, 71, 72]),
-	69: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
-		[0, 2, 3, 4, 6, 7, 8, 10, 
-		11, 12, 14, 15, 16, 18, 19, 20, 
-		21, 23, 24, 25, 27, 28, 29, 31, 
-		32, 33, 35, 36, 37, 38, 40, 41, 
-		42, 44, 45, 46, 48, 49, 50, 52, 
-		53, 54, 56, 57, 58, 59, 61, 62])
-}
 
 ################################################################################
 
