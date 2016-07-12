@@ -142,10 +142,7 @@ def display_room(room):
 
 ################################################################################
 
-def db_colon(fingerprint):
-	"""
-	Inserts colon to hex strings.
-	"""
+def db_colon(fingerprint): # Inserts colon to hex strings.
 	assert len(fingerprint) % 2 == 0
 	result = ""
 	for i in range(len(fingerprint)//2):
@@ -158,28 +155,19 @@ def db_check(fingerprint):
 	else:
 		return True # Hex pairs with colon
 
-def db(fingerprint):
-	"""
-	Creates a piece of art base on 32 hex
-	"""
+def db(fingerprint): # Creates a piece of art base on 32 hex
 	if db_check(fingerprint) == False:
 		fingerprint = db_colon(fingerprint)
 	room = stumble_around(fingerprint)
 	return display_room(room)
 
-def db_tops(fingerprint):
-	"""
-	Like drunken_bishop but without the bottom frame
-	"""
+def db_tops(fingerprint): # db but without the bottom frame
 	if db_check(fingerprint) == False:
 		fingerprint = db_colon(fingerprint)
 	room = stumble_around(fingerprint)
 	return display_room(room)[:-(ROOM_DIMENSIONS[0]+3)]
 
-def db_multiple(fingerprint):
-	"""
-	Vertically stacked drunken_bishop
-	"""
+def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 	if db_check(fingerprint) == False:
 		fingerprint = db_colon(fingerprint)
 	finger = [fingerprint[i:i+48].rstrip(':') for i in range(0, len(fingerprint), 48)]
@@ -207,37 +195,25 @@ def db_merge(list):
 def chop(string, length):
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
-def db_1x1(passwd):
-	"""
-	A 1x1 drunken_bishop rectangle based on MD-5
-	"""
+def db_1x1(passwd): # A 1x1 db rectangle based on MD-5
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	md5 = hashlib.md5(passwd).hexdigest()
 	md5_finger = chop(md5, 32)
 	return db_merge(md5_finger)
 
-def db_1x2(passwd):
-	"""
-	A 1x2 drunken_bishop rectangle based on SHA-256
-	"""
+def db_1x2(passwd): A 1x2 db rectangle based on SHA-256
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_finger = chop(sha_256, 32)
 	return db_merge(sha_finger)
 
-def db_2x2(passwd):
-	"""
-	A 2x2 drunken_bishop rectangle based on SHA-512
-	"""
+def db_2x2(passwd): # A 2x2 db rectangle based on SHA-512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_finger = chop(sha_512, 64)
 	return db_merge(sha_finger)
 
-def db_2x3(passwd):
-	"""
-	A 2x3 drunken_bishop rectangle based on SHA-256/512
-	"""
+def db_2x3(passwd): # A 2x3 db rectangle based on SHA-256/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
@@ -245,10 +221,7 @@ def db_2x3(passwd):
 	sha_finger = chop(sha_ultra, 64)
 	return db_merge(sha_finger)
 
-def db_3x3(passwd):
-	"""
-	A 3x3 drunken_bishop rectangle based on SHA-256/384/512
-	"""
+def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_384 = hashlib.sha384(passwd).hexdigest()
