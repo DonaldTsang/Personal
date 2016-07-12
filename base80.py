@@ -2,7 +2,6 @@
 
 """
 This is a binary-to-text encoding tool with a variety of options.
-
 Bytes ~> Integer ~> Encoded-String ~> Integer ~> Bytes
       u2i        en                de        i2u      
        |          |                |          |       
@@ -146,10 +145,10 @@ class Code(Codex):
 		return base, limit
 
 	def shifting(exp, shift = 0):
+		assert isinstance(exp, int), "Error: exponent not integer"
 		assert isinstance(shift, int), "Error: shift not integer"
 		assert -1 <= shift <= 3, "Error: shift not 0, 1, 2, or 3"
-		if shift == -1 and exp == 128: base, limit = 69, 21
-		assert shift != -1 and exp != 128, "Error: 128-bit break"
+		if exp == 128 or shift == -1: base, limit = 69, 21
 		elif shift == 0: base, limit = Code.shifty(exp)
 		else: base, limit = Code.shiftx(exp, shift)
 		return base, limit
@@ -229,6 +228,8 @@ class Code(Codex):
 
 ################################################################################
 
+k = -2
+
 byte = [0, 2, 3, 5, 6, 7, 9, 10,
 	11, 13, 14, 15, 17, 18, 19, 21,
 	22, 23, 25, 26, 27, 29, 30, 31,
@@ -244,6 +245,8 @@ base60 = Codex(112, k, 60, 19, '[0-9A-Za-x]{1,%d}', byte)
 
 ################################################################################
 
+import hashlib
+
 def pass_check(password):
 	if isinstance(password, str):
 		password = password.encode('utf-8')
@@ -252,11 +255,11 @@ def pass_check(password):
 	sha_256 = hashlib.sha256(password).digest()
 	sha_384 = hashlib.sha384(password).digest()
 	sha_512 = hashlib.sha512(password).digest()
-	code_128 = message_en(md5_128, Code(128, -1))
-	code_256 = message_en(sha_256, Code(128, -1))
-	code_384 = message_en(sha_384, Code(128, -1))
-	code_512 = message_en(sha_512, Code(128, -1))
-	return md5_128, code_256, code_384, code_512
+	code_128 = Codex.mess_en(md5_128, Code(128, -1))
+	code_256 = Codex.mess_en(sha_256, Code(128, -1))
+	code_384 = Codex.mess_en(sha_384, Code(128, -1))
+	code_512 = Codex.mess_en(sha_512, Code(128, -1))
+	return code_128, code_256, code_384, code_512
 
 ################################################################################
 
