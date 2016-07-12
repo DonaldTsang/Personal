@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import re
 import hashlib
 import itertools
 from collections import Counter
@@ -142,35 +143,32 @@ def display_room(room):
 
 ################################################################################
 
-def db_colon(fingerprint): # Inserts colon to hex strings.
-	assert len(fingerprint) % 2 == 0
-	result = ""
-	for i in range(len(fingerprint)//2):
-		result =  result + fingerprint[2*i:2*i+2] + ':'
-	return result[:-1]
-
-def db_check(fingerprint):
-	if ":" not in fingerprint:
-		return False # Hex pairs without colon
-	else:
-		return True # Hex pairs with colon
+def db_fix(fingerprint):
+	if bool(re.fullmatch('([0-9A-Fa-f]{2}[:]){0,}[0-9A-Fa-f]{2}', fingerprint)):
+		return fingerprint
+	elif bool(re.fullmatch('([0-9A-Fa-f]{2}){1,}', fingerprint)):
+		result = ""
+		for i in range(len(fingerprint) // 2):
+			result += (fingerprint[2*i:2*i+2] + ':')
+		return result[:-1]
+	else: assert False, "Error: fingerprint is invalid"
 
 def db(fingerprint): # Creates a piece of art base on 32 hex
-	if db_check(fingerprint) == False:
-		fingerprint = db_colon(fingerprint)
+	fingerprint = db_fix(fingerprint)
 	room = stumble_around(fingerprint)
 	return display_room(room)
 
 def db_tops(fingerprint): # db but without the bottom frame
-	if db_check(fingerprint) == False:
-		fingerprint = db_colon(fingerprint)
+	fingerprint = db_fix(fingerprint)
 	room = stumble_around(fingerprint)
 	return display_room(room)[:-(ROOM_DIMENSIONS[0]+3)]
 
+def chop(string, length): # chop string into blocks
+	return [string[i:i+length] for i in range(0, len(string), length)]
+
 def db_multiple(fingerprint): # Vertically stacked drunken_bishop
-	if db_check(fingerprint) == False:
-		fingerprint = db_colon(fingerprint)
-	finger = [fingerprint[i:i+48].rstrip(':') for i in range(0, len(fingerprint), 48)]
+	fingerprint = db_fix(fingerprint)
+	finger = [i.rstrip(':') for i in chop(fingerprint, 48)]
 	picture = [db_tops(i) for i in finger]
 	return ''.join(picture) + BORDER
 
@@ -192,34 +190,32 @@ def db_merge(list):
 		output[y] += output[y][0]
 	return '\n'.join(output) + '\n'
 
-def chop(string, length):
-	return [string[i:i+length] for i in range(0, len(string), length)]
-
 def db_1x1(passwd): # A 1x1 db rectangle based on MD-5
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	md5 = hashlib.md5(passwd).hexdigest()
-	md5_finger = chop(md5, 32)
-	return db_merge(md5_finger)
+	return db_merge(chop(md5, 32))
 
 def db_1x2(passwd): # A 1x2 db rectangle based on SHA-256
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_finger = chop(sha_256, 32)
-	return db_merge(sha_finger)
+	return db_merge(chop(sha_256, 32))
+
+def db_1x3(passwd): # A 1x3 db rectangle based on SHA-384
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	return db_merge(chop(sha_384, 32))
 
 def db_2x2(passwd): # A 2x2 db rectangle based on SHA-512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_finger = chop(sha_512, 64)
-	return db_merge(sha_finger)
+	return db_merge(chop(sha_512, 64))
 
 def db_2x3(passwd): # A 2x3 db rectangle based on SHA-256/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_ultra = sha_256 + sha_512
-	sha_finger = chop(sha_ultra, 64)
-	return db_merge(sha_finger)
+	return db_merge(chop(sha_ultra, 64))
 
 def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
@@ -227,16 +223,14 @@ def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
 	sha_384 = hashlib.sha384(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
 	sha_extreme = sha_256 + sha_384 + sha_512
-	sha_finger = chop(sha_extreme, 96)
-	return db_merge(sha_finger)
+	return db_merge(chop(sha_extreme, 96))
 
 def db_unused(passwd):
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_160 = hashlib.sha1(passwd).hexdigest()
 	sha_224 = hashlib.sha224(passwd).hexdigest()
 	sha_unused = sha_160 + sha_224
-	sha_finger = chop(sha_unused, 32)
-	return db_merge(sha_finger)
+	return db_merge(chop(sha_unused, 32))
 
 ################################################################################
 
@@ -255,13 +249,13 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	num_char = '0123456789'
 	chars = '+-_=.:/' if chars == '' else chars
 	royale = up_char + low_char + num_char + chars
+	rest = total - upcase - lowcase - numbers - others
 	result = ''
 	for i in range(upcase): result += up_char[randint(0, 25)]
 	for i in range(lowcase): result += low_char[randint(0, 25)]
 	for i in range(numbers): result += num_char[randint(0, 9)]
 	for i in range(others): result += chars[randint(0, len(chars)-1)]
-	for i in range(total - upcase - lowcase - numbers - others):
-		result += royale[randint(0, len(royale)-1)]
+	for i in range(rest): result += royale[randint(0, len(royale)-1)]
 	result = list(result)
 	shuffle(result)
 	return ''.join(result)
