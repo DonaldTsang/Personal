@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import re
 import hashlib
 import itertools
@@ -214,23 +212,41 @@ def db_2x3(passwd): # A 2x3 db rectangle based on SHA-256/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_ultra = sha_256 + sha_512
-	return db_merge(chop(sha_ultra, 64))
+	sha_finger = sha_256 + sha_512
+	return db_merge(chop(sha_finger, 64))
+
+def db_2x4(passwd): # A 2x3 db rectangle based on MD5 & SHA-384/512
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	md5 = hashlib.md5(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	sha_finger = md5 + sha_384 + sha_512
+	return db_merge(chop(sha_finger, 64))
 
 def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_384 = hashlib.sha384(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_extreme = sha_256 + sha_384 + sha_512
-	return db_merge(chop(sha_extreme, 96))
+	sha_finger = sha_256 + sha_384 + sha_512
+	return db_merge(chop(sha_finger, 96))
 
-def db_unused(passwd):
+def db_ded(passwd):
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_160 = hashlib.sha1(passwd).hexdigest()
 	sha_224 = hashlib.sha224(passwd).hexdigest()
 	sha_unused = sha_160 + sha_224
 	return db_merge(chop(sha_unused, 32))
+
+def db_wow(passwd):
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	sha_160 = hashlib.sha1(passwd).hexdigest()
+	sha_224 = hashlib.sha224(passwd).hexdigest()
+	sha_finger = sha_256 + sha_384 + sha_512 + (sha_160 + sha_224)
+	return db_merge(chop(sha_finger, 96))
 
 ################################################################################
 
