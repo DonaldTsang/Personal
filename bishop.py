@@ -201,7 +201,7 @@ def db_1x1(passwd): # A 1x1 db rectangle based on MD-5
 	md5_finger = chop(md5, 32)
 	return db_merge(md5_finger)
 
-def db_1x2(passwd): A 1x2 db rectangle based on SHA-256
+def db_1x2(passwd): # A 1x2 db rectangle based on SHA-256
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_finger = chop(sha_256, 32)
