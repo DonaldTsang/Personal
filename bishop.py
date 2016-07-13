@@ -1,5 +1,3 @@
-import re
-import hashlib
 import itertools
 from collections import Counter
 
@@ -141,6 +139,8 @@ def display_room(room):
 
 ################################################################################
 
+import re
+
 def db_fix(fingerprint):
 	if bool(re.fullmatch('([0-9A-Fa-f]{2}[:]){0,}[0-9A-Fa-f]{2}', fingerprint)):
 		return fingerprint
@@ -171,6 +171,8 @@ def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 	return ''.join(picture) + BORDER
 
 ################################################################################
+
+import hashlib
 
 def db_scrape(fingerprint):
 	room = db_multiple(fingerprint)
