@@ -1,4 +1,4 @@
-from math import ceil, log10
+from math import ceil, log
 
 def posmod(num, den): # special modulo for int2array and int2radix
 	result = num % den
@@ -28,7 +28,7 @@ def int2radix(num, base):
 	assert abs(base) >= 2, "Error: base impossible"
 	if num == 0: return "0".zfill(ceiling)
 	if num < 0 and base > 0: return "-" + int2radix(-num, base)
-	ceiling = ceil(log10(abs(base)))
+	ceiling = ceil(log(abs(base), 10))
 	result = []
 	x = int2array(num, base)
 	for i in int2array(num, base):
@@ -40,10 +40,10 @@ def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 		return [int2base(num.real, base, alph), int2base(num.imag, base, alph)]
 	assert isinstance(num, int), "Error: input not a number"
 	assert isinstance(base, int), "Error: base not a number"
+	assert abs(base) >= 2, "Error: base impossible"
 	if len(alph) < base:
 		print("Base out of range, return int2radix instead")
 		return(int2radix(num, base))
-	assert abs(base) >= 2, "Error: base impossible"
 	assert " " not in alph, "Error: alphabet contains space"
 	if num == 0: return alph[0]
 	if num < 0 and base > 0:
