@@ -218,8 +218,8 @@ def db_ded(passwd):
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_160 = hashlib.sha1(passwd).hexdigest()
 	sha_224 = hashlib.sha224(passwd).hexdigest()
-	sha_unused = sha_160 + sha_224
-	return db_merge(chop(sha_unused, 32))
+	sha_finger = sha_160 + sha_224
+	return db_merge(chop(sha_finger, 32))
 
 def db_wow(passwd):
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
