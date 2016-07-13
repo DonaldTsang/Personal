@@ -12,11 +12,10 @@ center of the room.
 
 # the bishop starts in the center of the room
 STARTING_POSITION = (8, 4)
-ROOM_DIMENSIONS = (17, 9)
+ROOM_DIMENSIONS = (STARTING_POSITION[0] * 2 + 1, STARTING_POSITION[1] * 2 + 1)
 
 # encode start and end positions
-COIN_VALUE_STARTING_POSITION = 15
-COIN_VALUE_ENDING_POSITION = 16
+COIN_VALUE_STARTING_POSITION, COIN_VALUE_ENDING_POSITION = 15, 16
 
 BORDER = '+' + '-' * ROOM_DIMENSIONS[0] + '+\n'
 
