@@ -29,8 +29,7 @@ def decode(encoded_str): #Decode Base91 string to a bytearray
 				out += struct.pack('B', b&255)
 				b >>= 8
 				n -= 8
-				if not n>7:
-					break
+				if not n>7: break
 			v = -1
 	if v+1: out += struct.pack('B', (b | v << n) & 255 )
 	return bytes(out)
