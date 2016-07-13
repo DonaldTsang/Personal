@@ -120,9 +120,10 @@ def display_room(room):
 import re
 
 def db_fix(fingerprint):
-	if bool(re.fullmatch('([0-9A-Fa-f]{2}[:]){0,}[0-9A-Fa-f]{2}', fingerprint)):
+	bihex = '[0-9A-Fa-f]{2}'
+	if bool(re.fullmatch('(' + bihex + '[:]){0,}' + bihex, fingerprint)):
 		return fingerprint
-	elif bool(re.fullmatch('([0-9A-Fa-f]{2}){1,}', fingerprint)):
+	elif bool(re.fullmatch('(' + bihex + '){1,}', fingerprint)):
 		result = ""
 		for i in range(len(fingerprint) // 2):
 			result += (fingerprint[2*i:2*i+2] + ':')
