@@ -118,13 +118,11 @@ def db_fix(fingerprint):
 	else: assert False, "Error: fingerprint is invalid"
 
 def db(fingerprint): # Creates a piece of art base on 32 hex
-	fingerprint = db_fix(fingerprint)
-	room = stumble_around(fingerprint)
+	room = stumble_around(db_fix(fingerprint))
 	return display_room(room)
 
 def db_tops(fingerprint): # db but without the bottom frame
-	fingerprint = db_fix(fingerprint)
-	room = stumble_around(fingerprint)
+	room = stumble_around(db_fix(fingerprint))
 	return display_room(room)[:-(ROOM_DIMENSIONS[0]+3)]
 
 def chop(string, length): # chop string into blocks
@@ -141,9 +139,8 @@ def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 import hashlib
 
 def db_scrape(fingerprint):
-	room = db_multiple(fingerprint)
-	scan = room.split('\n')[:-1]
-	return [item[:-1] for item in scan]
+	room = db_multiple(fingerprint).split('\n')[:-1]
+	return [item[:-1] for item in room]
 
 def db_merge(list):
 	super_list = []
