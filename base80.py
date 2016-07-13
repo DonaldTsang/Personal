@@ -61,7 +61,7 @@ class Codex(object):
 	def de(string, self): # decode text into integer
 		assert isinstance(string, str)
 		assert len(string) <= self.limit, "Error: string too long"
-		assert True == bool(re.fullmatch(self.regex % self.limit, string))
+		assert bool(re.fullmatch(self.regex % self.limit, string))
 		result, string = 0, string[::-1].lstrip("0")
 		for char in string:
 			result *= self.base
