@@ -11,7 +11,7 @@ def int2array(num, base):
 	assert isinstance(num, int), "Error: input not a number"
 	assert isinstance(base, int), "Error: base not a number"
 	assert abs(base) >= 2, "Error: base impossible"
-	if num == 0: return '0'
+	if num == 0: return "0"
 	if num < 0 and base > 0: return  ["-"] + int2array(-num, base)
 	converted = []
 	while num != 0:
@@ -21,10 +21,16 @@ def int2array(num, base):
 	return converted[::-1]
 
 def int2radix(num, base):
+	if isinstance(num, complex) == True: 
+		return [int2array(num.real, base), int2array(num.imag, base)]
+	assert isinstance(num, int), "Error: input not a number"
+	assert isinstance(base, int), "Error: base not a number"
+	assert abs(base) >= 2, "Error: base impossible"
+	if num == 0: return "0".zfill(ceiling)
+	if num < 0 and base > 0: return "-" + int2radix(-num, base)
 	ceiling = ceil(log10(abs(base)))
 	result = []
 	x = int2array(num, base)
-	if x[0] == "-": return "-" + int2radix(-1 * num, base)
 	for i in int2array(num, base):
 		result += [str(i).zfill(ceiling)]
 	return ":".join(result)
