@@ -241,10 +241,6 @@ def db_wow(passwd):
 
 ################################################################################
 
-left_side = ["  ", 'H  S', "A  H", "S  A, "H  /", "I  M", "N  D", "G  S", "  "]
-
-################################################################################
-
 from random import randint, shuffle
 
 def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
