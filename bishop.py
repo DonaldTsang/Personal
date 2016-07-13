@@ -23,7 +23,7 @@ def bit_pairs(binary): # Convert a word into bit pairs little-endian style.
             pair = take(2, iterable)
             if not pair: break
             yield ''.join(pair)
-    return list(reversed(list(all_pairs(iter(binary)))))
+    return list(all_pairs(iter(binary)))[::-1]
 
 class Direction(object):
     """Encode a sense of direction."""
