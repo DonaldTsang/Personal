@@ -18,11 +18,9 @@ def decode(encoded_str): #Decode Base91 string to a bytearray
 	v, b, n = -1, 0, 0
 	out = bytearray()
 	for strletter in encoded_str:
-		if not strletter in decode_table:
-			continue
+		if not strletter in decode_table: continue
 		c = decode_table[strletter]
-		if(v < 0):
-			v = c
+		if(v < 0): v = c
 		else:
 			v += c * 91
 			b |= v << n
@@ -34,9 +32,8 @@ def decode(encoded_str): #Decode Base91 string to a bytearray
 				if not n>7:
 					break
 			v = -1
-	if v+1:
-		out += struct.pack('B', (b | v << n) & 255 )
-	return out
+	if v+1: out += struct.pack('B', (b | v << n) & 255 )
+	return bytes(out)
 
 def encode(bindata): # Encode a bytearray to a Base91 string
 	b, n = 0, 0
@@ -52,6 +49,5 @@ def encode(bindata): # Encode a bytearray to a Base91 string
 			out += base91_alphabet[v % 91] + base91_alphabet[v // 91]
 	if n:
 		out += base91_alphabet[b % 91]
-		if n>7 or b>90:
-			out += base91_alphabet[b // 91]
+		if n>7 or b>90: out += base91_alphabet[b // 91]
 	return out
