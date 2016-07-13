@@ -84,9 +84,8 @@ def checkDubs(num, base):
 	last = revtext[0]
 	tuple = 0
 	while(tuple <= num):
-		if last != revtext[tuple]:
-			break
-		tuple = tuple + 1
+		if last != revtext[tuple]: break
+		tuple += 1
 	if last != '0' and tuple == length: return "Full num GET"
 	elif last != '0' and tuple == length - 1: return "Half num GET"
 	elif last == '0' and tuple == length - 1 and text[0] == '1': return "Full zero GET"
