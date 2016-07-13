@@ -1,7 +1,6 @@
 from math import ceil, log10
 
-def posmod(num, den):
-	# Modulo constrained to 0..abs(den)
+def posmod(num, den): # special modulo for int2array and int2radix
 	result = num % den
 	if result < 0: result += abs(den)
 	return result
@@ -18,12 +17,16 @@ def int2array(num, base):
 	converted = []
 	while num != 0:
 		unit = posmod(num, base)
-		# Can't just do a straight floor-div here
-		# That would break negative bases
-		# Doing this allows us to "carry the one"
 		num = (num - unit) // base
-		converted.insert(0, unit)
-	return converted
+		converted += [unit]
+	return converted[::-1]
+
+def int2radix(num, base):
+	ceiling = ceil(log10(abs(base)))
+	result = ""
+	for i in int2array(num, base):
+		result += i.zfill(ceiling) + ":"
+	return result[:-1]
 
 def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
 	if isinstance(num, complex) == True: 
@@ -44,32 +47,9 @@ def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 	converted = ''
 	while num != 0:
 		unit = posmod(num, base)
-		# Can't just do a straight floor-div here
-		# That would break negative bases
-		# Doing this allows us to "carry the one"
 		num = (num - unit) // base
-		converted = alph[unit] + converted
-	return converted
-
-def int2radix(num, base):
-	if isinstance(num, complex) == True: 
-		# return a tuple
-		return int2radix(num.real, base), int2radix(num.imag, base)
-	assert isinstance(num, int), "Error: input not a number"
-	assert isinstance(base, int), "Error: base not a number"
-	assert abs(base) >= 2, "Error: base impossible"
-	if num == 0: return '0'
-	if num < 0 and base > 0: return  '-' + int2radix(-num, base)
-	ceiling = ceil(log10(abs(base)))
-	converted = ""
-	while num != 0:
-		unit = posmod(num, base)
-		# Can't just do a straight floor-div here
-		# That would break negative bases
-		# Doing this allows us to "carry the one"
-		num = (num - unit) // base
-		converted = str(unit).zfill(ceiling) + ':' + converted
-	return converted[:-1]
+		converted += alph[unit]
+	return converted[::-1]
 
 ################################################################################
 
