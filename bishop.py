@@ -150,8 +150,7 @@ def db_scrape(fingerprint):
 
 def db_merge(list):
 	super_list = []
-	for item in list:
-		super_list += [db_scrape(item)]
+	for item in list: super_list += [db_scrape(item)]
 	output = [''] * len(super_list[0])
 	for y in range(len(super_list[0])):
 		for x in range(len(super_list)):
