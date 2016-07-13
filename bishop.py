@@ -223,6 +223,11 @@ def db_wow(passwd):
 
 ################################################################################
 
+def insert(string, char, index):
+	return string[:index] + char + string[index:]
+
+################################################################################
+
 from random import randint, shuffle
 
 def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
