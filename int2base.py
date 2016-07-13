@@ -7,7 +7,6 @@ def posmod(num, den): # special modulo for int2array and int2radix
 
 def int2array(num, base):
 	if isinstance(num, complex) == True: 
-		# return a tuple
 		return [int2array(num.real, base), int2array(num.imag, base)]
 	assert isinstance(num, int), "Error: input not a number"
 	assert isinstance(base, int), "Error: base not a number"
@@ -25,26 +24,23 @@ def int2radix(num, base):
 	ceiling = ceil(log10(abs(base)))
 	result = ""
 	for i in int2array(num, base):
-		result += i.zfill(ceiling) + ":"
-	return result[:-1]
+		result += i.zfill(ceiling)
+	return ":".join(result)[:-1]
 
 def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
 	if isinstance(num, complex) == True: 
-		# return a tuple
-		return int2base(num.real, base, alph), int2base(num.imag, base, alph)
+		return [int2base(num.real, base, alph), int2base(num.imag, base, alph)]
 	assert isinstance(num, int), "Error: input not a number"
 	assert isinstance(base, int), "Error: base not a number"
-	if len(alph) < base:
-		print('Base out of range, int2radix is used instead')
-		return(int2radix(num, base))
+	if len(alph) < base: print("Base out of range"), return(int2radix(num, base))
 	assert abs(base) >= 2, "Error: base impossible"
-	assert ' ' not in alph, "Error: alphabet contains space"
+	assert " " not in alph, "Error: alphabet contains space"
 	if num == 0: return alph[0]
 	if num < 0 and base > 0:
-		if '-' not in alph: return  '--' + int2base(-num, base, alph)
-		elif '~' not in alph: return  '~~' + int2base(-num, base, alph)
-		else: return  'negative ' + int2base(-num, base, alph)
-	converted = ''
+		if "-" not in alph: return  "--" + int2base(-num, base, alph)
+		elif "~" not in alph: return  "~~" + int2base(-num, base, alph)
+		else: return  "negative " + int2base(-num, base, alph)
+	converted = ""
 	while num != 0:
 		unit = posmod(num, base)
 		num = (num - unit) // base
