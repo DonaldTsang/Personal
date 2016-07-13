@@ -253,11 +253,11 @@ def db_wow(passwd):
 from random import randint, shuffle
 
 def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
-	assert isinstance(total, int)
-	assert isinstance(upcase, int)
-	assert isinstance(lowcase, int)
-	assert isinstance(numbers, int)
-	assert isinstance(others, int)
+	assert isinstance(total, int) and total > 0
+	assert isinstance(upcase, int) and upcase > 0
+	assert isinstance(lowcase, int) and lowcase > 0
+	assert isinstance(numbers, int) and numbers > 0
+	assert isinstance(others, int) and others > 0
 	assert isinstance(chars, str)
 	assert total >= ( upcase + lowcase + numbers + others )
 	up_char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
