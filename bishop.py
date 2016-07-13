@@ -233,6 +233,8 @@ def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
 	sha_finger = sha_256 + sha_384 + sha_512
 	return db_merge(chop(sha_finger, 96))
 
+################################################################################
+
 def db_ded(passwd):
 	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
 	sha_160 = hashlib.sha1(passwd).hexdigest()
@@ -249,6 +251,10 @@ def db_wow(passwd):
 	sha_224 = hashlib.sha224(passwd).hexdigest()
 	sha_finger = sha_256 + sha_384 + sha_512 + (sha_160 + sha_224)
 	return db_merge(chop(sha_finger, 96))
+
+################################################################################
+
+left_side = ["  ", 'H  S', "A  H", "S  A, "H  /", "I  M", "N  D", "G  S", "  "]
 
 ################################################################################
 
