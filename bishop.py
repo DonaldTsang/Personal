@@ -1,15 +1,6 @@
 import itertools
 from collections import Counter
 
-"""
-The bishop wakes up in the center of a room. He is drunk and stumbles around,
-putting down coins at each position he passes. The bishop only walks diagonally
-much like bishops normally found on chess boards. The fingerprint determines
-his steps.
-The room is 17 positions wide and 9 positions long. The bishop starts in the
-center of the room.
-"""
-
 # the bishop starts in the center of the room
 STARTING_POSITION = (8, 4)
 ROOM_DIMENSIONS = (STARTING_POSITION[0] * 2 + 1, STARTING_POSITION[1] * 2 + 1)
