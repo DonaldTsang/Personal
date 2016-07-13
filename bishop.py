@@ -84,21 +84,11 @@ def coin(value):
 	Display the ascii representation of a coin.
 	"""
 	return {
-		0: ' ',
-		1: '.',
-		2: 'o',
-		3: '+',
-		4: '=',
-		5: '*',
-		6: 'B',
-		7: 'O',
-		8: 'X',
-		9: '@',
-		10: '%',
-		11: '&',
-		12: '#',
-		13: '/',
-		14: '^',
+		0: ' ', 1: '.', 2: 'o',
+		3: '+', 4: '=', 5: '*',
+		6: 'B', 7: 'O', 8: 'X',
+		9: '@', 10: '%', 11: '&',
+		12: '#', 13: '/', 14: '^',
 		COIN_VALUE_STARTING_POSITION: 'S',
 		COIN_VALUE_ENDING_POSITION: 'E',
 	}.get(value, '!')
