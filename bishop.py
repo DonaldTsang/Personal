@@ -114,10 +114,7 @@ def db_fix(fingerprint):
 	if bool(re.fullmatch('(' + bihex + '[:]){0,}' + bihex, fingerprint)):
 		return fingerprint
 	elif bool(re.fullmatch('(' + bihex + '){1,}', fingerprint)):
-		result = ""
-		for i in range(len(fingerprint) // 2):
-			result += (fingerprint[2*i:2*i+2] + ':')
-		return result[:-1]
+		return ":".join(chop(fingerprint, 2))
 	else: assert False, "Error: fingerprint is invalid"
 
 def db(fingerprint): # Creates a piece of art base on 32 hex
