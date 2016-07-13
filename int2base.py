@@ -32,7 +32,9 @@ def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 		return [int2base(num.real, base, alph), int2base(num.imag, base, alph)]
 	assert isinstance(num, int), "Error: input not a number"
 	assert isinstance(base, int), "Error: base not a number"
-	if len(alph) < base: print("Base out of range"), return(int2radix(num, base))
+	if len(alph) < base:
+		print("Base out of range, return int2radix instead")
+		return(int2radix(num, base))
 	assert abs(base) >= 2, "Error: base impossible"
 	assert " " not in alph, "Error: alphabet contains space"
 	if num == 0: return alph[0]
