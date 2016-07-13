@@ -90,12 +90,14 @@ class Codex(object):
 		result += [0] * (self.byte-len(result))
 		return bytes(result)
 
-	def encode(string, self): # encoding unicode into text
+################################################################################
+
+	def block_en(string, self): # encoding unicode into text
 		medium = Codex.en(Codex.u2i(string, self), self)
 		if len(string) == self.byte: return medium
 		return trim(medium, self.byte_list[len(string)], "0")
 
-	def decode(string, self): # decoding text into unicode
+	def block_de(string, self): # decoding text into unicode
 		medium = Codex.i2u(Codex.de(string, self), self)
 		if len(string) == self.limit: return medium
 		return trim(medium, self.byte_list.index(len(string)), b"\x00")
@@ -104,12 +106,12 @@ class Codex(object):
 		string = string.encode('utf-8') if isinstance(string, str) else string
 		assert isinstance(string, bytes), "Error: message not bytes"
 		string = chop(string, self.byte)
-		return "".join([Codex.encode(steak, self) for steak in string])
+		return "".join([Codex.block_en(steak, self) for steak in string])
 
 	def mess_de(string, self): # decode text into unicode
 		assert isinstance(string, str), "Error: message not string"
 		string = chop(string, self.limit)
-		return b"".join([Codex.decode(steak, self) for steak in string])
+		return b"".join([Codex.block_de(steak, self) for steak in string])
 
 ################################################################################
 
