@@ -12,7 +12,7 @@ def int2array(num, base):
 	assert isinstance(base, int), "Error: base not a number"
 	assert abs(base) >= 2, "Error: base impossible"
 	if num == 0: return '0'
-	if num < 0 and base > 0: return  ['-'] + int2array(-num, base)
+	if num < 0 and base > 0: return  ["-"] + int2array(-num, base)
 	converted = []
 	while num != 0:
 		unit = posmod(num, base)
@@ -22,10 +22,12 @@ def int2array(num, base):
 
 def int2radix(num, base):
 	ceiling = ceil(log10(abs(base)))
-	result = ""
+	result = []
+	x = int2array(num, base)
+	if x[0] == "-": return "-" + int2radix(-1 * num, base)
 	for i in int2array(num, base):
-		result += i.zfill(ceiling)
-	return ":".join(result)[:-1]
+		result += [str(i).zfill(ceiling)]
+	return ":".join(result)
 
 def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
 	if isinstance(num, complex) == True: 
