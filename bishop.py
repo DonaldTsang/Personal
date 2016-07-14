@@ -219,6 +219,15 @@ def db_wow(passwd):
 def insert(string, char, index):
 	return string[:index] + char + string[index:]
 
+def db_supreme(passwd):
+	passwd = passwd.encode('utf-8') if isinstance(passwd, str) else passwd
+	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
+	right = hashlib.sha384(passwd).hexdigest()
+	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
+	mid_left = insert(mid[0], "0" * 32, 32)
+	mid_right = insert(mid[1], "0" * 32, 32)
+	image = db_merge([left, mid_left, mid_right, right])
+
 ################################################################################
 
 from random import randint, shuffle
