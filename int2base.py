@@ -5,11 +5,11 @@ def posmod(num, den): # special modulo for int2array and int2radix
 	if result < 0: result += abs(den)
 	return result
 
-def int2array(num, base):
+def int2list(num, base):
 	if isinstance(num, complex) == True: 
 		return [int2array(num.real, base), int2array(num.imag, base)]
-	assert isinstance(num, int), "Error: input not a number"
-	assert isinstance(base, int), "Error: base not a number"
+	assert isinstance(num, int), "Error: input not integer"
+	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
 	if num == 0: return "0"
 	if num < 0 and base > 0: return  ["-"] + int2array(-num, base)
@@ -20,11 +20,22 @@ def int2array(num, base):
 		converted += [unit]
 	return converted[::-1]
 
+def list2int(list, base):
+	assert isinstance(num, int), "Error: input not integer"
+	assert isinstance(base, int), "Error: base not integer"
+	assert abs(base) >= 2, "Error: base impossible"
+	if list[0] = "-": return -1 * list2int(list[1:], base)
+	num = 0
+	for item in list:
+		num *= base
+		num += item
+	return num
+
 def int2radix(num, base):
 	if isinstance(num, complex) == True: 
 		return [int2array(num.real, base), int2array(num.imag, base)]
-	assert isinstance(num, int), "Error: input not a number"
-	assert isinstance(base, int), "Error: base not a number"
+	assert isinstance(num, int), "Error: input not integer"
+	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
 	if num == 0: return "0".zfill(ceiling)
 	if num < 0 and base > 0: return "-" + int2radix(-num, base)
@@ -38,12 +49,10 @@ def int2radix(num, base):
 def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
 	if isinstance(num, complex) == True: 
 		return [int2base(num.real, base, alph), int2base(num.imag, base, alph)]
-	assert isinstance(num, int), "Error: input not a number"
-	assert isinstance(base, int), "Error: base not a number"
+	assert isinstance(num, int), "Error: input not integer"
+	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
-	if len(alph) < base:
-		print("Base out of range, return int2radix instead")
-		return(int2radix(num, base))
+	assert len(alph) >= base, "Error: base out of range"
 	assert " " not in alph, "Error: alphabet contains space"
 	if num == 0: return alph[0]
 	if num < 0 and base > 0:
@@ -56,6 +65,21 @@ def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkl
 		num = (num - unit) // base
 		converted += alph[unit]
 	return converted[::-1]
+
+def base2int(string, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
+	assert isinstance(string, str), "Error: input not string"
+	assert isinstance(base, int), "Error: base not integer"
+	assert abs(base) >= 2, "Error: base impossible"
+	assert len(alph) >= base, "Error: base out of range"
+	assert " " not in alph, "Error: alphabet contains space"
+	if string[0:2] == "--" and "-" not in alph: return -1 * base2int(string[2:], base, alph)
+	elif string[0:2] == "~~" and "~" not in alph: return -1 * base2int(string[2:], base, alph)
+	elif string[0:9] == "negative ": return -1 * base2int(string[9:], base, alph)
+	num = 0
+	for char in string:
+		num *= base
+		num += alph.index(char)
+	return num
 
 ################################################################################
 
