@@ -241,10 +241,8 @@ import hashlib
 def pass_check(passwd):
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	assert isinstance(passwd, bytes), "Error: password not bytes"
-	sp, bar = " ", "||"
-	space = sp * 3
-	def mid(center, side):
-		return side + center + side
+	sp, bar, space = " ", "||", "   "
+	def mid(center, side): return side + center + side
 	md5_128 = hashlib.md5(passwd).digest()
 	sha_256 = hashlib.sha256(passwd).digest()
 	sha_384 = hashlib.sha384(passwd).digest()
@@ -253,9 +251,9 @@ def pass_check(passwd):
 	code_256 = Codex.mess_en(sha_256, Code(128, -1))
 	code_384 = Codex.mess_en(sha_384, Code(128, -1))
 	code_512 = Codex.mess_en(sha_512, Code(128, -1))
-	code_l = [space, "S H", "H A", "A S", "& H", "M I", "D N", "5 G", space]
+	code_l = mid(["S H", "H A", "A S", "& H", "M I", "D N", "5 G"], [space])
 	code_c = chop(code_256 + code_384 + code_512, 21)
-	code_r = [space] + chop(code_128, 3) + [space]
+	code_r = mid(chop(code_128, 3), [space])
 	code = []
 	for i in range(0, 9):
 		code += [mid(code_l[i], sp) + mid(code_c[i], bar) + mid(code_r[i], sp)]
