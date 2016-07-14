@@ -5,6 +5,8 @@ def posmod(num, den): # special modulo for int2array and int2radix
 	if result < 0: result += abs(den)
 	return result
 
+################################################################################
+
 def int2list(num, base):
 	if isinstance(num, complex) == True: 
 		return [int2array(num.real, base), int2array(num.imag, base)]
@@ -31,6 +33,8 @@ def list2int(list, base):
 		num += item
 	return num
 
+################################################################################
+
 def int2radix(num, base):
 	if isinstance(num, complex) == True: 
 		return [int2array(num.real, base), int2array(num.imag, base)]
@@ -45,6 +49,8 @@ def int2radix(num, base):
 	for i in int2array(num, base):
 		result += [str(i).zfill(ceiling)]
 	return ":".join(result)
+
+################################################################################
 
 def int2base(num, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'):
 	if isinstance(num, complex) == True: 
@@ -72,9 +78,12 @@ def base2int(string, base, alph = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi
 	assert abs(base) >= 2, "Error: base impossible"
 	assert len(alph) >= base, "Error: base out of range"
 	assert " " not in alph, "Error: alphabet contains space"
-	if string[0:2] == "--" and "-" not in alph: return -1 * base2int(string[2:], base, alph)
-	elif string[0:2] == "~~" and "~" not in alph: return -1 * base2int(string[2:], base, alph)
-	elif string[0:9] == "negative ": return -1 * base2int(string[9:], base, alph)
+	if string[0:2] == "--" and "-" not in alph:
+		return -1 * base2int(string[2:], base, alph)
+	elif string[0:2] == "~~" and "~" not in alph:
+		return -1 * base2int(string[2:], base, alph)
+	elif string[0:9] == "negative ":
+		return -1 * base2int(string[9:], base, alph)
 	num = 0
 	for char in string:
 		num *= base
@@ -107,6 +116,8 @@ def superDubs(num):
 	assert isinstance(num, int), "Error: not a number"
 	for i in range (8, 63):
 		print("base" + str(i) + ": " + str(checkDubs(num, i)))
+
+################################################################################
 
 def checkPali(num, base):
 	if isinstance(num, complex) == True: 
