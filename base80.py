@@ -1,14 +1,5 @@
 #!/usr/bin/python
 
-"""
-This is a binary-to-text encoding tool with a variety of options.
-Bytes ~> Integer ~> Encoded-String ~> Integer ~> Bytes
-      u2i        en                de        i2u      
-       |          |                |          |       
-       +----------+                +----------+       
-          encode                      decode          
-"""
-
 import re
 
 def chop(string, length): # chop string into blocks
@@ -18,7 +9,6 @@ def trim(string, length, char):
 	return string.rstrip(char).ljust(length, char)
 
 class Codex(object):
-
 	def __init__(self, exp, base, limit, regex, byte_list):
 		self.exp = exp # Number of bits contained in a block
 		self.base = base # Radix system inside of a block
