@@ -26,9 +26,9 @@ def array2int(array, base):
 	assert isinstance(array, list), "Error: input not list"
 	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
-	if list[0] = "-": return -1 * list2int(list[1:], base)
+	if array[0] == "-": return -1 * array2int(array[1:], base)
 	num = 0
-	for item in list:
+	for item in array:
 		num *= base
 		num += item
 	return num
@@ -54,10 +54,10 @@ def radix2int(string, base):
 	assert isinstance(string, str), "Error: input not string"
 	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
-	if string[0] = "-": return -1 * radix2int(string[1:], base)
+	if string[0] == "-": return -1 * radix2int(string[1:], base)
 	array = string.split(":")
-	for item in array: item = int(item)
-	return array2int(array)
+	array = [int(item) for item in array]
+	return array2int(array, base)
 
 ################################################################################
 
