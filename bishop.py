@@ -143,8 +143,7 @@ def db_scrape(fingerprint):
 	return [item[:-1] for item in room]
 
 def db_merge(list):
-	super_list = []
-	for item in list: super_list += [db_scrape(item)]
+	super_list = [db_scrape(item) for item in list]
 	output = [''] * len(super_list[0])
 	for y in range(len(super_list[0])):
 		for x in range(len(super_list)):
