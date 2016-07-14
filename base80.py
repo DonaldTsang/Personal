@@ -238,14 +238,13 @@ base60 = Codex(112, 60, 19, '[0-9A-Za-x]{1,%d}', byte)
 
 import hashlib
 
-def pass_check(password):
-	if isinstance(password, str):
-		password = password.encode('utf-8')
-	assert isinstance(password, bytes), "Error: password not bytes"
-	md5_128 = hashlib.md5(password).digest()
-	sha_256 = hashlib.sha256(password).digest()
-	sha_384 = hashlib.sha384(password).digest()
-	sha_512 = hashlib.sha512(password).digest()
+def pass_check(passwd):
+	if isinstance(password, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "Error: password not bytes"
+	md5_128 = hashlib.md5(passwd).digest()
+	sha_256 = hashlib.sha256(passwd).digest()
+	sha_384 = hashlib.sha384(passwd).digest()
+	sha_512 = hashlib.sha512(passwod).digest()
 	code_128 = Codex.mess_en(md5_128, Code(128, -1))
 	code_256 = Codex.mess_en(sha_256, Code(128, -1))
 	code_384 = Codex.mess_en(sha_384, Code(128, -1))
