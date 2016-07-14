@@ -14,7 +14,7 @@ def hex_byte_to_binary(hex_byte): # Convert hex byte into a string of bits
 	assert len(hex_byte) == 2
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
-def bit_pairs(binary): # Convert a word into bit pairs little-endian style.
+def bit_pairs(binary): # Convert a word into bit pairs little-endian style
 	def take(n, iterable):
 		"Return first n items of the iterable as a list"
 		return list(itertools.islice(iterable, n))
@@ -25,8 +25,7 @@ def bit_pairs(binary): # Convert a word into bit pairs little-endian style.
 			yield ''.join(pair)
 	return list(all_pairs(iter(binary)))[::-1]
 
-class Direction(object):
-	"""Encode a sense of direction."""
+class Direction(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
 		self.dx, self.dy = dx, dy
 
@@ -35,17 +34,8 @@ NE = Direction(dx=1, dy=-1)
 SW = Direction(dx=-1, dy=1)
 SE = Direction(dx=1, dy=1)
 
-def directions_from_fingerprint(fingerprint):
-	"""
-	Convert the fingerprint (16 hex-encoded bytes separated by colons)
-	to steps (one of four directions: NW, NE, SW, SE).
-	"""
-	direction_lookup = {
-		'00': NW,
-		'01': NE,
-		'10': SW,
-		'11': SE,
-	}
+def directions_from_fingerprint(fingerprint): # Convert fingerprint into direction
+	direction_lookup = {'00': NW, '01': NE, '10': SW, '11': SE}
 	for hex_byte in fingerprint.split(':'):
 		binary = hex_byte_to_binary(hex_byte)
 		# read each bit-pair in each word right-to-left (little endian)
@@ -53,10 +43,7 @@ def directions_from_fingerprint(fingerprint):
 			direction = direction_lookup[bit_pair]
 			yield direction
 
-def move(position, direction):
-	"""
-	Returns new position given current position and direction to move in.
-	"""
+def move(position, direction): # Returns new position given current condition
 	x, y = position
 	MAX_X = ROOM_DIMENSIONS[0] - 1
 	MAX_Y = ROOM_DIMENSIONS[1] - 1
@@ -79,10 +66,7 @@ def stumble_around(fingerprint):
 	room[position] = COIN_VALUE_ENDING_POSITION
 	return room
 
-def coin(value):
-	"""
-	Display the ascii representation of a coin.
-	"""
+def coin(value): # Display the ascii representation of a coin.
 	return {
 		0: ' ', 1: '.', 2: 'o',
 		3: '+', 4: '=', 5: '*',
