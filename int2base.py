@@ -7,7 +7,7 @@ def posmod(num, den): # special modulo for int2array and int2radix
 
 ################################################################################
 
-def int2list(num, base):
+def int2array(num, base):
 	if isinstance(num, complex) == True: 
 		return [int2array(num.real, base), int2array(num.imag, base)]
 	assert isinstance(num, int), "Error: input not integer"
@@ -22,8 +22,8 @@ def int2list(num, base):
 		converted += [unit]
 	return converted[::-1]
 
-def list2int(list, base):
-	assert isinstance(num, int), "Error: input not integer"
+def array2int(array, base):
+	assert isinstance(array, list), "Error: input not list"
 	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
 	if list[0] = "-": return -1 * list2int(list[1:], base)
@@ -41,7 +41,7 @@ def int2radix(num, base):
 	assert isinstance(num, int), "Error: input not integer"
 	assert isinstance(base, int), "Error: base not integer"
 	assert abs(base) >= 2, "Error: base impossible"
-	if num == 0: return "0".zfill(ceiling)
+	if num == 0: return "".zfill(ceiling)
 	if num < 0 and base > 0: return "-" + int2radix(-num, base)
 	ceiling = ceil(log(abs(base), 10))
 	result = []
@@ -49,6 +49,15 @@ def int2radix(num, base):
 	for i in int2array(num, base):
 		result += [str(i).zfill(ceiling)]
 	return ":".join(result)
+
+def radix2int(string, base):
+	assert isinstance(string, str), "Error: input not string"
+	assert isinstance(base, int), "Error: base not integer"
+	assert abs(base) >= 2, "Error: base impossible"
+	if string[0] = "-": return -1 * radix2int(string[1:], base)
+	array = string.split(":")
+	for item in array: item = int(item)
+	return array2int(array)
 
 ################################################################################
 
