@@ -9,6 +9,7 @@ def trim(string, length, char):
 	return string.rstrip(char).ljust(length, char)
 
 class Codex(object):
+
 	def __init__(self, exp, base, limit, regex, byte_list):
 		self.exp = exp # Number of bits contained in a block
 		self.base = base # Radix system inside of a block
