@@ -353,22 +353,22 @@ def display_room(room):
 	def room_as_strings():
 		yield border
 		for y in range(Y):
-			yield '|'
+			yield "|"
 			for x in range(X):
 				yield coin(room[(x,y)])
-			yield '|\n'
+			yield "|\n"
 		yield border
-	return ''.join(room_as_strings())
+	return "".join(room_as_strings())
 
 ################################################################################
 
 import re
 
 def db_fix(fingerprint): # add colons to fingerprints
-	bihex = '[0-9A-Fa-f]{2}'
-	if bool(re.fullmatch('(' + bihex + '[:]){0,}' + bihex, fingerprint)):
+	bihex = "[0-9A-Fa-f]{2}"
+	if bool(re.fullmatch("(" + bihex + "[:]){0,}" + bihex, fingerprint)):
 		return fingerprint
-	elif bool(re.fullmatch('(' + bihex + '){1,}', fingerprint)):
+	elif bool(re.fullmatch("(" + bihex + "){1,}", fingerprint)):
 		return ":".join(chop(fingerprint, 2))
 	else: assert False, "Error: fingerprint is invalid"
 
@@ -385,26 +385,26 @@ def chop(string, length): # chop string into blocks
 
 def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 	fingerprint = db_fix(fingerprint)
-	finger = [i.rstrip(':') for i in chop(fingerprint, 48)]
+	finger = [i.rstrip(":") for i in chop(fingerprint, 48)]
 	picture = [db_tops(i) for i in finger]
-	return ''.join(picture) + border
+	return "".join(picture) + border
 
 ################################################################################
 
 import hashlib
 
 def db_scrape(fingerprint): # remove last character of each line
-	room = db_multiple(fingerprint).split('\n')[:-1]
+	room = db_multiple(fingerprint).split("\n")[:-1]
 	return [item[:-1] for item in room]
 
 def db_merge(list): # combine multiple vertical ascii frames
 	super_list = [db_scrape(item) for item in list]
-	output = [''] * len(super_list[0])
+	output = [""] * len(super_list[0])
 	for y in range(len(super_list[0])):
 		for x in range(len(super_list)):
 			output[y] += super_list[x][y]
 		output[y] += output[y][0]
-	return '\n'.join(output) + '\n'
+	return "\n".join(output) + "\n"
 
 def db_basic(passwd, num): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
@@ -440,10 +440,10 @@ def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
 	mid_left = insert(mid[0], "0" * 32, 32)
 	mid_right = insert(mid[1], "0" * 32, 32)
-	image = db_merge([left, mid_left, mid_right, right]).split('\n')
+	image = db_merge([left, mid_left, mid_right, right]).split("\n")
 	for i in range(0, 9):
 		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
-	return '\n'.join(image)
+	return "\n".join(image)
 
 ################################################################################
 
@@ -457,13 +457,13 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	assert isinstance(others, int) and others >= 0
 	assert isinstance(chars, str)
 	assert total >= ( upcase + lowcase + numbers + others )
-	up_char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-	low_char = 'abcdefghijklmnopqrstuvwxyz'
-	num_char = '0123456789'
-	chars = '+-_=.:/' if chars == '' else chars
+	up_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	low_char = "abcdefghijklmnopqrstuvwxyz"
+	num_char = "0123456789"
+	chars = "+-_=.:/" if chars == '' else chars
 	royale = up_char + low_char + num_char + chars
 	rest = total - upcase - lowcase - numbers - others
-	result = ''
+	result = ""
 	for i in range(upcase): result += up_char[randint(0, 25)]
 	for i in range(lowcase): result += low_char[randint(0, 25)]
 	for i in range(numbers): result += num_char[randint(0, 9)]
@@ -471,4 +471,4 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	for i in range(rest): result += royale[randint(0, len(royale)-1)]
 	result = list(result)
 	shuffle(result)
-	return ''.join(result)
+	return "".join(result)
