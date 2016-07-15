@@ -20,8 +20,8 @@ class Codex(object):
 
 	#        |000000000111111111122222222223333333|
 	#        |123456789012345678901234567890123456|
-	digit = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ' + \
-		'abcdefghijklmnopqrstuvwxyz.-:+=^!/*?()[]@%$#'
+	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
+		"abcdefghijklmnopqrstuvwxyz.-:+=^!/*?()[]@%$#"
 	#   |33344444444445555555555666666666677777777778|
 	#   |78901234567890123456789012345678901234567890|
 
@@ -147,7 +147,7 @@ class Code(Codex):
 		return base, limit
 
 	dictionary = {
-		80: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		80: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 9, 
 			11, 12, 13, 14, 16, 17, 18, 19, 
 			21, 22, 23, 25, 26, 27, 28, 30, 
@@ -156,20 +156,20 @@ class Code(Codex):
 			51, 52, 54, 55, 56, 57, 59, 60, 
 			61, 63, 64, 65, 66, 68, 69, 70, 
 			71, 73, 74, 75, 76, 78, 79, 80]),
-		79: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}', 
+		79: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}", 
 			[0, 2, 3, 4, 6, 7, 8, 9, 
 			11, 12, 13, 14, 16, 17, 18, 20, 
 			21, 22, 23, 25, 26, 27, 28, 30, 
 			31, 32, 33, 35, 36, 37, 39, 40, 
 			41, 42, 44, 45, 46, 47, 49, 50, 
 			51, 53, 54, 55, 56, 58, 59, 60]),
-		78: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		78: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 9, 
 			11, 12, 13, 15, 16, 17, 18, 20, 
 			21, 22, 23, 25, 26, 27, 29, 30, 
 			31, 32, 34, 35, 36, 37, 39, 40, 
 			41, 43, 44, 45, 46, 48, 49, 50]),
-		76: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		76: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 9, 
 			11, 12, 13, 15, 16, 17, 18, 20, 
 			21, 22, 24, 25, 26, 27, 29, 30, 
@@ -178,7 +178,7 @@ class Code(Codex):
 			52, 53, 54, 56, 57, 58, 59, 61, 
 			62, 63, 65, 66, 67, 68, 70, 71, 
 			72, 73, 75, 76, 77, 79, 80, 81]),
-		75: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		75: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 9, 
 			11, 12, 13, 15, 16, 17, 18, 20, 
 			21, 22, 24, 25, 26, 27, 29, 30, 
@@ -186,14 +186,14 @@ class Code(Codex):
 			42, 43, 44, 45, 47, 48, 49, 51, 
 			52, 53, 54, 56, 57, 58, 60, 61, 
 			62, 63, 65, 66, 67, 69, 70, 71]),
-		74: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		74: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 10, 
 			11, 12, 13, 15, 16, 17, 19, 20, 
 			21, 22, 24, 25, 26, 28, 29, 30, 
 			31, 33, 34, 35, 37, 38, 39, 40, 
 			42, 43, 44, 46, 47, 48, 49, 51, 
 			52, 53, 55, 56, 57, 58, 60, 61]),
-		72: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		72: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 10, 
 			11, 12, 13, 15, 16, 17, 19, 20, 
 			21, 23, 24, 25, 26, 28, 29, 30, 
@@ -202,7 +202,7 @@ class Code(Codex):
 			52, 54, 55, 56, 58, 59, 60, 61, 
 			63, 64, 65, 67, 68, 69, 71, 72, 
 			73, 74, 76, 77, 78, 80, 81, 82]),
-		71: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		71: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 10, 
 			11, 12, 14, 15, 16, 17, 19, 20, 
 			21, 23, 24, 25, 27, 28, 29, 30, 
@@ -210,7 +210,7 @@ class Code(Codex):
 			42, 43, 45, 46, 47, 49, 50, 51, 
 			53, 54, 55, 56, 58, 59, 60, 62, 
 			63, 64, 66, 67, 68, 69, 71, 72]),
-		69: ('[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}',
+		69: ("[!#-%%(-+--:=?-Z[\]^a-z]{1,%d}",
 			[0, 2, 3, 4, 6, 7, 8, 10, 
 			11, 12, 14, 15, 16, 18, 19, 20, 
 			21, 23, 24, 25, 27, 28, 29, 31, 
@@ -229,10 +229,10 @@ byte = [0, 2, 3, 5, 6, 7, 9, 10,
 	54, 55, 57, 58, 59, 61, 62, 63,
 	65, 66, 67, 69, 70, 71, 73, 74]
 
-base63 = Codex(448, 63, 75, '[0-9A-Za-z_]{1,%d}', byte)
-base62 = Codex(256, 62, 43, '[0-9A-Za-z]{1,%d}', byte)
-base61 = Codex(160, 61, 27, '[0-9A-Za-y]{1,%d}', byte)
-base60 = Codex(112, 60, 19, '[0-9A-Za-x]{1,%d}', byte)
+base63 = Codex(448, 63, 75, "[0-9A-Za-z_]{1,%d}", byte)
+base62 = Codex(256, 62, 43, "[0-9A-Za-z]{1,%d}", byte)
+base61 = Codex(160, 61, 27, "[0-9A-Za-y]{1,%d}", byte)
+base60 = Codex(112, 60, 19, "[0-9A-Za-x]{1,%d}", byte)
 
 ################################################################################
 
@@ -282,7 +282,7 @@ room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
 # encode start and end positions
 coin_value_start_position, coin_value_end_position = 15, 16
 
-border = '+' + '-' * room_dimensions[0] + '+\n'
+border = "+" + "-" * room_dimensions[0] + "+\n"
 
 def hex_byte_to_binary(hex_byte): # convert hex byte into a string of bits
 	assert len(hex_byte) == 2
@@ -295,7 +295,7 @@ def bit_pairs(binary): # convert a word into bit pairs little-endian style
 		while True:
 			pair = take(2, iterable)
 			if not pair: break
-			yield ''.join(pair)
+			yield "".join(pair)
 	return list(all_pairs(iter(binary)))[::-1]
 
 class Direction(object): # Encode a sense of direction
@@ -308,8 +308,8 @@ SW = Direction(dx=-1, dy=1)
 SE = Direction(dx=1, dy=1)
 
 def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
-	direction_lookup = {'00': NW, '01': NE, '10': SW, '11': SE}
-	for hex_byte in fingerprint.split(':'):
+	direction_lookup = {"00": NW, "01": NE, "10": SW, "11": SE}
+	for hex_byte in fingerprint.split(":"):
 		binary = hex_byte_to_binary(hex_byte)
 		# read each bit-pair in each word right-to-left (little endian)
 		for bit_pair in bit_pairs(binary):
@@ -341,12 +341,12 @@ def stumble_around(fingerprint):
 
 def coin(value): # Display the ascii representation of a coin
 	return {
-		0: ' ', 1: '.', 2: 'o', 3: '+', 4: '=',
-        5: '*', 6: 'B', 7: 'O', 8: 'X', 9: '@',
-        10: '%', 11: '&', 12: '#', 13: '/', 14: '^',
-		coin_value_start_position: 'S',
-		coin_value_end_position: 'E',
-	}.get(value, '!')
+		0: " ", 1: ".", 2: "o", 3: "+", 4: "=",
+		5: "*", 6: "B", 7: "O", 8: "X", 9: "@",
+		10: "%", 11: "&", 12: "#", 13: "/", 14: "^",
+		coin_value_start_position: "S",
+		coin_value_end_position: "E",
+	}.get(value, "!")
 
 def display_room(room):
 	X, Y = room_dimensions
