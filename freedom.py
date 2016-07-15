@@ -50,7 +50,7 @@ class Codex(object):
 		return result.ljust(self.limit, "0")
 
 	def de(string, self): # decode text into integer
-		assert isinstance(string, str)
+		assert isinstance(string, str), "Error: message not string"
 		assert len(string) <= self.limit, "Error: string too long"
 		assert bool(re.fullmatch(self.regex % self.limit, string))
 		result, string = 0, string[::-1].lstrip("0")
@@ -61,8 +61,8 @@ class Codex(object):
 		return result
 
 	def u2i(string, self): # encode unicode into integer
-		string = string.encode('utf-8') if isinstance(string, str) else string
-		assert isinstance(string, bytes), "Error: message not bytes"
+		if isinstance(string, str): passwd = passwd.encode('utf-8')
+		assert isinstance(string, bytes), "Error: password not bytes"
 		assert len(string) <= (self.byte), "Error: string too long"
 		result, string = 0, string[::-1].lstrip(b'\x00')
 		for char in string:
@@ -94,7 +94,7 @@ class Codex(object):
 		return trim(medium, self.byte_list.index(len(string)), b"\x00")
 
 	def mess_en(string, self): # encode unicode into text
-		string = string.encode('utf-8') if isinstance(string, str) else string
+		if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 		assert isinstance(string, bytes), "Error: message not bytes"
 		string = chop(string, self.byte)
 		return "".join([Codex.block_en(steak, self) for steak in string])
@@ -284,11 +284,11 @@ coin_value_start_position, coin_value_end_position = 15, 16
 
 border = '+' + '-' * room_dimensions[0] + '+\n'
 
-def hex_byte_to_binary(hex_byte): # Convert hex byte into a string of bits
+def hex_byte_to_binary(hex_byte): # convert hex byte into a string of bits
 	assert len(hex_byte) == 2
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
-def bit_pairs(binary): # Convert a word into bit pairs little-endian style
+def bit_pairs(binary): # convert a word into bit pairs little-endian style
 	def take(n, iterable): # Return first n items of the iterable as a list
 		return list(itertools.islice(iterable, n))
 	def all_pairs(iterable):
@@ -307,7 +307,7 @@ NE = Direction(dx=1, dy=-1)
 SW = Direction(dx=-1, dy=1)
 SE = Direction(dx=1, dy=1)
 
-def directions_from_fingerprint(fingerprint): # Convert fingerprint into direction
+def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
 	direction_lookup = {'00': NW, '01': NE, '10': SW, '11': SE}
 	for hex_byte in fingerprint.split(':'):
 		binary = hex_byte_to_binary(hex_byte)
@@ -316,7 +316,7 @@ def directions_from_fingerprint(fingerprint): # Convert fingerprint into directi
 			direction = direction_lookup[bit_pair]
 			yield direction
 
-def move(position, direction): # Returns new position given current condition
+def move(position, direction): # returns new position given current condition
 	x, y = position
 	MAX_X = room_dimensions[0] - 1
 	MAX_Y = room_dimensions[1] - 1
@@ -341,11 +341,9 @@ def stumble_around(fingerprint):
 
 def coin(value): # Display the ascii representation of a coin
 	return {
-		0: ' ', 1: '.', 2: 'o',
-		3: '+', 4: '=', 5: '*',
-		6: 'B', 7: 'O', 8: 'X',
-		9: '@', 10: '%', 11: '&',
-		12: '#', 13: '/', 14: '^',
+		0: ' ', 1: '.', 2: 'o', 3: '+', 4: '=',
+        5: '*', 6: 'B', 7: 'O', 8: 'X', 9: '@',
+        10: '%', 11: '&', 12: '#', 13: '/', 14: '^',
 		coin_value_start_position: 'S',
 		coin_value_end_position: 'E',
 	}.get(value, '!')
@@ -395,11 +393,11 @@ def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 
 import hashlib
 
-def db_scrape(fingerprint):
+def db_scrape(fingerprint): # remove last character of each line
 	room = db_multiple(fingerprint).split('\n')[:-1]
 	return [item[:-1] for item in room]
 
-def db_merge(list):
+def db_merge(list): # combine multiple vertical ascii frames
 	super_list = [db_scrape(item) for item in list]
 	output = [''] * len(super_list[0])
 	for y in range(len(super_list[0])):
@@ -408,8 +406,9 @@ def db_merge(list):
 		output[y] += output[y][0]
 	return '\n'.join(output) + '\n'
 
-def db_basic(passwd, num):
+def db_basic(passwd, num): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+    assert isinstance(passwd, bytes), "input not bytes"
 	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
 	md5 = hashlib.md5(passwd).hexdigest()
 	sha_256 = hashlib.sha256(passwd).hexdigest()
@@ -430,8 +429,9 @@ def db_basic(passwd, num):
 
 ################################################################################
 
-def db_supreme(passwd):
+def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+    assert isinstance(passwd, bytes), "input not bytes"
 	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
 	right = hashlib.sha384(passwd).hexdigest()
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
