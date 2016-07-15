@@ -142,6 +142,7 @@ def db_1234689(passwd, num):
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_384 = hashlib.sha384(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
+	finger, constant = "", 0
 	if num == 1: finger = md5
 	elif num == 2: finger == sha_256
 	elif num == 3: finger == sha_384
