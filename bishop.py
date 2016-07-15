@@ -15,8 +15,7 @@ def hex_byte_to_binary(hex_byte): # Convert hex byte into a string of bits
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
 def bit_pairs(binary): # Convert a word into bit pairs little-endian style
-	def take(n, iterable):
-		"Return first n items of the iterable as a list"
+	def take(n, iterable): # Return first n items of the iterable as a list
 		return list(itertools.islice(iterable, n))
 	def all_pairs(iterable):
 		while True:
@@ -50,7 +49,7 @@ def move(position, direction): # Returns new position given current condition
 	assert 0 <= x <= MAX_X
 	assert 0 <= y <= MAX_Y
 	new_x, new_y = x + direction.dx, y + direction.dy
-	# the drunk bishop is hindered by the wall.
+	# the drunk bishop is hindered by the wall
 	new_x = 0 if new_x <= 0 else min(new_x, MAX_X)
 	new_y = 0 if new_y <= 0 else min(new_y, MAX_Y)
 	return new_x, new_y
@@ -66,7 +65,7 @@ def stumble_around(fingerprint):
 	room[position] = COIN_VALUE_ENDING_POSITION
 	return room
 
-def coin(value): # Display the ascii representation of a coin.
+def coin(value): # Display the ascii representation of a coin
 	return {
 		0: ' ', 1: '.', 2: 'o',
 		3: '+', 4: '=', 5: '*',
@@ -93,7 +92,7 @@ def display_room(room):
 
 import re
 
-def db_fix(fingerprint):
+def db_fix(fingerprint): # add colons to fingerprints
 	bihex = '[0-9A-Fa-f]{2}'
 	if bool(re.fullmatch('(' + bihex + '[:]){0,}' + bihex, fingerprint)):
 		return fingerprint
