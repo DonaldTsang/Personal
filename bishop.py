@@ -135,7 +135,7 @@ def db_merge(list):
 		output[y] += output[y][0]
 	return '\n'.join(output) + '\n'
 
-def db_1234689(passwd, num):
+def db_basic(passwd, num):
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
 	md5 = hashlib.md5(passwd).hexdigest()
@@ -144,12 +144,12 @@ def db_1234689(passwd, num):
 	sha_512 = hashlib.sha512(passwd).hexdigest()
 	finger, constant = "", 0
 	if num == 1: finger = md5
-	elif num == 2: finger == sha_256
-	elif num == 3: finger == sha_384
-	elif num == 4: finger == sha_512
-	elif num == 6: finger == sha_256 + sha_512
-	elif num == 8: finger == md5 + sha_384 + sha_512
-	elif num == 9: finger == sha_256 + sha_384 + sha_512
+	elif num == 2: finger = sha_256
+	elif num == 3: finger = sha_384
+	elif num == 4: finger = sha_512
+	elif num == 6: finger = sha_256 + sha_512
+	elif num == 8: finger = md5 + sha_384 + sha_512
+	elif num == 9: finger = sha_256 + sha_384 + sha_512
 	if num in [1, 2, 3]: constant = 32
 	elif num in [4, 6, 8]: constant = 64
 	elif num == 9: constant = 96
