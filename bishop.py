@@ -156,25 +156,6 @@ def db_basic(passwd, num):
 
 ################################################################################
 
-def db_ded(passwd):
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_160 = hashlib.sha1(passwd).hexdigest()
-	sha_224 = hashlib.sha224(passwd).hexdigest()
-	sha_finger = sha_160 + sha_224
-	return db_merge(chop(sha_finger, 32))
-
-def db_wow(passwd):
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_384 = hashlib.sha384(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_160 = hashlib.sha1(passwd).hexdigest()
-	sha_224 = hashlib.sha224(passwd).hexdigest()
-	sha_finger = sha_256 + sha_384 + sha_512 + (sha_160 + sha_224)
-	return db_merge(chop(sha_finger, 96))
-
-################################################################################
-
 def db_supreme(passwd):
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
