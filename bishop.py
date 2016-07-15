@@ -2,13 +2,13 @@ import itertools
 from collections import Counter
 
 # the bishop starts in the center of the room
-STARTING_POSITION = (8, 4) # this is 128-bit, 256-bit should be (12, 6)
-ROOM_DIMENSIONS = (STARTING_POSITION[0] * 2 + 1, STARTING_POSITION[1] * 2 + 1)
+start_position = (8, 4) # this is 128-bit, 256-bit should be (12, 6)
+room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
 
 # encode start and end positions
-COIN_VALUE_STARTING_POSITION, COIN_VALUE_ENDING_POSITION = 15, 16
+coin_value_start_position, coin_value_end_position = 15, 16
 
-BORDER = '+' + '-' * ROOM_DIMENSIONS[0] + '+\n'
+border = '+' + '-' * room_dimensions[0] + '+\n'
 
 def hex_byte_to_binary(hex_byte): # Convert hex byte into a string of bits
 	assert len(hex_byte) == 2
@@ -44,8 +44,8 @@ def directions_from_fingerprint(fingerprint): # Convert fingerprint into directi
 
 def move(position, direction): # Returns new position given current condition
 	x, y = position
-	MAX_X = ROOM_DIMENSIONS[0] - 1
-	MAX_Y = ROOM_DIMENSIONS[1] - 1
+	MAX_X = room_dimensions[0] - 1
+	MAX_Y = room_dimensions[1] - 1
 	assert 0 <= x <= MAX_X
 	assert 0 <= y <= MAX_Y
 	new_x, new_y = x + direction.dx, y + direction.dy
@@ -56,13 +56,13 @@ def move(position, direction): # Returns new position given current condition
 
 def stumble_around(fingerprint):
 	room = Counter()
-	position = STARTING_POSITION
+	position = start_position
 	for direction in directions_from_fingerprint(fingerprint):
 		position = move(position, direction)
 		room[position] += 1  # drop coin
 	# mark start and end positions
-	room[STARTING_POSITION] = COIN_VALUE_STARTING_POSITION
-	room[position] = COIN_VALUE_ENDING_POSITION
+	room[start_position] = coin_value_start_position
+	room[position] = coin_value_end_position
 	return room
 
 def coin(value): # Display the ascii representation of a coin
@@ -72,20 +72,20 @@ def coin(value): # Display the ascii representation of a coin
 		6: 'B', 7: 'O', 8: 'X',
 		9: '@', 10: '%', 11: '&',
 		12: '#', 13: '/', 14: '^',
-		COIN_VALUE_STARTING_POSITION: 'S',
-		COIN_VALUE_ENDING_POSITION: 'E',
+		coin_value_start_position: 'S',
+		coin_value_end_position: 'E',
 	}.get(value, '!')
 
 def display_room(room):
-	X, Y = ROOM_DIMENSIONS
+	X, Y = room_dimensions
 	def room_as_strings():
-		yield BORDER
+		yield border
 		for y in range(Y):
 			yield '|'
 			for x in range(X):
 				yield coin(room[(x,y)])
 			yield '|\n'
-		yield BORDER
+		yield border
 	return ''.join(room_as_strings())
 
 ################################################################################
@@ -106,7 +106,7 @@ def db(fingerprint): # Creates a piece of art base on 32 hex
 
 def db_tops(fingerprint): # db but without the bottom frame
 	room = stumble_around(db_fix(fingerprint))
-	return display_room(room)[:-(ROOM_DIMENSIONS[0]+3)]
+	return display_room(room)[:-(room_dimensions[0]+3)]
 
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
@@ -115,7 +115,7 @@ def db_multiple(fingerprint): # Vertically stacked drunken_bishop
 	fingerprint = db_fix(fingerprint)
 	finger = [i.rstrip(':') for i in chop(fingerprint, 48)]
 	picture = [db_tops(i) for i in finger]
-	return ''.join(picture) + BORDER
+	return ''.join(picture) + border
 
 ################################################################################
 
