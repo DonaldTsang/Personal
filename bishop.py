@@ -135,48 +135,24 @@ def db_merge(list):
 		output[y] += output[y][0]
 	return '\n'.join(output) + '\n'
 
-def db_1x1(passwd): # A 1x1 db rectangle based on MD-5
+def db_1234689(passwd, num):
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
 	md5 = hashlib.md5(passwd).hexdigest()
-	return db_merge(chop(md5, 32))
-
-def db_1x2(passwd): # A 1x2 db rectangle based on SHA-256
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	return db_merge(chop(sha_256, 32))
-
-def db_1x3(passwd): # A 1x3 db rectangle based on SHA-384
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_384 = hashlib.sha384(passwd).hexdigest()
-	return db_merge(chop(sha_384, 32))
-
-def db_2x2(passwd): # A 2x2 db rectangle based on SHA-512
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	return db_merge(chop(sha_512, 64))
-
-def db_2x3(passwd): # A 2x3 db rectangle based on SHA-256/512
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_finger = sha_256 + sha_512
-	return db_merge(chop(sha_finger, 64))
-
-def db_2x4(passwd): # A 2x3 db rectangle based on MD5 & SHA-384/512
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	md5 = hashlib.md5(passwd).hexdigest()
-	sha_384 = hashlib.sha384(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_finger = md5 + sha_384 + sha_512
-	return db_merge(chop(sha_finger, 64))
-
-def db_3x3(passwd): # A 3x3 db rectangle based on SHA-256/384/512
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_384 = hashlib.sha384(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
-	sha_finger = sha_256 + sha_384 + sha_512
-	return db_merge(chop(sha_finger, 96))
+	if num == 1: finger = md5
+	elif num == 2: finger == sha_256
+	elif num == 3: finger == sha_384
+	elif num == 4: finger == sha_512
+	elif num == 6: finger == sha_256 + sha_512
+	elif num == 8: finger == md5 + sha_384 + sha_512
+	elif num == 9: finger == sha_256 + sha_384 + sha_512
+	if num in [1, 2, 3]: constant = 32
+	elif num in [4, 6, 8]: constant = 64
+	elif num == 9: constant = 96
+	return db_merge(chop(finger, constant))
 
 ################################################################################
 
