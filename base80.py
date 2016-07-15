@@ -262,13 +262,10 @@ def pass_check(passwd):
 ################################################################################
 
 """
-def shiftz(exp): # for 256/320/384/448/512-bits
-	assert isinstance(exp, int), "Error: exponent not integer"
-	assert exp % 64 == 0, "Error: exponent not multiple of 64"
+def shiftz(exp):
 	exp //= 64
-	assert 4 <= exp <= 8, "Error: exponent out of range"
-	limit = exp * 10 - 1
-	base = 98 - exp
+	assert 4 <= exp <= 8
+	limit, base = exp * 10 - 1, 98 - exp
 	base += 1 if base == 94 else 0 
 	return base, limit
 """
