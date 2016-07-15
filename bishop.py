@@ -2,7 +2,7 @@ import itertools
 from collections import Counter
 
 # the bishop starts in the center of the room
-STARTING_POSITION = (8, 4)
+STARTING_POSITION = (8, 4) # this is 128-bit, 256-bit should be (12, 6)
 ROOM_DIMENSIONS = (STARTING_POSITION[0] * 2 + 1, STARTING_POSITION[1] * 2 + 1)
 
 # encode start and end positions
