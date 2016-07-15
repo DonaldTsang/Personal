@@ -176,11 +176,6 @@ def db_wow(passwd):
 
 ################################################################################
 
-import base80
-
-def insert(string, char, index):
-	return string[:index] + char + string[index:]
-
 def db_supreme(passwd):
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
