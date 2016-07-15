@@ -429,6 +429,9 @@ def db_basic(passwd, num): # creates rectangles based on hashes
 
 ################################################################################
 
+def insert(string, char, index):
+	return string[:index] + char + string[index:]
+
 def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
     assert isinstance(passwd, bytes), "input not bytes"
@@ -437,8 +440,7 @@ def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
 	mid_left = insert(mid[0], "0" * 32, 32)
 	mid_right = insert(mid[1], "0" * 32, 32)
-	image = db_merge([left, mid_left, mid_right, right])
-	image = image.split('\n')
+	image = db_merge([left, mid_left, mid_right, right]).split('\n')
 	for i in range(0, 9):
 		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
 	return '\n'.join(image)
