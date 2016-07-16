@@ -3,7 +3,7 @@
 
 import struct
 
-base91_alphabet = [
+b91_alph = [
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -12,7 +12,7 @@ base91_alphabet = [
 	'%', '&', '(', ')', '*', '+', ',', '.', '/', ':', ';', '<', '=',
 	'>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~', '"']
 
-decode_table = dict((v,k) for k,v in enumerate(base91_alphabet))
+decode_table = dict((v,k) for k,v in enumerate(b91_alph))
 
 def decode(encoded_str): #Decode Base91 string to a bytearray
 	v, b, n = -1, 0, 0
@@ -45,8 +45,8 @@ def encode(bindata): # Encode a bytearray to a Base91 string
 			v = b & 8191
 			b >>= 13
 			n -= 13
-			out += base91_alphabet[v % 91] + base91_alphabet[v // 91]
+			out += b91_alph[v % 91] + b91_alph[v // 91]
 	if n:
-		out += base91_alphabet[b % 91]
-		if n>7 or b>90: out += base91_alphabet[b // 91]
+		out += b91_alph[b % 91]
+		if n>7 or b>90: out += b91_alph[b // 91]
 	return out
