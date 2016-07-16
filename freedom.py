@@ -408,7 +408,7 @@ def db_merge(list): # combine multiple vertical ascii frames
 
 def db_basic(passwd, num): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-    assert isinstance(passwd, bytes), "input not bytes"
+	assert isinstance(passwd, bytes), "input not bytes"
 	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
 	md5 = hashlib.md5(passwd).hexdigest()
 	sha_256 = hashlib.sha256(passwd).hexdigest()
@@ -434,7 +434,7 @@ def insert(string, char, index):
 
 def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-    assert isinstance(passwd, bytes), "input not bytes"
+	assert isinstance(passwd, bytes), "input not bytes"
 	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
 	right = hashlib.sha384(passwd).hexdigest()
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
