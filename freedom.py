@@ -5,7 +5,7 @@ import re
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
-def trim(string, length, char):
+def trim(string, length, char): # trim padding of a string
 	return string.rstrip(char).ljust(length, char)
 
 class Codex(object):
@@ -238,7 +238,8 @@ base60 = Codex(112, 60, 19, "[0-9A-Za-x]{1,%d}", byte)
 
 from textwrap import wrap
 
-def new_line(text, count): return "\n".join(wrap(text, count))
+def new_line(text, count): # split long string and add newline
+	return "\n".join(wrap(text, count))
 
 ################################################################################
 
@@ -335,8 +336,7 @@ def move(position, direction): # returns new position given current condition
 	return new_x, new_y
 
 def stumble_around(fingerprint):
-	room = Counter()
-	position = start_position
+	room, position = Counter(), start_position
 	for direction in directions_from_fingerprint(fingerprint):
 		position = move(position, direction)
 		room[position] += 1  # drop coin
