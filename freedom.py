@@ -236,6 +236,12 @@ base60 = Codex(112, 60, 19, "[0-9A-Za-x]{1,%d}", byte)
 
 ################################################################################
 
+from textwrap import wrap
+
+def new_line(text, count): return "\n".join(wrap(text, count))
+
+################################################################################
+
 import hashlib
 
 def pass_check(passwd):
