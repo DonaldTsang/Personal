@@ -285,7 +285,7 @@ import itertools
 from collections import Counter
 
 # the bishop starts in the center of the room
-start_position = (8, 4) # this is 128-bit, 256-bit should be (12, 6)
+start_position = (8, 4) # this is 128-bit, 256-bit should be (11, 6) or (12, 6)
 room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
 
 # encode start and end positions
@@ -306,6 +306,8 @@ def bit_pairs(binary): # convert a word into bit pairs little-endian style
 			if not pair: break
 			yield "".join(pair)
 	return list(all_pairs(iter(binary)))[::-1]
+
+################################################################################
 
 class Direction(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
