@@ -313,10 +313,7 @@ class Direction(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
 		self.dx, self.dy = dx, dy
 
-NW = Direction(dx=-1, dy=-1)
-NE = Direction(dx=1, dy=-1)
-SW = Direction(dx=-1, dy=1)
-SE = Direction(dx=1, dy=1)
+NW, NE, SW, SE = Direction(-1, -1), Direction(1, -1), Direction(-1, 1), Direction(1, 1)
 
 def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"00": NW, "01": NE, "10": SW, "11": SE}
