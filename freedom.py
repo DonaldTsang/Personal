@@ -39,6 +39,8 @@ class Codex(object):
 		assert isinstance(regex, str), "Error: regex not string"
 		assert self.digit[0] == "0", "Error: first digit not zero"
 
+################################################################################
+
 	def en(integer, self): # encode integer into text
 		assert isinstance(integer, int), "Error: message not integer"
 		assert 0 <= integer < self.bound, "Error: number out of range"
