@@ -96,7 +96,7 @@ class Codex(object):
 		return trim(medium, self.byte_list.index(len(string)), b"\x00")
 
 	def mess_en(string, self): # encode unicode into text
-		if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+		if isinstance(string, str): string = string.encode('utf-8')
 		assert isinstance(string, bytes), "Error: message not bytes"
 		string = chop(string, self.byte)
 		return "".join([Codex.block_en(steak, self) for steak in string])
