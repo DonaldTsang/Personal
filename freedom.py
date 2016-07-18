@@ -2,6 +2,10 @@
 
 import re
 
+# https://github.com/natmchugh/drunken-bishop/blob/master/drunken-bishop.py
+# https://github.com/atoponce/keyart/blob/master/keyart
+
+
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
