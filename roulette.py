@@ -19,7 +19,7 @@ class roulette(object):
 		assert isinstance(bet, int)
 		assert self.cash >= bet > 0
 		self.cash -= bet
-	def twin(self, bet, pick):
+	def twins(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["odd", "even"]
 		roll()
@@ -31,7 +31,7 @@ class roulette(object):
 		elif ball % 2 == 1 and pick == "odd":
 			self.cash += 2 * bet + bet // 12
 		print(self.cash)
-	def dozen(self, bet, pick):
+	def dozens(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
 		roll()
@@ -45,7 +45,7 @@ class roulette(object):
 		elif 24 < ball <= 36 and pick == "3rd":
 			self.cash += bet * 3 + bet // 12
 		print(self.cash)
-	def column(self, bet, pick):
+	def columns(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
 		roll()
