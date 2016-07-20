@@ -5,6 +5,12 @@ def roll():
 	global ball
 	ball = randint(0, 38)
 
+def num(ball):
+	assert isinstance(ball, int)
+	assert 0 <= ball <= 37
+	if ball == 37: return "00"
+	else: return str(ball)
+
 class roulette(object):
 	def __init__(self, cash):
 		self.cash = cash
@@ -17,8 +23,8 @@ class roulette(object):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["odd", "even"]
 		roll()
-		print("You picked %s, and ball lands on %s" % (pick, ball))
-		if ball == 0 or ball == 38:
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball == 0 or ball == 37:
 			pass
 		elif ball % 2 == 0 and pick == "even":
 			self.cash += 2 * bet + bet // 12
@@ -29,8 +35,8 @@ class roulette(object):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
 		roll()
-		print("You picked %s, and ball lands on %s" % (pick, ball))
-		if ball in [0, 38]:
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball in [0, 37]:
 			pass
 		elif 0 < ball <= 12 and pick == "1st":
 			self.cash += bet * 3 + bet // 12
@@ -43,8 +49,8 @@ class roulette(object):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
 		roll()
-		print("You picked %s, and ball lands on %s" % (pick, ball))
-		if ball in [0, 38]:
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball in [0, 37]:
 			pass
 		elif ball % 3 == 0 and pick == "1st":
 			self.cash += bet * 3 + (bet * 1) // 12
@@ -58,8 +64,8 @@ class roulette(object):
 		assert pick in ["red", "blue", "teal", "purple",
 			"green", "orange", "yellow", "pink"]
 		roll()
-		print("You picked %s, and ball lands on %s" % (pick, ball))
-		if ball in [25, 10, 27, 38, 1, 13, 36] and pick == "red":
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball in [25, 10, 27, 37, 1, 13, 36] and pick == "red":
 			self.cash += bet * 5 + (bet * 5) // 12
 		elif ball in [24, 3, 15, 34, 22] and pick == "blue":
 			self.cash += bet * 7 + (bet * 7) // 12
