@@ -27,9 +27,9 @@ class roulette(object):
 		if ball in [0, 37]:
 			pass
 		elif 0 < ball <= 18 and pick == "low":
-			self.cash += 2 * bet + bet // 12
+			self.cash += 2 * bet + (bet * 1) // 12
 		elif 18 < ball <= 36 and pick == "hi":
-			self.cash += 2 * bet + bet // 12
+			self.cash += 2 * bet + (bet * 1) // 12
 		print(self.cash)
 	def twins(self, bet, pick):
 		self.cash = roulette.check(self, bet)
@@ -39,9 +39,9 @@ class roulette(object):
 		if ball in [0, 37]:
 			pass
 		elif ball % 2 == 0 and pick == "even":
-			self.cash += 2 * bet + bet // 12
+			self.cash += 2 * bet + (bet * 1) // 12
 		elif ball % 2 == 1 and pick == "odd":
-			self.cash += 2 * bet + bet // 12
+			self.cash += 2 * bet + (bet * 1) // 12
 		print(self.cash)
 	def dozens(self, bet, pick):
 		self.cash = roulette.check(self, bet)
@@ -51,11 +51,11 @@ class roulette(object):
 		if ball in [0, 37]:
 			pass
 		elif 0 < ball <= 12 and pick == "1st":
-			self.cash += bet * 3 + bet // 12
+			self.cash += bet * 3 + (bet * 1) // 12
 		elif 12 < ball <= 24 and pick == "2nd":
-			self.cash += bet * 3 + bet // 12
+			self.cash += bet * 3 + (bet * 1) // 12
 		elif 24 < ball <= 36 and pick == "3rd":
-			self.cash += bet * 3 + bet // 12
+			self.cash += bet * 3 + (bet * 1) // 12
 		print(self.cash)
 	def column(self, bet, pick):
 		self.cash = roulette.check(self, bet)
