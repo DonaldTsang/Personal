@@ -21,6 +21,24 @@ class roulette(object):
 		assert self.cash >= bet > 0
 		self.cash -= bet
 
+	def num(self, bet, pick): # zero house edge
+		self.cash = roulette.check(self, bet)
+		assert isinstance(pick, int)
+		assert 0 <= pick <= 37
+		roll()
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball == pick:
+			self.cash += 38 * bet
+		print(self.cash)
+
+	def zero(self, bet): # zero house edge
+		self.cash = roulette.check(self, bet)
+		roll()
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball in [0, 37]:
+			self.cash += 19 * bet
+		print(self.cash)
+
 	def hilo(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["hi", "lo"]
