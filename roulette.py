@@ -38,9 +38,9 @@ class roulette(object):
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
 		if ball in [0, 37]:
 			pass
-		elif ball % 2 == 0 and pick == "even":
-			self.cash += 2 * bet + (bet * 1) // 12
 		elif ball % 2 == 1 and pick == "odd":
+			self.cash += 2 * bet + (bet * 1) // 12
+		elif ball % 2 == 0 and pick == "even":
 			self.cash += 2 * bet + (bet * 1) // 12
 		print(self.cash)
 	def dozen(self, bet, pick): # zero house edge
@@ -64,14 +64,14 @@ class roulette(object):
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
 		if ball in [0, 37]:
 			pass
-		elif ball % 3 == 0 and pick == "1st":
+		elif ball % 3 == 1 and pick == "1st":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 3 == 1 and pick == "2nd":
+		elif ball % 3 == 2 and pick == "2nd":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 3 == 2 and pick == "3rd":
+		elif ball % 3 == 3 and pick == "3rd":
 			self.cash += bet * 3 + (bet * 2) // 12
 		print(self.cash)
-	def sixes(self, bet, pick):
+	def sexies(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd", "4th", "5th", "6th"]
 		roll()
@@ -98,17 +98,17 @@ class roulette(object):
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
 		if ball in [0, 37]:
 			pass
-		elif ball % 6 == 0 and pick == "1st":
+		elif ball % 6 == 1 and pick == "1st":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 1 and pick == "2nd":
+		elif ball % 6 == 2 and pick == "2nd":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 2 and pick == "3rd":
+		elif ball % 6 == 3 and pick == "3rd":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 3 and pick == "4th":
+		elif ball % 6 == 4 and pick == "4th":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 4 and pick == "5th":
+		elif ball % 6 == 5 and pick == "5th":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 5 and pick == "6th":
+		elif ball % 6 == 6 and pick == "6th":
 			self.cash += bet * 3 + (bet * 2) // 12
 	def colours(self, bet, pick):
 		self.cash = roulette.check(self, bet)
