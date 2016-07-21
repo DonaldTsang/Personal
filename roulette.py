@@ -31,12 +31,38 @@ class roulette(object):
 			self.cash += 38 * bet
 		print(self.cash)
 
-	def zero(self, bet): # zero house edge
+	def row(self, bet, pick): # zero house edge
 		self.cash = roulette.check(self, bet)
+		assert isinstance(pick, int)
+		assert 0 <= pick <= 12
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
-		if ball in [0, 37]:
+		if ball in [0, 37] and pick == 0:
 			self.cash += 19 * bet
+		elif 0 < ball <= 3 and pick == 1:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 3 < ball <= 6 and pick == 2:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 6 < ball <= 9 and pick == 3:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 9 < ball <= 12 and pick == 4:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 12 < ball <= 15 and pick == 5:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 15 < ball <= 18 and pick == 6:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 18 < ball <= 21 and pick == 7:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 21 < ball <= 24 and pick == 8:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 24 < ball <= 27 and pick == 9:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 27 < ball <= 30 and pick == 10:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 30 < ball <= 33 and pick == 11:
+			self.cash += 12 * bet + (bet * 8) // 12
+		elif 36 < ball <= 36 and pick == 12:
+			self.cash += 12 * bet + (bet * 8) // 12
 		print(self.cash)
 
 	def hilo(self, bet, pick):
