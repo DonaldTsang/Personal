@@ -14,11 +14,13 @@ def num(ball):
 class roulette(object):
 	def __init__(self, cash):
 		self.cash = cash
+
 	def check(self, bet):
 		assert isinstance(self.cash, int)
 		assert isinstance(bet, int)
 		assert self.cash >= bet > 0
 		self.cash -= bet
+
 	def hilo(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["hi", "lo"]
@@ -31,6 +33,7 @@ class roulette(object):
 		elif 18 < ball <= 36 and pick == "hi":
 			self.cash += 2 * bet + (bet * 1) // 12
 		print(self.cash)
+
 	def twin(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["odd", "even"]
@@ -43,6 +46,7 @@ class roulette(object):
 		elif ball % 2 == 0 and pick == "even":
 			self.cash += 2 * bet + (bet * 1) // 12
 		print(self.cash)
+
 	def dozen(self, bet, pick): # zero house edge
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
@@ -57,6 +61,7 @@ class roulette(object):
 		elif 24 < ball <= 36 and pick == "3rd":
 			self.cash += bet * 3 + (bet * 2) // 12
 		print(self.cash)
+
 	def lines(self, bet, pick): # zero house edge
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
@@ -71,6 +76,7 @@ class roulette(object):
 		elif ball % 3 == 3 and pick == "3rd":
 			self.cash += bet * 3 + (bet * 2) // 12
 		print(self.cash)
+
 	def sexies(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd", "4th", "5th", "6th"]
@@ -91,6 +97,7 @@ class roulette(object):
 		elif 30 < ball <= 36 and pick == "6th":
 			self.cash += bet * 6 + (bet * 4) // 12
 		print(self.cash)
+
 	def column(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd", "4th", "5th", "6th"]
@@ -110,6 +117,7 @@ class roulette(object):
 			self.cash += bet * 3 + (bet * 2) // 12
 		elif ball % 6 == 0 and pick == "6th":
 			self.cash += bet * 3 + (bet * 2) // 12
+
 	def colours(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["red", "blue", "teal", "purple",
