@@ -26,7 +26,7 @@ class roulette(object):
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
 		if ball in [0, 37]:
 			pass
-		elif 0 < ball <= 18 and pick == "low":
+		elif 0 < ball <= 18 and pick == "lo":
 			self.cash += 2 * bet + (bet * 1) // 12
 		elif 18 < ball <= 36 and pick == "hi":
 			self.cash += 2 * bet + (bet * 1) // 12
