@@ -94,7 +94,7 @@ class twister(object):
 			elif dice[0] % 2 == 0 and pick == "even":
 				self.cash += 8 # zero house edge
 		elif pick == "mixed":
-			self.cash += 1 * bet + (bet * 4) // 12
+			self.cash += 1 * bet + (bet * 4) // 12 # zero house edge
 		print(self.cash)
 
 	def duo_dubs(self, bet, pick):
@@ -138,13 +138,13 @@ class twister(object):
 
 	def trio_straight(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
-		assert pick in ["lo", "high", "any"]
+		assert pick in ["lo", "hi", "any"]
 		roll()
 		print("You picked straights, and rolls are %s" % dice)
 		if result in [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]:
 			if result in [[1, 2, 3], [2, 3, 4]] and pick == "lo":
 				self.cash += 18 * bet
-			elif result in[[3, 4, 5], [4, 5, 6]] and pick == "high":
+			elif result in[[3, 4, 5], [4, 5, 6]] and pick == "hi":
 				self.cash += 18 * bet
 			elif pick == "any":
 				self.cash += 9 * bet
