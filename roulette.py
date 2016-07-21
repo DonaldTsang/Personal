@@ -3,7 +3,7 @@ from random import randint
 ball = 0
 def roll():
 	global ball
-	ball = randint(0, 38)
+	ball = randint(0, 37)
 
 def num(ball):
 	assert isinstance(ball, int)
