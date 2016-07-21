@@ -97,11 +97,11 @@ class roulette(object):
 
 	def dozen(self, bet, pick): # zero house edge
 		self.cash = roulette.check(self, bet)
-		assert pick in ["1-2", "2-3", "3-4", "4-5", "5-6"]
+		assert pick in ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
-		if ball in [0, 37]:
-			pass
+		if ball in [0, 37, 1, 2, 3, 4, 5, 6] and pick == "0-1":
+			self.cash += bet * 3 + (bet * 9) // 12
 		elif 0 < ball <= 12 and pick == "1-2":
 			self.cash += bet * 3 + (bet * 2) // 12
 		elif 6 < ball <= 18 and pick == "2-3":
