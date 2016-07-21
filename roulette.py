@@ -108,7 +108,7 @@ class roulette(object):
 			self.cash += bet * 3 + (bet * 2) // 12
 		elif ball % 6 == 5 and pick == "5th":
 			self.cash += bet * 3 + (bet * 2) // 12
-		elif ball % 6 == 6 and pick == "6th":
+		elif ball % 6 == 0 and pick == "6th":
 			self.cash += bet * 3 + (bet * 2) // 12
 	def colours(self, bet, pick):
 		self.cash = roulette.check(self, bet)
