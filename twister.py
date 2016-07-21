@@ -136,7 +136,15 @@ class twister(object):
 				self.cash += 216 * bet # zero house edge
 		print(self.cash)
 
-	def number(self, bet, pick): # zero house edge
+	def trio_straight(self, bet): # zero house edge
+		self.cash = twister.check(self, bet)
+		roll()
+		print("You picked straights, and rolls are %s" % dice)
+		if result in [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]:
+			self.cash += 9 * bet
+		print(self.cash)
+
+	def trio_number(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick <= 6
