@@ -23,12 +23,22 @@ class twister(object):
 		self.cash -= bet
 		return self.cash
 
+	def uno_sum(self, bet, pick):
+		self.cash = twister.check(self, bet)
+		assert isinstance(pick, int)
+		assert 1 <= pick <= 6
+		roll()
+		print("You picked red totaling %s, and rolls are %s" % (pick, dice))
+		if pick == dice[2]:
+			self.cash += 6 * bet # zero house edge
+		print(self.cash)
+
 	def duo_sum(self, bet, pick):
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 2 <= pick <= 12
 		roll()
-		print("You picked two dice totalling %s, and rolls are %s" % (pick, dice))
+		print("You picked green totalling %s, and rolls are %s" % (pick, dice))
 		if pick == dice[0] + dice[1]:
 			if pick in [2, 12]:
 				self.cash += 36 * bet # zero house edge
@@ -49,7 +59,7 @@ class twister(object):
 		assert isinstance(pick, int)
 		assert 3 <= pick <= 18
 		roll()
-		print("You picked three dice totaling %s, and rolls are %s" % (pick, dice))
+		print("You picked green/red totaling %s, and rolls are %s" % (pick, dice))
 		if pick == dice[0] + dice[1] + dice[2]:
 			if pick in [3, 18]:
 				self.cash += 216 * bet # zero house edge
@@ -69,45 +79,45 @@ class twister(object):
 				self.cash += 8 * bet # zero house edge
 		print(self.cash)
 
-	def duo_twin(self, bet, pick):
+	def duo_twin(self, bet, pick):  # zero house edge
 		self.cash = twister.check(self, bet)
 		assert pick in ["odd", "even", "mixed"]
 		roll()
-		print("You picked two dice being %s, and rolls are %s" % (pick, dice))
+		print("You picked green being %s, and rolls are %s" % (pick, dice))
 		if dice[0] % 2 == dice[1] % 2:
 			if dice[0] % 2 == 1 and pick == "odd":
-				self.cash += 4 * bet # zero house edge
+				self.cash += 4 * bet
 			elif dice[0] % 2 == 0 and pick == "even":
-				self.cash += 4 * bet # zero house edge
+				self.cash += 4 * bet
 		elif pick == "mixed":
-			self.cash += 2 * bet # zero house edge
+			self.cash += 2 * bet
 		print(self.cash)
 
-	def trio_twin(self, bet, pick):
+	def trio_twin(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert pick in ["odd", "even", "mixed"]
 		roll()
-		print("You picked three dice being %s, and rolls are %s" % (pick, dice))
+		print("You picked green/red being %s, and rolls are %s" % (pick, dice))
 		if dice[0] % 2 == dice[1] % 2 == dice[2] % 2:
 			if dice[0] % 2 == 1 and pick == "odd":
-				self.cash += 8 * bet # zero house edge
+				self.cash += 8 * bet
 			elif dice[0] % 2 == 0 and pick == "even":
-				self.cash += 8 # zero house edge
+				self.cash += 8
 		elif pick == "mixed":
-			self.cash += 1 * bet + (bet * 4) // 12 # zero house edge
+			self.cash += 1 * bet + (bet * 4) // 12
 		print(self.cash)
 
-	def duo_dubs(self, bet, pick):
+	def duo_dubs(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 0 <= pick <= 6
 		roll()
-		print("You picked two dice double %ss, and rolls are %s" % (pick, dice))
+		print("You picked green double %s, and rolls are %s" % (pick, dice))
 		if dice[0] == dice[1]:
 			if pick == 0:
-				self.cash += 6 * bet # zero house edge
+				self.cash += 6 * bet
 			elif dice[0] == pick:
-				self.cash += 36 * bet # zero house edge
+				self.cash += 36 * bet
 		print(self.cash)
 
 	def trio_dubs(self, bet, pick):
@@ -115,7 +125,7 @@ class twister(object):
 		assert isinstance(pick, int)
 		assert 0 <= pick <= 6
 		roll()
-		print("You picked three dice double %ss, and rolls are %s" % (pick, dice))
+		print("You picked green/red double %s, and rolls are %s" % (pick, dice))
 		if pairs[0] == 2:
 			if pick == 0:
 				self.cash += 2 * bet + (bet * 4) // 12
@@ -123,24 +133,24 @@ class twister(object):
 				self.cash += 14 * bet + (bet * 4) // 12
 		print(self.cash)
 
-	def trio_trips(self, bet, pick):
+	def trio_trips(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 0 <= pick <= 6
 		roll()
-		print("You picked three dice double %ss, and rolls are %s" % (pick, dice))
+		print("You picked green/red triple %s, and rolls are %s" % (pick, dice))
 		if pairs[0] == 3:
 			if pick == 0:
-				self.cash += 36 * bet # zero house edge
+				self.cash += 36 * bet
 			elif dice[0] == pick:
-				self.cash += 216 * bet # zero house edge
+				self.cash += 216 * bet
 		print(self.cash)
 
 	def trio_straight(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert pick in ["lo", "hi", "any"]
 		roll()
-		print("You picked straights, and rolls are %s" % dice)
+		print("You picked green/red straights, and rolls are %s" % dice)
 		if result in [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]:
 			if result in [[1, 2, 3], [2, 3, 4]] and pick == "lo":
 				self.cash += 18 * bet
