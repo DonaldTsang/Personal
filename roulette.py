@@ -121,6 +121,21 @@ class roulette(object):
 			self.cash += bet * 3 + (bet * 2) // 12
 		print(self.cash)
 
+	def third(self, bet, pick): # zero house edge
+		self.cash = roulette.check(self, bet)
+		assert pick in ["1st", "2nd", "3rd"]
+		roll()
+		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
+		if ball in [0, 37]:
+			pass
+		elif ball % 6 in [1, 2] and pick == "1st":
+			self.cash += bet * 3 + (bet * 2) // 12
+		elif ball % 6 == [3, 4] and pick == "2nd":
+			self.cash += bet * 3 + (bet * 2) // 12
+		elif ball % 6 == [5, 0] and pick == "3rd":
+			self.cash += bet * 3 + (bet * 2) // 12
+		print(self.cash)
+
 	def sexies(self, bet, pick):
 		self.cash = roulette.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd", "4th", "5th", "6th"]
