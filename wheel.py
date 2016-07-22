@@ -61,6 +61,18 @@ class wheel(object):
 				self.cash += 19 * bet
 		print(self.cash)
 
+	def multi3x12(self, bet, pick_x, pick_y): # zero house edge
+		self.cash = wheel.check(self, bet)
+		assert isinstance(pick_x, int)
+		assert isinstance(pick_y, int)
+		assert 0 <= pick_x <= 10
+		assert 1 <= pick_y <= 12
+		assert pick_x % 2 == 1 or pick_y % 2 == 1
+		x_1, x_2 = pick_x // 2 + 1, pick_x // 2 + 2
+		y_1, y_2 = (pick_y // 2 - 1) * 3, (pick_y // 2) * 3
+		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
+		print(pick_z)
+
 ################################################################################
 
 	def row(self, bet, pick): # zero house edge
