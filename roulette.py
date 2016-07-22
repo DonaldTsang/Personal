@@ -22,7 +22,7 @@ class wheel(object):
 		self.cash -= bet
 
 	def num(self, bet, pick): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert isinstance(pick, int)
 		assert 0 <= pick <= 37
 		roll()
@@ -32,7 +32,7 @@ class wheel(object):
 		print(self.cash)
 
 	def multi6x6(self, bet, pick_x, pick_y): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert isinstance(pick_x, int)
 		assert isinstance(pick_y, int)
 		assert 0 <= pick_x <= 10
@@ -63,7 +63,7 @@ class wheel(object):
 ################################################################################
 
 	def row(self, bet, pick): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert isinstance(pick, int)
 		assert 0 <= pick <= 12
 		roll()
@@ -99,7 +99,7 @@ class wheel(object):
 ################################################################################
 
 	def hilo(self, bet, pick):
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["hi", "lo"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -112,7 +112,7 @@ class wheel(object):
 		print(self.cash)
 
 	def twin(self, bet, pick):
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["odd", "even"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -127,7 +127,7 @@ class wheel(object):
 ################################################################################
 
 	def dozen(self, bet, pick): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -146,7 +146,7 @@ class wheel(object):
 		print(self.cash)
 
 	def lines(self, bet, pick): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -161,7 +161,7 @@ class wheel(object):
 		print(self.cash)
 
 	def third(self, bet, pick): # zero house edge
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["1-2", "2-3", "3-4", "4-5", "5-6"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -182,7 +182,7 @@ class wheel(object):
 ################################################################################
 
 	def sexies(self, bet, pick):
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["0-1", "1-2", "2-3", "3-4", "4-5", "5-6",
 			"6-7", "7-8", "8-9", "9-10", "10-11", "11-12"]
 		roll()
@@ -214,7 +214,7 @@ class wheel(object):
 		print(self.cash)
 
 	def column(self, bet, pick):
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["1st", "2nd", "3rd", "4th", "5th", "6th"]
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick, num(ball)))
@@ -236,7 +236,7 @@ class wheel(object):
 ################################################################################
 
 	def colours(self, bet, pick):
-		self.cash = roulette.check(self, bet)
+		self.cash = wheel.check(self, bet)
 		assert pick in ["red", "blue", "teal", "purple",
 			"green", "orange", "yellow", "pink"]
 		roll()
