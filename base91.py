@@ -1,6 +1,7 @@
 # https://github.com/aberaud/base91-python/blob/master/base91.py
 # https://github.com/thenoviceoof/base92/blob/master/python/base92/base92.py
 # 256*(1024^2)Bytes / 13Bytes * 16char = 330,382,100char (round-up)
+# Every 13Bytes can be converted into 16char in base91
 
 from struct import pack, unpack
 
