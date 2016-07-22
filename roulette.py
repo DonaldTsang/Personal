@@ -11,7 +11,7 @@ def num(ball):
 	if ball == 37: return "00"
 	else: return str(ball)
 
-class roulette(object):
+class wheel(object):
 	def __init__(self, cash):
 		self.cash = cash
 
