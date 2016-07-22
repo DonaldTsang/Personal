@@ -1,4 +1,5 @@
 from random import randint
+from math import floor, ceil
 
 ball = 0
 def roll():
@@ -10,6 +11,18 @@ def num(ball):
 	assert 0 <= ball <= 37
 	if ball == 37: return "00"
 	else: return str(ball)
+
+def stray(array):
+	assert isinstance(array, list)
+	for i in array:
+		assert isinstance(i, int)
+		assert 0 <= i <= 37
+	result = "["
+	for i in array:
+		if i == 37: result += "00,"
+		else: result += str(i) + ','
+	result += "]"
+	return result
 
 class wheel(object):
 	def __init__(self, cash):
@@ -39,14 +52,14 @@ class wheel(object):
 		assert 0 <= pick_x <= 10
 		assert 1 <= pick_y <= 12
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
-		x_1, x_2 = pick_x // 2 + 1, pick_x // 2 + 2
-		y_1, y_2 = (pick_y // 2 - 1) * 6, (pick_y // 2) * 6
+		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
+		y_1, y_2 = floor(pick_y / 2) * 6, ceil(pick_y / 2) * 6
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
 		for i in range(0, 4):
 			if pick_z[i] in [-5, -4, -3]: pick_z[i] = 0
 			elif pick_z[i] in [-2, -1, 0]: pick_z[i] = 37
 		roll()
-		print("You picked %s, and ball lands on %s" % (pick_z, num(ball)))
+		print("You picked %s, and ball lands on %s" % (stray(pick_z), num(ball)))
 		if ball in pick_z:
 			if pick_y == 1:
 				if pick_x == 5:
@@ -65,13 +78,31 @@ class wheel(object):
 		self.cash = wheel.check(self, bet)
 		assert isinstance(pick_x, int)
 		assert isinstance(pick_y, int)
-		assert 0 <= pick_x <= 10
-		assert 1 <= pick_y <= 12
+		assert 0 <= pick_x <= 4
+		assert 1 <= pick_y <= 24
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
-		x_1, x_2 = pick_x // 2 + 1, pick_x // 2 + 2
-		y_1, y_2 = (pick_y // 2 - 1) * 3, (pick_y // 2) * 3
+		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
+		y_1, y_2 = floor(pick_y / 2) * 3, ceil(pick_y / 2) * 3
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
-		print(pick_z)
+		for i in range(0, 4):
+			if pick_z[i] == -2: pick_z[i] = 37
+			if pick_z[i] == 0: pick_z[i] = 0
+		if pick_x == 2 and pick_y == 1: pick_z == [0 , 37, 2]
+		roll()
+		print("You picked %s, and ball lands on %s" % (stray(pick_z), num(ball)))
+		if ball in pick_z:
+			if pick_y == 1:
+				if pick_x == 2:
+					self.cash += 8 * bet + (bet * 6) // 12
+				elif pick_x % 2 == 1:
+					self.cash += 12 * bet + (bet * 8) // 12
+				elif pick_x % 2 == 0:
+					self.cash += 19 * bet
+			elif pick_x % 2 == pick_y % 2 == 1:
+				self.cash += 12 * bet + (bet * 8) // 12
+			elif pick_x % 2 == 0 or pick_y % 2 == 0:
+				self.cash += 19 * bet
+		print(self.cash)
 
 ################################################################################
 
