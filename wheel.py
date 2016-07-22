@@ -21,8 +21,7 @@ def stray(array):
 	for i in array:
 		if i == 37: result += "00,"
 		else: result += str(i) + ','
-	result += "]"
-	return result
+	return result[:-1] + "]"
 
 class wheel(object):
 	def __init__(self, cash):
@@ -53,7 +52,7 @@ class wheel(object):
 		assert 1 <= pick_y <= 12
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
 		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
-		y_1, y_2 = floor(pick_y / 2) * 6, ceil(pick_y / 2) * 6
+		y_1, y_2 = floor(pick_y / 2 - 1) * 6, ceil(pick_y / 2 - 1) * 6
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
 		for i in range(0, 4):
 			if pick_z[i] in [-5, -4, -3]: pick_z[i] = 0
@@ -82,7 +81,7 @@ class wheel(object):
 		assert 1 <= pick_y <= 24
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
 		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
-		y_1, y_2 = floor(pick_y / 2) * 3, ceil(pick_y / 2) * 3
+		y_1, y_2 = floor(pick_y / 2 - 1) * 3, ceil(pick_y / 2 - 1) * 3
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
 		for i in range(0, 4):
 			if pick_z[i] == -2: pick_z[i] = 37
