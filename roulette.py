@@ -20,6 +20,7 @@ class wheel(object):
 		assert isinstance(bet, int)
 		assert self.cash >= bet > 0
 		self.cash -= bet
+		return self.cash
 
 	def num(self, bet, pick): # zero house edge
 		self.cash = wheel.check(self, bet)
@@ -43,7 +44,7 @@ class wheel(object):
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
 		for i in range(0, 4):
 			if pick_z[i] in [-5, -4, -3]: pick_z[i] = 0
-			elif pick_z[i] in [-2, -1, 0]: pick[i] = 37
+			elif pick_z[i] in [-2, -1, 0]: pick_z[i] = 37
 		roll()
 		print("You picked %s, and ball lands on %s" % (pick_z, num(ball)))
 		if ball in pick_z:
