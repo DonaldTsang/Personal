@@ -31,6 +31,36 @@ class roulette(object):
 			self.cash += 38 * bet
 		print(self.cash)
 
+	def multi6x6(self, bet, pick_x, pick_y): # zero house edge
+		self.cash = roulette.check(self, bet)
+		assert isinstance(pick_x, int)
+		assert isinstance(pick_y, int)
+		assert 0 <= pick_x <= 10
+		assert 1 <= pick_y <= 12
+		assert pick_x % 2 == 1 or pick_y % 2 == 1
+		roll()
+		x_1, x_2 = pick_x // 2 + 1, pick_x // 2 + 2
+		y_1, y_2 = (pick_y // 2 - 1) * 6, (pick_y // 2) * 6
+		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
+		for i in range(0, 4):
+			if pick_z[i] in [-5, -4, -3]: pick_z[i] = 0
+			elif pick_z[i] in [-2, -1, 0]: pick[i] = 37
+		if ball in pick_z:
+			if pick_y == 1:
+				if pick_x == 5:
+					self.cash += 8 * bet + (bet * 6) // 12
+				elif pick_x % 2 == 1:
+					self.cash += 12 * bet + (bet * 8) // 12
+				elif pick_x % 2 == 0:
+					self.cash += 19 * bet
+			elif pick_x % 2 == pick_y % 2 == 1:
+				self.cash += 12 * bet + (bet * 8) // 12
+			elif pick_x % 2 == 0 or pick_y % 2 == 0:
+				self.cash += 19 * bet
+		print(self.cash)
+
+################################################################################
+
 	def row(self, bet, pick): # zero house edge
 		self.cash = roulette.check(self, bet)
 		assert isinstance(pick, int)
