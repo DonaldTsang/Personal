@@ -38,13 +38,14 @@ class roulette(object):
 		assert 0 <= pick_x <= 10
 		assert 1 <= pick_y <= 12
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
-		roll()
 		x_1, x_2 = pick_x // 2 + 1, pick_x // 2 + 2
 		y_1, y_2 = (pick_y // 2 - 1) * 6, (pick_y // 2) * 6
 		pick_z = [x_1 + y_1, x_2 + y_1, x_1 + y_2, x_2 + y_2]
 		for i in range(0, 4):
 			if pick_z[i] in [-5, -4, -3]: pick_z[i] = 0
 			elif pick_z[i] in [-2, -1, 0]: pick[i] = 37
+		roll()
+		print("You picked %s, and ball lands on %s" % (pick_z, num(ball)))
 		if ball in pick_z:
 			if pick_y == 1:
 				if pick_x == 5:
