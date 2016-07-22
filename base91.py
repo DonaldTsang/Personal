@@ -1,6 +1,6 @@
 # https://github.com/aberaud/base91-python/blob/master/base91.py
 # https://github.com/thenoviceoof/base92/blob/master/python/base92/base92.py
-# 256MiBytes / 13Bytes * 16 characters = 330,382,100 characters (round up)
+# 256*(1024^2)Bytes / 13Bytes * 16char = 330,382,100char (round-up)
 
 from struct import pack, unpack
 
