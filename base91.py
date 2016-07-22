@@ -16,7 +16,7 @@ b91_alph = [
 
 de_table = dict((v,k) for k,v in enumerate(b91_alph))
 
-def decode(en_str): #Decode Base91 string to a bytearray
+def decode(en_str): # Decode Base91 string to bytes
 	v, b, n = -1, 0, 0
 	out = bytearray()
 	for strletter in en_str:
@@ -36,7 +36,7 @@ def decode(en_str): #Decode Base91 string to a bytearray
 	if v+1: out += pack('B', (b | v << n) & 255 )
 	return bytes(out)
 
-def encode(bindata): # Encode a bytearray to a Base91 string
+def encode(bindata): # Encode a bytes to a Base91 string
 	b, n = 0, 0
 	out = ''
 	for count in range(len(bindata)):
