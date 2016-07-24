@@ -168,11 +168,11 @@ class twister(object):
 		print("You picked %ss, and rolls are %s" % (pick, dice))
 		if pairs[1] == pick:
 			if pairs[0] == 3:
-				self.cash += 9 * bet + (bet * 9) // 12
+				# triple numbers
 			elif pairs[0] == 2:
-				self.cash += 3 * bet + (bet * 9) // 12
+				# double numbers
 		elif pick in dice:
-			self.cash += 2 * bet
+			# single number
 		print(self.cash)
 
 	# Need Field Bets and Big/Small a.k.a Hi/Mid/Lo
