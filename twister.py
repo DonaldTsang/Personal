@@ -79,6 +79,17 @@ class twister(object):
 				self.cash += 8 * bet # zero house edge
 		print(self.cash)
 
+	def uno_twin(self, bet, pick):  # zero house edge
+		self.cash = twister.check(self, bet)
+		assert pick in ["odd", "even"]
+		roll()
+		print("You picked green being %s, and rolls are %s" % (pick, dice))
+		if dice[2] % 2 == 1 and pick == "odd":
+			self.cash += 2 * bet
+		elif dice[2] % 2 == 0 and pick == "even":
+			self.cash += 2 * bet
+		print(self.cash)
+
 	def duo_twin(self, bet, pick):  # zero house edge
 		self.cash = twister.check(self, bet)
 		assert pick in ["odd", "even", "mixed"]
