@@ -5,19 +5,14 @@ def calendar(year, month, day):
 	assert isinstance(month, int)
 	assert year >= 1935, "Fuhrer error"
 	assert 1 <= month <= 12, "month error"
-	if month in [1, 3, 5, 7, 8, 10, 12]:
-		assert 1 <= day <= 31, "day error"
-	elif month in [4, 6, 9, 11]:
-		assert 1 <= day <= 30, "day error"
+	assert 1 <= day, "day error"
+	if month in [1, 3, 5, 7, 8, 10, 12]: assert day <= 31, "day error"
+	elif month in [4, 6, 9, 11]: assert day <= 30, "day error"
 	elif month == 2: # Gregorian calendar
-		if year % 400 == 0:
-			assert 1 <= day <= 29, "day error"
-		elif year % 100 == 0:
-			assert 1 <= day <= 28, "day error"
-		elif year % 4 == 0:
-			assert 1 <= day <= 29, "day error"
-		elif year % 4 != 0:
-			assert 1 <= day <= 28, "day error"
+		if year % 400 == 0 or (year % 100 != 0 and year % 4 == 0):
+			assert day <= 29, "day error"
+		elif year % 100 == 0 or year % 4 != 0:
+			assert day <= 28, "day error"
 	if month == 12 and day > 20: year += 1; month = 0; day -= 20
 	elif month == 2 and day == 29: return year, 'leap', -1, -1 # leap day
 	elif month == 8 and day == 30: return year, 'tera', 0, 0 # tera day
