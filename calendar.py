@@ -1,6 +1,8 @@
 from datetime import datetime
 
 def calendar(year, month, day):
+	# First day of summer is always June 21
+	# First day of winter is always December 21
 	assert isinstance(year, int)
 	assert isinstance(month, int)
 	assert year >= 1935, "Fuhrer error"
