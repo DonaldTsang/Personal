@@ -1,3 +1,5 @@
+from datetime import datetime
+
 def calendar(year, month, day):
 	assert isinstance(year, int)
 	assert isinstance(month, int)
@@ -16,17 +18,20 @@ def calendar(year, month, day):
 			assert 1 <= day <= 29, "day error"
 		elif year % 4 != 0:
 			assert 1 <= day <= 28, "day error"
-
 	if month == 12 and day > 20: year += 1; month = 0; day -= 20
-	if month == 2 and day == 29: return [year, 'leaps','l', 'l']
-	elif month == 8 and day == 30: return [year, 'earth', 'e', 'e']
-	elif month == 8 and day == 31: return [year, summer, 11, 1]
-	if month < 8 or (month == 8 and day < 30):
-		day_count = [0, 11, 42, 70, 101, 131, 162, 192, 223][month] + day - 1
-	if month > 8:
-		day_count = [1, 31, 62, 92][month - 9] + 252 + day - 1
+	elif month == 2 and day == 29: return year, 'leap', -1, -1 # leap day
+	elif month == 8 and day == 30: return year, 'tera', 0, 0 # tera day
+	elif month == 8 and day == 31: return year, 'summer', 11, 1
+	else: day_count = [0, 11, 42, 70, 101, 131, 162, \
+		192, 223, 253, 283, 314, 344][month] + day - 1
 	season, day_count = divmod(day_count, 91)
 	week_count, day_count = divmod(day_count, 7)
 	season = ["winter", "spring", "summer", "autumn"][season]
 	week_count += 1; day_count += 1
-	return [year, season, week_count, day_count]
+	return year, season, week_count, day_count
+
+def today():
+	now = datetime.now()
+	year, season, week, day = calendar(now.year, now.month, now.day)
+	print('Today is day-' + str(day) + ' of week-' + str(week) + \
+		' of ' + season + ', ' + str(year) + ' in the Brad Calendar')
