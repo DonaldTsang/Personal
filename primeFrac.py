@@ -3,7 +3,7 @@ def testDivide(primfac, n, p):
 	while (n % p) == 0:
 		counter += 1
 		n //= p
-	if counter != 0: primfac += [[p, counter]]
+	if counter != 0: primfac += [(p, counter)]
 	return n
 
 def primes(n):
@@ -36,5 +36,5 @@ def primes(n):
 		if d** 2 > n: break
 		n = testDivide(primfac, n, d)
 		d += 6
-	if n > 1: primfac += [[n, 1]]
+	if n > 1: primfac += [(n, 1)]
 	return primfac
