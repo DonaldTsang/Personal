@@ -48,13 +48,13 @@ def de(en_str): # Decode Base91 string to bytes
 	if v + 1: out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
-def b91_en(input, output):
-	i = open(input, "rb")
+def b91_en(inputs, output):
+	i = open(inputs, "rb")
 	o = open(output, "wb")
 	i.close()
 	o.close()
 def b91_de(input, output):
-  	i = open(input, "rb")
+  	i = open(inputs, "rb")
 	o = open(output, "wb")
 	i.close()
 	o.close()
@@ -65,7 +65,7 @@ group.add_argument("-e", "-encode", action="store_true",
 	help="Encode binaries into base91 text file")
 group.add_argument("-d", "-decode", action="store_true", 
 	help="Decode base91 text file into binaries")
-parser.add_argument("input", required=True, 
+parser.add_argument("inputs", required=True, 
 	help="the input file")
 parser.add_argument("output", required=True,
 	help="the output file")
@@ -73,8 +73,8 @@ argv = parser.parse_args()
 
 def main(argv):
 	if argv.encode:
-		b91_en(argv.input, argv.output)
+		b91_en(argv.inputs, argv.output)
     elif argv.decode:
-		b91_de(argv.input, argv.output)
+		b91_de(argv.inputs, argv.output)
 
 if __name__ == '__main__': main(sys.argv[1:])
