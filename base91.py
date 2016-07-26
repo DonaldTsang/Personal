@@ -61,20 +61,18 @@ def b91_de(input, output):
 
 parser = argparse.ArgumentParser(description='base91 file conversion')
 group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument("-e", "-encode", action="store_true", 
+group.add_argument("-e", "--encode", action="store_true", 
 	help="Encode binaries into base91 text file")
-group.add_argument("-d", "-decode", action="store_true", 
+group.add_argument("-d", "--decode", action="store_true", 
 	help="Decode base91 text file into binaries")
 parser.add_argument("inputs", type=open, required=True, 
-	help="the inputs file name for base91")
+	help="the inputs file name")
 parser.add_argument("output", type=open, required=True,
-	help="the output file name for base91")
+	help="the output file name")
 argv = parser.parse_args()
 
 def main(argv):
-	if argv.encode:
-		b91_en(argv.inputs, argv.output)
-    elif argv.decode:
-		b91_de(argv.inputs, argv.output)
+	if argv.encode: b91_en(argv.inputs, argv.output)
+	elif argv.decode: b91_de(argv.inputs, argv.output)
 
 if __name__ == '__main__': main(sys.argv[1:])
