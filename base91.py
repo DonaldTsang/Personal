@@ -67,7 +67,7 @@ group.add_argument("-d", "-decode", action="store_true",
 	help="Decode base91 text file into binaries")
 parser.add_argument("input", required=True, 
 	help="the input file")
-parser.add_argument("output", default="base91.out",
+parser.add_argument("output", required=True,
 	help="the output file")
 argv = parser.parse_args()
 
