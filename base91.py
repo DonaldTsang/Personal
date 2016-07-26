@@ -16,8 +16,7 @@ de_table = dict((v,k) for k,v in enumerate(b91_alph))
 
 def en(bindata): # Encode a bytes to a Base91 string
 	from struct import unpack
-	b, n = 0, 0
-	out = ''
+	b, n, out = 0, 0, ''
 	for count in range(len(bindata)):
 		byte = bindata[count:count+1]
 		b |= unpack('B', byte)[0] << n; n += 8
@@ -31,8 +30,7 @@ def en(bindata): # Encode a bytes to a Base91 string
 
 def de(en_str): # Decode Base91 string to bytes
 	from struct import pack
-	v, b, n = -1, 0, 0
-	out = bytearray()
+	v, b, n, out = -1, 0, 0, bytearray()
 	for strletter in en_str:
 		if not strletter in de_table: continue
 		c = de_table[strletter]
@@ -62,15 +60,16 @@ def b91_de(inputs, output):
 if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser(description='base91 file conversion')
-	group = parser.add_mutually_exclusive_group(required=True)
-	group.add_argument("-e", "--encode", action="store_true", 
+	group_code = parser.add_mutually_exclusive_group(required=True)
+	group_code.add_argument("-e", "--encode", action="store_true", default=False, 
 		help="Encode binaries into base91 text file")
-	group.add_argument("-d", "--decode", action="store_true", 
+	group_code.add_argument("-d", "--decode", action="store_true", default=False,
 		help="Decode base91 text file into binaries")
-	parser.add_argument("inputs", type=open,
-		help="the inputs file name")
-	parser.add_argument("output", type=open,
-		help="the output file name")
+	group_bytes = parser.add_mutually_exclusive_group(required=False)
+	group_bytes.add_argument("-k", "--kilobyte", type=int, default=64, metavar="kilobyte")
+	group_bytes.add_argument("-m", "--megabyte", type=int, default=1, metavar="megabyte")
+	parser.add_argument("inputs", type=open, help="the inputs file name")
+	parser.add_argument("output", type=open, help="the output file name")
 	args = parser.parse_args()
 	if args.encode: b91_en(args.inputs, args.output)
 	elif args.decode: b91_de(args.inputs, args.output)
