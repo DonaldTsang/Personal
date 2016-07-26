@@ -38,7 +38,7 @@ def de(en_str): # Decode Base91 string to bytes
 		else:
 			v += c * 91; b |= v << n; n += 13
 			while True:
-				out += pack('B', b&255)
+				out += pack('B', b & 255)
 				b >>= 8; n -= 8
 				if not n > 7: break
 			v = -1
