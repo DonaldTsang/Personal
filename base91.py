@@ -3,9 +3,6 @@
 # 256*(1024^2)Bytes / 13Bytes * 16char = 330,382,100char (round-up)
 # Every 13Bytes can be converted into 16char in base91
 
-import os, sys, argparse
-from struct import pack, unpack
-
 b91_alph = [
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -18,6 +15,7 @@ b91_alph = [
 de_table = dict((v,k) for k,v in enumerate(b91_alph))
 
 def en(bindata): # Encode a bytes to a Base91 string
+	from struct import unpack
 	b, n = 0, 0
 	out = ''
 	for count in range(len(bindata)):
@@ -32,6 +30,7 @@ def en(bindata): # Encode a bytes to a Base91 string
 	return out
 
 def de(en_str): # Decode Base91 string to bytes
+	from struct import pack
 	v, b, n = -1, 0, 0
 	out = bytearray()
 	for strletter in en_str:
@@ -49,28 +48,29 @@ def de(en_str): # Decode Base91 string to bytes
 	return bytes(out)
 
 def b91_en(inputs, output):
-	i = open(inputs, "rb"); o = open(output, "wb")
+	i = open(inputs, "rb")
+	o = open(output, "wb")
 	o.write(b'testing pages (encode)')
 	i.close(); o.close()
+
 def b91_de(inputs, output):
-  	i = open(inputs, "rb"); o = open(output, "wb")
-  	o.write(b'testing pages (decode)')
+	i = open(inputs, "rb")
+	o = open(output, "wb")
+	o.write(b'testing pages (decode)')
 	i.close(); o.close()
 
-parser = argparse.ArgumentParser(description='base91 file conversion')
-group = parser.add_mutually_exclusive_group(required=True)
-group.add_argument("-e", "--encode", action="store_true", 
-	help="Encode binaries into base91 text file")
-group.add_argument("-d", "--decode", action="store_true", 
-	help="Decode base91 text file into binaries")
-parser.add_argument("inputs", type=open, required=True, 
-	help="the inputs file name")
-parser.add_argument("output", type=open, required=True,
-	help="the output file name")
-argv = parser.parse_args()
-
-def main(argv):
-	if argv.encode: b91_en(argv.inputs, argv.output)
-	elif argv.decode: b91_de(argv.inputs, argv.output)
-
-if __name__ == '__main__': main(sys.argv[1:])
+if __name__ == '__main__':
+	import argparse
+	parser = argparse.ArgumentParser(description='base91 file conversion')
+	group = parser.add_mutually_exclusive_group(required=True)
+	group.add_argument("-e", "--encode", action="store_true", 
+		help="Encode binaries into base91 text file")
+	group.add_argument("-d", "--decode", action="store_true", 
+		help="Decode base91 text file into binaries")
+	parser.add_argument("inputs", type=open,
+		help="the inputs file name")
+	parser.add_argument("output", type=open,
+		help="the output file name")
+	args = parser.parse_args()
+	if args.encode: b91_en(args.inputs, args.output)
+	elif args.decode: b91_de(args.inputs, args.output)
