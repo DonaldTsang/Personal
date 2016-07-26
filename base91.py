@@ -3,6 +3,7 @@
 # 256*(1024^2)Bytes / 13Bytes * 16char = 330,382,100char (round-up)
 # Every 13Bytes can be converted into 16char in base91
 
+import os, sys, argparse
 from struct import pack, unpack
 
 b91_alph = [
@@ -16,7 +17,21 @@ b91_alph = [
 
 de_table = dict((v,k) for k,v in enumerate(b91_alph))
 
-def decode(en_str): # Decode Base91 string to bytes
+def en(bindata): # Encode a bytes to a Base91 string
+	b, n = 0, 0
+	out = ''
+	for count in range(len(bindata)):
+		byte = bindata[count:count+1]
+		b |= unpack('B', byte)[0] << n; n += 8
+		if n>13:
+			v = b & 8191; b >>= 13; n -= 13
+			out += b91_alph[v % 91] + b91_alph[v // 91]
+	if n:
+		out += b91_alph[b % 91]
+		if n>7 or b>90: out += b91_alph[b // 91]
+	return out
+
+def de(en_str): # Decode Base91 string to bytes
 	v, b, n = -1, 0, 0
 	out = bytearray()
 	for strletter in en_str:
@@ -24,31 +39,42 @@ def decode(en_str): # Decode Base91 string to bytes
 		c = de_table[strletter]
 		if(v < 0): v = c
 		else:
-			v += c * 91
-			b |= v << n
-			n += 13
+			v += c * 91; b |= v << n; n += 13
 			while True:
 				out += pack('B', b&255)
-				b >>= 8
-				n -= 8
+				b >>= 8; n -= 8
 				if not n>7: break
 			v = -1
-	if v+1: out += pack('B', (b | v << n) & 255 )
+	if v+1: out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
-def encode(bindata): # Encode a bytes to a Base91 string
-	b, n = 0, 0
-	out = ''
-	for count in range(len(bindata)):
-		byte = bindata[count:count+1]
-		b |= unpack('B', byte)[0] << n
-		n += 8
-		if n>13:
-			v = b & 8191
-			b >>= 13
-			n -= 13
-			out += b91_alph[v % 91] + b91_alph[v // 91]
-	if n:
-		out += b91_alph[b % 91]
-		if n>7 or b>90: out += b91_alph[b // 91]
-	return out
+def b91_en(input, output):
+	i = open(input, "rb")
+    o = open(output, "wb")
+    i.close()
+    o.close()
+def b91_de(input, output):
+  	i = open(input, "rb")
+    o = open(output, "wb")
+    i.close()
+    o.close()
+
+parser = argparse.ArgumentParser(description='base91 file conversion')
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-e", "-encode", action="store_true", 
+	help="Encode binaries into base91 text file")
+group.add_argument("-d", "-decode", action="store_true", 
+	help="Decode base91 text file into binaries")
+parser.add_argument("input", required=True, 
+	help="the input file")
+parser.add_argument("output", default="base91.out",
+	help="the output file")
+argv = parser.parse_args()
+
+def main(argv):
+	if argv.encode:
+		b91_en(argv.input, argv.output)
+    elif argv.decode:
+		b91_de(argv.input, argv.output)
+
+if __name__ == '__main__': main(sys.argv[1:])
