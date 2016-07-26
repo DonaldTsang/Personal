@@ -65,10 +65,10 @@ group.add_argument("-e", "-encode", action="store_true",
 	help="Encode binaries into base91 text file")
 group.add_argument("-d", "-decode", action="store_true", 
 	help="Decode base91 text file into binaries")
-parser.add_argument("inputs", required=True, 
-	help="the input file")
-parser.add_argument("output", required=True,
-	help="the output file")
+parser.add_argument("inputs", type=open, required=True, 
+	help="the inputs file name for base91")
+parser.add_argument("output", type=open, required=True,
+	help="the output file name for base91")
 argv = parser.parse_args()
 
 def main(argv):
