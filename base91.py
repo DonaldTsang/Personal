@@ -50,9 +50,11 @@ def de(en_str): # Decode Base91 string to bytes
 
 def b91_en(inputs, output):
 	i = open(inputs, "rb"); o = open(output, "wb")
+	o.write(b'testing pages (encode)')
 	i.close(); o.close()
 def b91_de(inputs, output):
   	i = open(inputs, "rb"); o = open(output, "wb")
+  	o.write(b'testing pages (decode)')
 	i.close(); o.close()
 
 parser = argparse.ArgumentParser(description='base91 file conversion')
