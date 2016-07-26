@@ -65,9 +65,6 @@ if __name__ == '__main__':
 		help="Encode binaries into base91 text file")
 	group_code.add_argument("-d", "--decode", action="store_true", default=False,
 		help="Decode base91 text file into binaries")
-	group_bytes = parser.add_mutually_exclusive_group(required=False)
-	group_bytes.add_argument("-k", "--kilobyte", type=int, default=64, metavar="kilobyte")
-	group_bytes.add_argument("-m", "--megabyte", type=int, default=1, metavar="megabyte")
 	parser.add_argument("inputs", type=open, help="the inputs file name")
 	parser.add_argument("output", type=open, help="the output file name")
 	args = parser.parse_args()
