@@ -23,12 +23,12 @@ def en(bindata): # Encode a bytes to a Base91 string
 	for count in range(len(bindata)):
 		byte = bindata[count:count+1]
 		b |= unpack('B', byte)[0] << n; n += 8
-		if n>13:
+		if n > 13:
 			v = b & 8191; b >>= 13; n -= 13
 			out += b91_alph[v % 91] + b91_alph[v // 91]
 	if n:
 		out += b91_alph[b % 91]
-		if n>7 or b>90: out += b91_alph[b // 91]
+		if n > 7 or b > 90: out += b91_alph[b // 91]
 	return out
 
 def de(en_str): # Decode Base91 string to bytes
@@ -37,15 +37,15 @@ def de(en_str): # Decode Base91 string to bytes
 	for strletter in en_str:
 		if not strletter in de_table: continue
 		c = de_table[strletter]
-		if(v < 0): v = c
+		if v < 0: v = c
 		else:
 			v += c * 91; b |= v << n; n += 13
 			while True:
 				out += pack('B', b&255)
 				b >>= 8; n -= 8
-				if not n>7: break
+				if not n > 7: break
 			v = -1
-	if v+1: out += pack('B', (b | v << n) & 255)
+	if v + 1: out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
 def b91_en(input, output):
