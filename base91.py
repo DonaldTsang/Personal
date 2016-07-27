@@ -45,32 +45,19 @@ def de(en_str): # Decode Base91 string to bytes
 	if v + 1: out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
-def b91_en_short(inputs, output):
+def b91_en(inputs, output):
 	i = open(inputs, "rb"); o = open(output, "w")
 	text = i.read()
-	text_len, counter = len(text), 0
-	while counter < text_len:
-		text_part = text[counter:counter + 52]
+	text_len, count = len(text), 0
+	while count < text_len:
+		text_part = text[count:count+52]
 		o.write(en(text_part) + "\n")
-		counter += 52
+		count += 52
 	i.close(); o.close()
 
-def b91_en_short(inputs, output):
-	i = open(inputs, "rb"); o = open(output, "w")
-	text = i.read()
-	text_len, counter = len(text), 0
-	while counter < text_len:
-		text_part = text[counter:counter + 65]
-		o.write(en(text_part) + "\n")
-		counter += 65
-	i.close(); o.close()
-
-def b91_de_short(inputs, output):
+def b91_de(inputs, output):
 	i = open(inputs, "r"); o = open(output, "wb")
-	i.close(); o.close()
-
-def b91_de_short(inputs, output):
-	i = open(inputs, "r"); o = open(output, "wb")
+	for line in i: o.write(de(line[:-1])
 	i.close(); o.close()
 
 if __name__ == '__main__':
