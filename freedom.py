@@ -285,31 +285,13 @@ def shiftz(exp):
 
 ################################################################################
 
-class Size(object):
-	def __init__(self, x, y):
-		self.x, self.y = x, y # bishop starts in the center of the room
-		self.start_position = (x, y)
-		self.room_dimensions = (x * 2 + 1, y * 2 + 1)
-		self.border = "+" + "-" * (x * 2 + 1) + "+\n"
-
-small = Size(8, 4)
-large = Size(11, 6)
-
-start_position = (8, 4) # this is 128-bit, 256-bit should be (11, 6) or (12, 6)
-room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
-
-# encode start and end positions
-coin_value_start_position, coin_value_end_position = 15, 16
-
-border = "+" + "-" * room_dimensions[0] + "+\n"
-
-################################################################################
+import re
 
 def hex_byte_to_bin(hex_byte): # convert hex byte into a string of bits
 	assert bool(re.fullmatch("[0-9A-Fa-f]{2}", hex_byte))
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
-def bit_pairs(binary): # convert a word into bit pairs little-endian style
+def bit_pairs(binary): # convert a word into little-endian bit pairs
 	from itertools import islice
 	def take(n, iterable): # Return first n items of the iterable as a list
 		return list(islice(iterable, n))
@@ -319,8 +301,6 @@ def bit_pairs(binary): # convert a word into bit pairs little-endian style
 			if not pair: break
 			yield "".join(pair)
 	return list(all_pairs(iter(binary)))[::-1]
-
-################################################################################
 
 class Direct(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
@@ -339,27 +319,8 @@ def directions_from_fingerprint(fingerprint): # convert fingerprint into directi
 
 ################################################################################
 
-def move(position, direction): # returns new position given current condition
-	x, y = position
-	MAX_X, MAX_Y = room_dimensions[0] - 1, room_dimensions[1] - 1
-	assert 0 <= x <= MAX_X, "Error: position of x out of range"
-	assert 0 <= y <= MAX_Y, "Error: position of y out of range"
-	new_x, new_y = x + direction.dx, y + direction.dy
-	# the drunk bishop is hindered by the wall
-	new_x = 0 if new_x <= 0 else min(new_x, MAX_X)
-	new_y = 0 if new_y <= 0 else min(new_y, MAX_Y)
-	return new_x, new_y
-
-def stumble_around(fingerprint):
-	from collections import Counter
-	room, position = Counter(), start_position
-	for direction in directions_from_fingerprint(fingerprint):
-		position = move(position, direction)
-		room[position] += 1  # drop coin
-	# mark start and end positions
-	room[start_position] = coin_value_start_position
-	room[position] = coin_value_end_position
-	return room
+# encode start and end positions
+coin_value_start_position, coin_value_end_position = 15, 16
 
 def coin(value): # Display the ascii representation of a coin
 	return {
@@ -370,21 +331,7 @@ def coin(value): # Display the ascii representation of a coin
 		coin_value_end_position: "E",
 	}.get(value, "!")
 
-def display_room(room):
-	X, Y = room_dimensions
-	def room_as_strings():
-		yield border
-		for y in range(Y):
-			yield "|"
-			for x in range(X):
-				yield coin(room[(x,y)])
-			yield "|\n"
-		yield border
-	return "".join(room_as_strings())
-
 ################################################################################
-
-import re
 
 def db_fix(fingerprint): # add colons to fingerprints
 	bihex = "[0-9A-Fa-f]{2}"
@@ -394,39 +341,86 @@ def db_fix(fingerprint): # add colons to fingerprints
 		return ":".join(chop(fingerprint, 2))
 	else: assert False, "Error: fingerprint is invalid"
 
-def db(fingerprint): # Creates a piece of art base on 32 hex
-	room = stumble_around(db_fix(fingerprint))
-	return display_room(room)
-
-def db_tops(fingerprint): # db but without the bottom frame
-	room = stumble_around(db_fix(fingerprint))
-	return display_room(room)[:-(room_dimensions[0]+3)]
-
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
-def db_multiple(fingerprint): # Vertically stacked drunken_bishop
-	fingerprint = db_fix(fingerprint)
-	finger = [i.rstrip(":") for i in chop(fingerprint, 48)]
-	picture = [db_tops(i) for i in finger]
-	return "".join(picture) + border
+################################################################################
+
+class Size(object):
+	def __init__(self, x, y, byte):
+		self.x, self.y = x, y # bishop starts in the center of the room
+		self.byte = byte # the amount of bytes contained in a single db
+		self.start_position = (x, y)
+		self.room_dimensions = (x * 2 + 1, y * 2 + 1)
+		self.border = "+" + "-" * (x * 2 + 1) + "+\n"
+
+	def move(position, direction, self): # returns new position given current condition
+		x, y = position
+		max_x, max_y = self.x * 2, self.y * 2
+		assert 0 <= x <= max_x, "Error: position of x out of range"
+		assert 0 <= y <= max_y, "Error: position of y out of range"
+		new_x, new_y = x + direction.dx, y + direction.dy
+		# the drunk bishop is hindered by the wall
+		new_x = 0 if new_x <= 0 else min(new_x, max_x)
+		new_y = 0 if new_y <= 0 else min(new_y, max_y)
+		return new_x, new_y
+
+	def stumble_around(fingerprint, self):
+		from collections import Counter
+		room, position = Counter(), self.start_position
+		for direction in directions_from_fingerprint(fingerprint):
+			position = Size.move(position, direction, self)
+			room[position] += 1  # drop coin
+		# mark start and end positions
+		room[self.start_position] = coin_value_start_position
+		room[position] = coin_value_end_position
+		return room
+
+	def display_room(room, self):
+		X, Y = self.room_dimensions
+		def room_as_strings():
+			yield self.border
+			for y in range(Y):
+				yield "|"
+				for x in range(X):
+					yield coin(room[(x,y)])
+				yield "|\n"
+			yield self.border
+		return "".join(room_as_strings())
+
+	def db(fingerprint, self): # Creates a piece of art base on 32 hex
+		room = Size.stumble_around(db_fix(fingerprint), self)
+		return Size.display_room(room, self)
+
+	def db_tops(fingerprint, self): # db but without the bottom frame
+		room = Size.stumble_around(db_fix(fingerprint), self)
+		return Size.display_room(room, self)[:-(self.room_dimensions[0]+3)]
+
+	def db_multiple(fingerprint, self): # Vertically stacked drunken_bishop
+		fingerprint = db_fix(fingerprint)
+		finger = [i.rstrip(":") for i in chop(fingerprint, self.byte * 3)]
+		picture = [Size.db_tops(i, self) for i in finger]
+		return "".join(picture) + self.border
+
+	def db_scrape(fingerprint, self): # remove last character of each line
+		room = Size.db_multiple(fingerprint, self).split("\n")[:-1]
+		return [item[:-1] for item in room]
+
+	def db_merge(list, self): # combine multiple vertical ascii frames
+		super_list = [Size.db_scrape(item, self) for item in list]
+		output = [""] * len(super_list[0])
+		for y in range(len(super_list[0])):
+			for x in range(len(super_list)):
+				output[y] += super_list[x][y]
+			output[y] += output[y][0]
+		return "\n".join(output) + "\n"
+
+small = Size(8, 4, 16)
+large = Size(11, 6, 32)
 
 ################################################################################
 
 import hashlib
-
-def db_scrape(fingerprint): # remove last character of each line
-	room = db_multiple(fingerprint).split("\n")[:-1]
-	return [item[:-1] for item in room]
-
-def db_merge(list): # combine multiple vertical ascii frames
-	super_list = [db_scrape(item) for item in list]
-	output = [""] * len(super_list[0])
-	for y in range(len(super_list[0])):
-		for x in range(len(super_list)):
-			output[y] += super_list[x][y]
-		output[y] += output[y][0]
-	return "\n".join(output) + "\n"
 
 def db_basic(passwd, num): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
@@ -447,7 +441,32 @@ def db_basic(passwd, num): # creates rectangles based on hashes
 	if num in [1, 2, 3]: constant = 32
 	elif num in [4, 6, 8]: constant = 64
 	elif num == 9: constant = 96
-	return db_merge(chop(finger, constant))
+	return Size.db_merge(chop(finger, constant), small)
+
+def db_advanced(passwd, num): # creates rectangles based on hashes
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	assert num in [1, 2, 3], "Error: num ivalid"
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	finger, constant = "", 0
+	if num == 1: finger = sha_256
+	elif num == 2: finger = sha_512
+	elif num == 3: finger = sha_256 + sha_512
+	return Size.db_merge(chop(finger, 64), large)
+
+def db_combo(passwd):
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	md5 = hashlib.md5(passwd).hexdigest()
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	top, bottom = md5 + sha_384, sha_256 + sha_512
+	return Size.db_merge(chop(top, 32), small)[:-74] + \
+		"+" + "-" * 17 + "+" + "-" * 5 + "+" + "-" * 11 + "+" + \
+		"-" * 11 + "+" + "-" * 5 + "+" + "-" * 17 + "+\n" + \
+		Size.db_merge(chop(bottom, 64), large)[74:]
 
 ################################################################################
 
@@ -461,7 +480,7 @@ def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	right = hashlib.sha384(passwd).hexdigest()
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
 	mid_l, mid_r = insert(mid[0], "0" * 32, 32), insert(mid[1], "0" * 32, 32)
-	image = db_merge([left, mid_l, mid_r, right]).split("\n")
+	image = db_merge([left, mid_l, mid_r, right], small).split("\n")
 	for i in range(0, 9):
 		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
 	return "\n".join(image)
