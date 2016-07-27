@@ -303,7 +303,7 @@ coin_value_start_position, coin_value_end_position = 15, 16
 
 border = "+" + "-" * room_dimensions[0] + "+\n"
 
-def hex_byte_to_binary(hex_byte): # convert hex byte into a string of bits
+def hex_byte_to_bin(hex_byte): # convert hex byte into a string of bits
 	assert len(hex_byte) == 2
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
@@ -329,7 +329,7 @@ NW, NE, SW, SE = Direct(-1, -1), Direct(1, -1), Direct(-1, 1), Direct(1, 1)
 def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"00": NW, "01": NE, "10": SW, "11": SE}
 	for hex_byte in fingerprint.split(":"):
-		binary = hex_byte_to_binary(hex_byte)
+		binary = hex_byte_to_bin(hex_byte)
 		# read each bit-pair in each word right-to-left (little endian)
 		for bit_pair in bit_pairs(binary):
 			direction = direction_lookup[bit_pair]
