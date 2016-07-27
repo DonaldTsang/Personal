@@ -293,7 +293,7 @@ class Size(object):
 		self.border = "+" + "-" * (x * 2 + 1) + "+\n"
 
 small = Size(8, 4)
-large = size(11, 6)
+large = Size(11, 6)
 
 start_position = (8, 4) # this is 128-bit, 256-bit should be (11, 6) or (12, 6)
 room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
