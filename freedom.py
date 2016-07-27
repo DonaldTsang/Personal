@@ -449,9 +449,8 @@ def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
 	right = hashlib.sha384(passwd).hexdigest()
 	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
-	mid_left = insert(mid[0], "0" * 32, 32)
-	mid_right = insert(mid[1], "0" * 32, 32)
-	image = db_merge([left, mid_left, mid_right, right]).split("\n")
+	mid_l, mid_r = insert(mid[0], "0" * 32, 32), insert(mid[1], "0" * 32, 32)
+	image = db_merge([left, mid_l, mid_r, right]).split("\n")
 	for i in range(0, 9):
 		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
 	return "\n".join(image)
