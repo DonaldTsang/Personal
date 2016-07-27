@@ -285,7 +285,7 @@ def shiftz(exp):
 
 ################################################################################
 
-import itertools
+from itertools import islice
 from collections import Counter
 
 # the bishop starts in the center of the room
@@ -303,7 +303,7 @@ def hex_byte_to_binary(hex_byte): # convert hex byte into a string of bits
 
 def bit_pairs(binary): # convert a word into bit pairs little-endian style
 	def take(n, iterable): # Return first n items of the iterable as a list
-		return list(itertools.islice(iterable, n))
+		return list(islice(iterable, n))
 	def all_pairs(iterable):
 		while True:
 			pair = take(2, iterable)
