@@ -19,9 +19,12 @@ def en(bindata): # Encode a bytes to a Base91 string
 	b, n, out = 0, 0, ''
 	for count in range(len(bindata)):
 		byte = bindata[count:count+1]
-		b |= unpack('B', byte)[0] << n; n += 8
+		b |= unpack('B', byte)[0] << n
+		n += 8
 		if n > 13:
-			v = b & 8191; b >>= 13; n -= 13
+			v = b & 8191
+			b >>= 13
+			n -= 13
 			out += b91_alph[v % 91] + b91_alph[v // 91]
 	if n:
 		out += b91_alph[b % 91]
@@ -36,29 +39,39 @@ def de(en_str): # Decode Base91 string to bytes
 		c = de_table[strletter]
 		if v < 0: v = c
 		else:
-			v += c * 91; b |= v << n; n += 13
+			v += c * 91
+			b |= v << n
+			n += 13
 			while True:
 				out += pack('B', b & 255)
-				b >>= 8; n -= 8
-				if not n > 7: break
+				b >>= 8
+				n -= 8
+				if not n > 7:
+					break
 			v = -1
-	if v + 1: out += pack('B', (b | v << n) & 255)
+	if v + 1:
+		out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
 def b91_en(inputs, output):
-	i = open(inputs, "rb"); o = open(output, "w")
+	i = open(inputs, "rb")
+	o = open(output, "w")
 	text = i.read()
 	text_len, count = len(text), 0
 	while count < text_len:
 		text_part = text[count:count+52]
 		o.write(en(text_part) + "\n")
 		count += 52
-	i.close(); o.close()
+	i.close()
+	o.close()
 
 def b91_de(inputs, output):
-	i = open(inputs, "r"); o = open(output, "wb")
-	for line in i: o.write(de(line[:-1])
-	i.close(); o.close()
+	i = open(inputs, "r")
+	o = open(output, "wb")
+	for line in i:
+		o.write(de(line[:-1])
+	i.close()
+	o.close()
 
 if __name__ == '__main__':
 	import argparse
