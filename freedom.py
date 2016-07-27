@@ -285,9 +285,6 @@ def shiftz(exp):
 
 ################################################################################
 
-from itertools import islice
-from collections import Counter
-
 # the bishop starts in the center of the room
 start_position = (8, 4) # this is 128-bit, 256-bit should be (11, 6) or (12, 6)
 room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
@@ -302,6 +299,7 @@ def hex_byte_to_binary(hex_byte): # convert hex byte into a string of bits
 	return bin(int(hex_byte, 16))[2:].zfill(8)
 
 def bit_pairs(binary): # convert a word into bit pairs little-endian style
+	from itertools import islice
 	def take(n, iterable): # Return first n items of the iterable as a list
 		return list(islice(iterable, n))
 	def all_pairs(iterable):
@@ -340,6 +338,7 @@ def move(position, direction): # returns new position given current condition
 	return new_x, new_y
 
 def stumble_around(fingerprint):
+	from collections import Counter
 	room, position = Counter(), start_position
 	for direction in directions_from_fingerprint(fingerprint):
 		position = move(position, direction)
