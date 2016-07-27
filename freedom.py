@@ -303,6 +303,8 @@ coin_value_start_position, coin_value_end_position = 15, 16
 
 border = "+" + "-" * room_dimensions[0] + "+\n"
 
+################################################################################
+
 def hex_byte_to_bin(hex_byte): # convert hex byte into a string of bits
 	assert len(hex_byte) == 2
 	return bin(int(hex_byte, 16))[2:].zfill(8)
@@ -334,6 +336,8 @@ def directions_from_fingerprint(fingerprint): # convert fingerprint into directi
 		for bit_pair in bit_pairs(binary):
 			direction = direction_lookup[bit_pair]
 			yield direction
+
+################################################################################
 
 def move(position, direction): # returns new position given current condition
 	x, y = position
