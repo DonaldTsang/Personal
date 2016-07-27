@@ -47,8 +47,7 @@ def de(en_str): # Decode Base91 string to bytes
 
 def b91_en(inputs, output):
 	i = open(inputs, "rb"); o = open(output, "wb")
-	text = i.read(); text_len = len(text)
-	counter = 0; data_to_write = ""
+	text = i.read(); text_len, counter = len(text), 0
 	while counter < text_len:
 		text_part = text[x:x+52]
 		o.write(en(text_part) + "\n")
