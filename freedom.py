@@ -324,10 +324,11 @@ coin_value_start_position, coin_value_end_position = 20, 21
 
 def coin(value): # Display the ascii representation of a coin
 	return {
-		0: " ", 1: ".", 2: "=", 3: "*", 4: "B",
-		5: "O", 6: "X", 7: "Z", 8: "@", 9: "%",
-		10: "&", 11: "#", 12: "/", 13: "^", 14: "?",
-		15: "f", 16: "i", 17: "l", 18: "M", 19: "W"
+		# 2 and 3 changed from "o" and "+"
+		0: " ", 1: ".", 2: "M",3: "W", 4: "=",
+		5: "*", 6: "B", 7: "O", 8: "X", 9: "@",
+		10: "%", 11: "&", 12: "#", 13: "/", 14: "^",
+		15: "f", 16: "i", 17: "l", 18: "Z", 19: "?"
 		coin_value_start_position: "S",
 		coin_value_end_position: "E",
 	}.get(value, "!")
