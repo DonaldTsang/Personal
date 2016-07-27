@@ -46,7 +46,7 @@ def de(strdata): # Decode Base91 string to bytes
 		out += pack('B', (b | v << n) & 255)
 	return bytes(out)
 
-def b91_en(inputs, output):
+def b91_en_short(inputs, output):
 	i = open(inputs, "rb"); o = open(output, "w")
 	text = i.read()
 	text_len, count = len(text), 0
@@ -54,6 +54,16 @@ def b91_en(inputs, output):
 		text_part = text[count:count+52]
 		o.write(en(text_part) + "\n")
 		count += 52
+	i.close(); o.close()
+
+def b91_en_long(inputs, output):
+	i = open(inputs, "rb"); o = open(output, "w")
+	text = i.read()
+	text_len, count = len(text), 0
+	while count < text_len:
+		text_part = text[count:count+65]
+		o.write(en(text_part) + "\n")
+		count += 65
 	i.close(); o.close()
 
 def b91_de(inputs, output):
@@ -65,12 +75,13 @@ if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser(description='base91 file conversion')
 	group_code = parser.add_mutually_exclusive_group(required=True)
-	group_code.add_argument("-e", "--encode", action="store_true", default=False, 
+	group_code.add_argument("-e", "--encode", choices=["short", "long"],
 		help="Encode binaries into base91 text file")
 	group_code.add_argument("-d", "--decode", action="store_true", default=False,
 		help="Decode base91 text file into binaries")
 	parser.add_argument("inputs", help="the inputs file directory")
 	parser.add_argument("output", help="the output file directory")
 	args = parser.parse_args()
-	if args.encode: b91_en(args.inputs, args.output)
+	if args.encode == "short": b91_en_short(args.inputs, args.output)
+	elif args.encode == "long": b91_en_long(args.inputs, args.output)
 	elif args.decode: b91_de(args.inputs, args.output)
