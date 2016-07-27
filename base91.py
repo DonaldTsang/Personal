@@ -47,9 +47,11 @@ def de(en_str): # Decode Base91 string to bytes
 
 def b91_en(inputs, output):
 	i = open(inputs, "rb"); o = open(output, "wb")
-	binary = i.read(); binary_len = len(binary)
+	text = i.read(); text_len = len(text)
 	counter = 0; data_to_write = ""
-	print(binary_len)
+	while counter < text_len:
+		text_part = text[x:x+52]
+		o.write(en(text_part) + "\n")
 	i.close(); o.close()
 
 def b91_de(inputs, output):
@@ -64,8 +66,8 @@ if __name__ == '__main__':
 		help="Encode binaries into base91 text file")
 	group_code.add_argument("-d", "--decode", action="store_true", default=False,
 		help="Decode base91 text file into binaries")
-	parser.add_argument("inputs", type=open, help="the inputs file directory")
-	parser.add_argument("output", type=open, help="the output file directory")
+	parser.add_argument("inputs", help="the inputs file directory")
+	parser.add_argument("output", help="the output file directory")
 	args = parser.parse_args()
 	if args.encode: b91_en(args.inputs, args.output)
 	elif args.decode: b91_de(args.inputs, args.output)
