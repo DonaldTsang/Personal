@@ -287,12 +287,14 @@ def shiftz(exp):
 
 class Size(object):
 	def __init__(self, x, y):
-		self.x, self.y = x, y
+		self.x, self.y = x, y # bishop starts in the center of the room
 		self.start_position = (x, y)
 		self.room_dimensions = (x * 2 + 1, y * 2 + 1)
 		self.border = "+" + "-" * (x * 2 + 1) + "+\n"
 
-# the bishop starts in the center of the room
+small = Size(8, 4)
+large = size(11, 6)
+
 start_position = (8, 4) # this is 128-bit, 256-bit should be (11, 6) or (12, 6)
 room_dimensions = (start_position[0] * 2 + 1, start_position[1] * 2 + 1)
 
