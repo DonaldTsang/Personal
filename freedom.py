@@ -313,11 +313,11 @@ def bit_pairs(binary): # convert a word into bit pairs little-endian style
 
 ################################################################################
 
-class Direction(object): # Encode a sense of direction
+class Direct(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
 		self.dx, self.dy = dx, dy
 
-NW, NE, SW, SE = Direction(-1, -1), Direction(1, -1), Direction(-1, 1), Direction(1, 1)
+NW, NE, SW, SE = Direct(-1, -1), Direct(1, -1), Direct(-1, 1), Direct(1, 1)
 
 def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"00": NW, "01": NE, "10": SW, "11": SE}
@@ -330,8 +330,7 @@ def directions_from_fingerprint(fingerprint): # convert fingerprint into directi
 
 def move(position, direction): # returns new position given current condition
 	x, y = position
-	MAX_X = room_dimensions[0] - 1
-	MAX_Y = room_dimensions[1] - 1
+	MAX_X, MAX_Y = room_dimensions[0] - 1, room_dimensions[1] - 1
 	assert 0 <= x <= MAX_X, "Error: position of x out of range"
 	assert 0 <= y <= MAX_Y, "Error: position of y out of range"
 	new_x, new_y = x + direction.dx, y + direction.dy
