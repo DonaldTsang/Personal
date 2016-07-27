@@ -320,13 +320,14 @@ def directions_from_fingerprint(fingerprint): # convert fingerprint into directi
 ################################################################################
 
 # encode start and end positions
-coin_value_start_position, coin_value_end_position = 15, 16
+coin_value_start_position, coin_value_end_position = 20, 21
 
 def coin(value): # Display the ascii representation of a coin
 	return {
-		0: " ", 1: ".", 2: "o", 3: "+", 4: "=",
-		5: "*", 6: "B", 7: "O", 8: "X", 9: "@",
-		10: "%", 11: "&", 12: "#", 13: "/", 14: "^",
+		0: " ", 1: ".", 2: "=", 3: "*", 4: "B",
+		5: "O", 6: "X", 7: "Z", 8: "@", 9: "%",
+		10: "&", 11: "#", 12: "/", 13: "^", 14: "?",
+		15: "f", 16: "i", 17: "l", 18: "M", 19: "W"
 		coin_value_start_position: "S",
 		coin_value_end_position: "E",
 	}.get(value, "!")
