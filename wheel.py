@@ -48,8 +48,7 @@ class wheel(object):
 		self.cash = wheel.check(self, bet)
 		assert isinstance(pick_x, int)
 		assert isinstance(pick_y, int)
-		assert 0 <= pick_x <= 10
-		assert 1 <= pick_y <= 12
+		assert 0 <= pick_x <= 10 and 1 <= pick_y <= 12
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
 		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
 		y_1, y_2 = floor(pick_y / 2 - 1) * 6, ceil(pick_y / 2 - 1) * 6
@@ -75,10 +74,8 @@ class wheel(object):
 
 	def multi3x12(self, bet, pick_x, pick_y): # zero house edge
 		self.cash = wheel.check(self, bet)
-		assert isinstance(pick_x, int)
-		assert isinstance(pick_y, int)
-		assert 0 <= pick_x <= 4
-		assert 1 <= pick_y <= 24
+		assert isinstance(pick_x, int) and isinstance(pick_y, int)
+		assert 0 <= pick_x <= 4 and 1 <= pick_y <= 24
 		assert pick_x % 2 == 1 or pick_y % 2 == 1
 		x_1, x_2 = floor(pick_x / 2) + 1, ceil(pick_x / 2) + 1
 		y_1, y_2 = floor(pick_y / 2 - 1) * 3, ceil(pick_y / 2 - 1) * 3
