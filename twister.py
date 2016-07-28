@@ -197,8 +197,7 @@ class twister(object):
 	def double_domino(self, bet, pick1, pick2):# zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
-		assert 1 <= pick1 <= 6
-		assert 1 <= pick2 <= 6
+		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6
 		assert pick1 != pick2
 		roll()
 		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
@@ -211,8 +210,7 @@ class twister(object):
 	def triple_domino(self, bet, pick1, pick2):
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
-		assert 1 <= pick1 <= 6
-		assert 1 <= pick2 <= 6
+		assert 1 <= pick1 <= 6 and assert 1 <= pick2 <= 6
 		assert pick1 != pick2
 		roll()
 		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
@@ -223,8 +221,7 @@ class twister(object):
 	def triple_ricochet(self, bet, pick1, pick2): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
-		assert 1 <= pick1 <= 6
-		assert 1 <= pick2 <= 6
+		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6
 		assert pick1 != pick2
 		roll()
 		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
@@ -235,12 +232,8 @@ class twister(object):
 	def triple_stooge(self, bet, pick1, pick2, pick3) # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
-		assert 1 <= pick1 <= 6
-		assert 1 <= pick2 <= 6
-		assert 1 <= pick3 <= 6
-		assert pick1 != pick2
-		assert pick2 != pick3
-		assert pick1 != pick3
+		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6 and 1 <= pick3 <= 6
+		assert pick1 != pick2 and pick2 != pick3 and pick1 != pick3
 		roll()
 		print("You picked %s-%s-%s, and rolls are %s" % (pick1, pick2, pick3, dice))
 		if result == sorted([pick1, pick2, pick3]):
