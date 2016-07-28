@@ -171,7 +171,7 @@ class twister(object):
 				self.cash += 9 * bet
 		print(self.cash)
 
-	def trio_number(self, bet, pick): # zero house edge
+	def trio_number(self, bet, pick): # odds can be fixed
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick <= 6
@@ -179,11 +179,11 @@ class twister(object):
 		print("You picked %ss, and rolls are %s" % (pick, dice))
 		if pairs[1] == pick:
 			if pairs[0] == 3:
-				# triple numbers
+				self.cash += 8 * bet
 			elif pairs[0] == 2:
-				# double numbers
+				self.cash += 4 * bet
 		elif pick in dice:
-			# single number
+			self.cash += 1 * bet + (bet * 11) // 12
 		print(self.cash)
 
 	# Need Field Bets and Big/Small a.k.a Hi/Mid/Lo
