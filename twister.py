@@ -194,7 +194,7 @@ class twister(object):
 
 ################################################################################
 
-	def double_domino(self, bet, pick1, pick2):# zero house edge
+	def duo_domino(self, bet, pick1, pick2):# zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6
@@ -207,7 +207,7 @@ class twister(object):
 			self.cash += 18 * bet
 		print(self.cash)
 
-	def triple_domino(self, bet, pick1, pick2):
+	def trio_domino(self, bet, pick1, pick2):
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick1 <= 6 and assert 1 <= pick2 <= 6
@@ -218,7 +218,7 @@ class twister(object):
 			self.cash += 7 * bet + (bet * 2) // 12
 		print(self.cash)
 
-	def triple_ricochet(self, bet, pick1, pick2): # zero house edge
+	def trio_ricochet(self, bet, pick1, pick2): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6
@@ -229,7 +229,7 @@ class twister(object):
 			self.cash += 72 * bet
 		print(self.cash)
 	
-	def triple_stooge(self, bet, pick1, pick2, pick3) # zero house edge
+	def trio_stooge(self, bet, pick1, pick2, pick3) # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
 		assert 1 <= pick1 <= 6 and 1 <= pick2 <= 6 and 1 <= pick3 <= 6
