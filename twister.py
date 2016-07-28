@@ -1,8 +1,6 @@
 from random import randint
 
-dice = [0, 0, 0]
-result = [0, 0, 0]
-pairs = ()
+dice, result, pairs = [0, 0, 0], [0, 0, 0], ()
 def roll():
 	global dice, result, pairs
 	dice[0], dice[1], dice[2] = randint(1, 6), randint(1, 6), randint(1, 6)
@@ -79,6 +77,8 @@ class twister(object):
 				self.cash += 8 * bet # zero house edge
 		print(self.cash)
 
+################################################################################
+
 	def uno_twin(self, bet, pick):  # zero house edge
 		self.cash = twister.check(self, bet)
 		assert pick in ["odd", "even"]
@@ -118,6 +118,8 @@ class twister(object):
 			self.cash += 1 * bet + (bet * 4) // 12
 		print(self.cash)
 
+################################################################################
+
 	def duo_dubs(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
 		assert isinstance(pick, int)
@@ -156,6 +158,8 @@ class twister(object):
 			elif dice[0] == pick:
 				self.cash += 216 * bet
 		print(self.cash)
+
+################################################################################
 
 	def trio_straight(self, bet, pick): # zero house edge
 		self.cash = twister.check(self, bet)
