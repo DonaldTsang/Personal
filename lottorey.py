@@ -50,7 +50,7 @@ class Pick5(object):
 		self.cash -= bet
 		return self.cash
 	
-	def picking(self, bet, pick):
+	def picking(self, bet, pick): # too hard to make it zero house edge
 		self.cash = Pick5.check(self, bet)
 		assert isinstance(pick, list)
 		for item in pick:
