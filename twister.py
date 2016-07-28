@@ -5,10 +5,10 @@ def roll():
 	global dice, result, pairs
 	dice[0], dice[1], dice[2] = randint(1, 6), randint(1, 6), randint(1, 6)
 	result = sorted([dice[0], dice[1], dice[2]])
-	if result[0] == result[1] == result [2]: pairs = (3, result[0])
-	elif result[0] == result[1]: pairs = (2, result[0])
-	elif result[1] == result [2]: pairs = (2, result[1])
-	else: pairs = (1, 0)
+	if result[0] == result[1] == result [2]: pairs = (3, result[0], 0)
+	elif result[0] == result[1]: pairs = (2, result[0], result[2])
+	elif result[1] == result [2]: pairs = (2, result[1], result[0])
+	else: pairs = (1, 0, 0)
 
 class twister(object):
 	def __init__(self, cash):
@@ -191,3 +191,58 @@ class twister(object):
 		print(self.cash)
 
 	# Need Field Bets and Big/Small a.k.a Hi/Mid/Lo
+
+################################################################################
+
+	def double_domino(self, bet, pick1, pick2):# zero house edge
+		self.cash = twister.check(self, bet)
+		assert isinstance(pick, int)
+		assert 1 <= pick1 <= 6
+		assert 1 <= pick2 <= 6
+		assert pick1 != pick2
+		roll()
+		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
+		if dice[0] == pick1 and dice[1] == pick2:
+			self.cash += 18 * bet
+		elif dice[0] == pick2 and dice[1] == pick1:
+			self.cash += 18 * bet
+		print(self.cash)
+
+	def triple_domino(self, bet, pick1, pick2):
+		self.cash = twister.check(self, bet)
+		assert isinstance(pick, int)
+		assert 1 <= pick1 <= 6
+		assert 1 <= pick2 <= 6
+		assert pick1 != pick2
+		roll()
+		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
+		if # blah blah blah
+			self.cash += 7 * bet + (bet * 2) // 12
+		print(self.cash)
+
+	def triple_ricochet(self, bet, pick1, pick2): # zero house edge
+		self.cash = twister.check(self, bet)
+		assert isinstance(pick, int)
+		assert 1 <= pick1 <= 6
+		assert 1 <= pick2 <= 6
+		assert pick1 != pick2
+		roll()
+		print("You picked %s-%s, and rolls are %s" % (pick1, pick2, dice))
+		if pairs == (2, pick1, pick2):
+			self.cash += 72 * bet
+		print(self.cash)
+	
+	def triple_stooge(self, bet, pick1, pick2, pick3) # zero house edge
+		self.cash = twister.check(self, bet)
+		assert isinstance(pick, int)
+		assert 1 <= pick1 <= 6
+		assert 1 <= pick2 <= 6
+		assert 1 <= pick3 <= 6
+		assert pick1 != pick2
+		assert pick2 != pick3
+		assert pick1 != pick3
+		roll()
+		print("You picked %s-%s-%s, and rolls are %s" % (pick1, pick2, pick3, dice))
+		if result == sorted([pick1, pick2, pick3]):
+			self.cash == 36 * bet
+		print(self.cash)
