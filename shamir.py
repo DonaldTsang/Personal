@@ -221,7 +221,7 @@ class SS():
 		self.secret_charset = secret_charset
 		self.share_charset = share_charset
 
-	def split_secret(self, secret_string, share_threshold, num_shares):
+	def split(self, secret_string, share_threshold, num_shares):
 		num_leading_zeros = 0
 		for secret_char in secret_string:
 			if secret_char == self.secret_charset[0]: num_leading_zeros += 1
@@ -235,7 +235,7 @@ class SS():
 			shares.append(share_string)
 		return shares
 
-	def recover_secret(self, shares):
+	def recover(self, shares):
 		num_leading_zeros = None
 		points = []
 		for share in shares:
