@@ -259,33 +259,23 @@ string = string.printable # cannot be used for share_charset
 
 if __name__ == '__main__':
 	import argparse
-	
-	def split_check(arg):
-		assert isinstance(arg[0], str), "First argument is not string"
-		assert isinstance(arg[1], int), "Second argument is not integer"
-		assert isinstance(arg[2], int), "Third argument is not integer"
-		return arg
-	
 	parser = argparse.ArgumentParser(description='Shamir Secret Sharer')
 	group_code = parser.add_mutually_exclusive_group(required=True)
-	group_code.add_argument_group('group_split')
-	group_code.add_argument_group('group_recover')
+	group_split = group_code.add_argument_group('group_split')
+	group_recover = group_code.add_argument_group('group_recover')
 	group_split.add_argument("-s", "--split", action="store_true",
 		default=False, help="Split password into multiple sub-passwords")
-	group_split.add_argument("password", type=string, required=True)
-	group_split.add_argument("share_threshold", type=int, required=True)
-	group_split.add_argument("num_shares", type=int, required=True)
+	group_split.add_argument("password", type=str)
+	group_split.add_argument("share_threshold", type=int)
+	group_split.add_argument("num_shares", type=int)
 	group_recover.add_argument("-r", "--recover", action="store_true",
 		default=False, help="Recover password from multiplr sub-passwords")
-	group_recover.add_argument("share_list", type=list, required=True)
+	group_recover.add_argument("share_list", type=list)
 	parser.add_argument("secret_charset", choices=["b16", "b32", "b64", "unix", "string"],
-		required=True, help="Encoding system of password")
+		default="b16", help="Encoding system of password")
 	parser.add_argument("share_charset", choices=["b16", "b32", "b64", "unix"],
-		required=True, help="Encoding system of sub-passwords")
+		default="b16", help="Encoding system of sub-passwords")
 	args = parser.parse_args()
-	if args.split:
-		SS_new = SS(secret_charset, share_charset)
-		print(SS_new.split(password, share_threshold, num_shares))
-	elif args.recover: 
-		SS_new = SS(secret_charset, share_charset)
-		print(SS_new.recover(share_list))
+	SS_new = SS(secret_charset, share_charset)
+	if args.split: print(SS_new.split(password, share_threshold, num_shares))
+	elif args.recover: print(SS_new.recover(share_list))
