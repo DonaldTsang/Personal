@@ -285,7 +285,7 @@ if __name__ == '__main__':
 	args = parser.parse_args()
 	if args.split:
 		SS_new = SS(secret_charset, share_charset)
-		print(SS_new.split(split))
+		print(SS_new.split(password, share_threshold, num_shares))
 	elif args.recover: 
 		SS_new = SS(secret_charset, share_charset)
-		print(SS_new.recover(recover))
+		print(SS_new.recover(share_list))
