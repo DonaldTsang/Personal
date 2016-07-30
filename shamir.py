@@ -222,8 +222,7 @@ class SS():
 	def split_secret(self, secret_string, share_threshold, num_shares):
 		num_leading_zeros = 0
 		for secret_char in secret_string:
-			if secret_char == self.secret_charset[0]:
-				num_leading_zeros += 1
+			if secret_char == self.secret_charset[0]: num_leading_zeros += 1
 			else: break
 		secret_int = charset_to_int(secret_string, self.secret_charset)
 		points = secret_int_to_points(secret_int, share_threshold, num_shares)
