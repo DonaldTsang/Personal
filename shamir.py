@@ -255,28 +255,4 @@ b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
 	"0123456789+/"
 unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 	"abcdefghijklmnopqrstuvwxyz"
-string = string.printable
-
-HexToHexSS = SS(b16, b16)
-B32ToHexSS = SS(b32, b16)
-B64ToHexSS = SS(b64, b16)
-UnixToHexSS = SS(unix, b16)
-TextToHexSS = SS(string, b16)
-
-HexToB32SS = SS(b16, b32)
-B32ToB32SS = SS(b32, b32)
-B64ToB32SS = SS(b64, b32)
-UnixToB32SS = SS(unix, b32)
-TextToB32SS = SS(string, b32)
-
-HexToB64SS = SS(b16, b64)
-B32ToB64SS = SS(b32, b64)
-B64ToB64SS = SS(b64, b64)
-UnixToB64SS = SS(unix, b64)
-TextToB64SS = SS(string, b64)
-
-HexToUnixSS = SS(b16, unix)
-B32ToUnixSS = SS(b32, unix)
-B64ToUnixSS = SS(b64, unix)
-UnixToUnixSS = SS(unix, unix)
-TextToUnixSS = SS(string, unix)
+string = string.printable # cannot be used for share_charset
