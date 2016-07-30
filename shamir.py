@@ -256,3 +256,17 @@ b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
 unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 	"abcdefghijklmnopqrstuvwxyz"
 string = string.printable # cannot be used for share_charset
+
+if __name__ == '__main__':
+	import argparse
+	parser = argparse.ArgumentParser(description='Shamir Secret Sharer')
+	group_code = parser.add_mutually_exclusive_group(required=True)
+	group_code.add_argument("-s", "--split", action="store_true", default=False,
+		help="Split password into multiple sub-passwords")
+	group_code.add_argument("-r", "--recover", action="store_true", default=False,
+		help="Recover password from multiplr sub-passwords")
+	parser.add_argument("secret_charset", choices=["b16", "b32", "b64", "unix", "string"],
+		help="Encoding system of password")
+	parser.add_argument("share_charset", choices=["b16", "b32", "b64", "unix"],
+		help="Encoding system of sub-passwords")
+	args = parser.parse_args()
