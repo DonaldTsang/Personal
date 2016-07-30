@@ -277,5 +277,7 @@ if __name__ == '__main__':
 		default="b16", help="Encoding system of sub-passwords")
 	args = parser.parse_args()
 	SS_new = SS(secret_charset, share_charset)
-	if args.split: print(SS_new.split(password, share_threshold, num_shares))
-	elif args.recover: print(SS_new.recover(share_list))
+	if args.split
+		print(SS_new.split(password, share_threshold, num_shares))
+	elif args.recover
+		print(SS_new.recover(share_list))
