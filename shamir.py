@@ -261,13 +261,13 @@ if __name__ == '__main__':
 	import argparse
 	parser = argparse.ArgumentParser(description='Shamir Secret Sharer')
 	group_code = parser.add_mutually_exclusive_group(required=True)
-	group_split = group_code.add_argument_group()
+	group_split = group_code.add_argument_group('group_split')
 	group_split.add_argument("-s", "--split", action="store_true",
 		default=False, help="Split password into multiple sub-passwords")
 	group_split.add_argument("password", type=str)
 	group_split.add_argument("share_threshold", type=int)
 	group_split.add_argument("num_shares", type=int)
-	group_recover = group_code.add_argument_group()
+	group_recover = group_code.add_argument_group('group_recover')
 	group_recover.add_argument("-r", "--recover", action="store_true",
 		default=False, help="Recover password from multiplr sub-passwords")
 	group_recover.add_argument("share_list", type=list)
@@ -277,7 +277,5 @@ if __name__ == '__main__':
 		default="b16", help="Encoding system of sub-passwords")
 	args = parser.parse_args()
 	SS_new = SS(secret_charset, share_charset)
-	if args.split
-		print(SS_new.split(password, share_threshold, num_shares))
-	elif args.recover
-		print(SS_new.recover(share_list))
+	if args.split: print(SS_new.split(password, share_threshold, num_shares))
+	elif args.recover: print(SS_new.recover(share_list))
