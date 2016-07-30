@@ -259,9 +259,16 @@ string = string.printable # cannot be used for share_charset
 
 if __name__ == '__main__':
 	import argparse
+	
+	def split_check(arg):
+		assert isinstance(arg[0], str), "First argument is not string"
+		assert isinstance(arg[1], int), "Second argument is not integer"
+		assert isinstance(arg[2], int), "Third argument is not integer"
+		return arg
+	
 	parser = argparse.ArgumentParser(description='Shamir Secret Sharer')
 	group_code = parser.add_mutually_exclusive_group(required=True)
-	group_code.add_argument("-s", "--split", nargs=3, type=(str, int, int), action="store_true",
+	group_code.add_argument("-s", "--split", nargs=3, type=split_check, action="store_true",
 		default=False, help="Split password into multiple sub-passwords")
 	group_code.add_argument("-r", "--recover", nargs=1, type=list, action="store_true",
 		default=False, help="Recover password from multiplr sub-passwords")
