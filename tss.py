@@ -1,16 +1,3 @@
-#!/usr/bin/env python
-import sys
-if sys.version_info < (2, 6):
-    sys.stderr.write('This module requires at least Python 2.6\n')
-    sys.exit(1)
-
-try:
-    from setuptools import setup
-except:
-    from distutils.core import setup
-
-################################################################################
-
 # from https://github.com/seb-m/tss
 
 """
