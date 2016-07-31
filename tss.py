@@ -9,6 +9,8 @@ try:
 except:
     from distutils.core import setup
 
+################################################################################
+
 # from https://github.com/seb-m/tss
 
 """
@@ -61,10 +63,8 @@ def encode(value, encoding='utf-8', encoding_errors='strict'):
     """
     Return a bytestring representation of the value.
     """
-    if isinstance(value, bytes):
-        return value
-    if not isinstance(value, basestring):
-        value = str(value)
+    if isinstance(value, bytes): return value
+    if not isinstance(value, basestring): value = str(value)
     if isinstance(value, unicode):
         value = value.encode(encoding, encoding_errors)
     return value
@@ -138,30 +138,22 @@ LOG = [  0,    0,   25,    1,   50,    2,   26,  198,
        103,   74,  237,  222,  197,   49,  254,   24,
         13,   99,  140,  128,  192,  247,  112,    7]
 
-def gf256_add(a, b):
-    return a ^ b
+def gf256_add(a, b): return a ^ b
 
-def gf256_sub(a, b):
-    return gf256_add(a, b)
+def gf256_sub(a, b): return gf256_add(a, b)
 
 def gf256_mul(a, b):
-    if a == 0 or b == 0:
-        return 0
+    if a == 0 or b == 0: return 0
     return EXP[(LOG[a] + LOG[b]) % 255]
 
 def gf256_div(a, b):
-    if a == 0:
-        return 0
-    if b == 0:
-        raise ZeroDivisionError
+    if a == 0: return 0
+    if b == 0: raise ZeroDivisionError
     return EXP[(LOG[a] - LOG[b]) % 255]
-
 
 # TSS error
 
-class TSSError(Exception):
-    pass
-
+class TSSError(Exception): pass
 
 # Hash
 
@@ -181,7 +173,6 @@ class Hash(object):
     @staticmethod
     def is_valid(hash_id):
         return 0 <= hash_id <= 2
-
 
 # Share generation
 
@@ -206,15 +197,14 @@ def generate_shares(m, n, secret):
     for secret_byte in secret:
         r = os.urandom(m - 1)
         for i in range(n):
-            shares[i].append(f(shares[i][0],
-                               b(byte_to_chr(secret_byte)) + r))
+            shares[i].append(f(shares[i][0], \
+                b(byte_to_chr(secret_byte)) + r))
     return [bytes(share) for share in shares]
 
 def format_header(identifier, hash_id, threshold, share_len):
     return struct.pack('>16sBBH', identifier, hash_id, threshold, share_len)
 
-def format_share(header, share):
-    return header[:] + share
+def format_share(header, share): return header[:] + share
 
 def share_secret(threshold, nshares, secret, identifier, hash_id=Hash.SHA256):
     """
@@ -254,8 +244,7 @@ def lagrange_interpolation(u, v):
         sum = gf256_add(sum, gf256_mul(basis_poly(i, u), v[i]))
     return sum
 
-def parse_header(share):
-    return struct.unpack('>16sBBH', share)
+def parse_header(share): return struct.unpack('>16sBBH', share)
 
 def reconstruct_secret(shares, strict_mode=True):
     """
@@ -273,8 +262,7 @@ def reconstruct_secret(shares, strict_mode=True):
     data_shares = []
     for share in shares:
         share = encode(share)
-        if len(share) < 20:
-            raise TSSError('share format invalid')
+        if len(share) < 20: raise TSSError('share format invalid')
         header = parse_header(share[:20])
         if ref_header is None:
             ref_header = header
@@ -285,17 +273,15 @@ def reconstruct_secret(shares, strict_mode=True):
         data_share = share[20:]
         if len(data_share) != header[3]:
             raise TSSError('invalid share data size %d (expected %d)' % \
-                               (len(data_share), header[3]))
+                (len(data_share), header[3]))
         data_shares.append(data_share)
 
     for combination in itertools.combinations(data_shares, ref_header[2]):
         secret = bytearray()
         u = [byte_to_ord(share[0]) for share in combination]
         if len(dict().fromkeys(u)) != len(u):
-            if strict_mode:
-                raise TSSError('invalid share with duplicate index')
-            else:
-                continue
+            if strict_mode: raise TSSError('invalid share with duplicate index')
+            else: continue
         for i in range(1, ref_header[3]):
             v = [byte_to_ord(share[i]) for share in combination]
             secret.append(lagrange_interpolation(u, v))
@@ -305,10 +291,8 @@ def reconstruct_secret(shares, strict_mode=True):
             digestsize = digest_size(d)
             d.update(secret[:-digestsize])
             if len(secret) < digestsize or d.digest() != secret[-digestsize:]:
-                if strict_mode:
-                    raise TSSError('hash values mismatch')
-                else:
-                    continue
+                if strict_mode: raise TSSError('hash values mismatch')
+                else: continue
             return secret[:-digestsize]
         return secret
     raise TSSError('not enough valid shares for reconstructing the secret')
