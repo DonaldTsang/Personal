@@ -9,6 +9,8 @@ try:
 except:
     from distutils.core import setup
 
+# from https://github.com/seb-m/tss
+
 """
 Threshold Secret Sharing (Shamir's secret sharing scheme)
 http://tools.ietf.org/html/draft-mcgrew-tss-03
