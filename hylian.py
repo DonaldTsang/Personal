@@ -69,11 +69,14 @@ def affine_de(integer, block_len, add, mult): # decrypts integer using affine
 # block_len = numbe rof characters in a block of code
 # add, mult = additive and multiplicative key of cipher
 
-def encrypt(string, block_len, add, mult): # encrypts hylian
-	assert isinstance(string, str)
+def check(block_len, add, mult):
 	assert isinstance(block_len, int) and block_len > 0
 	assert isinstance(add, int) and 0 <= add < 27 ** block_len
 	assert isinstance(mult, int) and 0 < mult < 27 ** block_len and egcd(mult, 27)[0] == 1 
+
+def encrypt(string, block_len, add, mult): # encrypts hylian
+	assert isinstance(string, str)
+	check(block_len, add, mult)
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
 	result = ''
 	for item in chop:
@@ -83,9 +86,7 @@ def encrypt(string, block_len, add, mult): # encrypts hylian
 
 def decrypt(string, block_len, add, mult): # decrypts hylian
 	assert isinstance(string, str)
-	assert isinstance(block_len, int) and block_len > 0
-	assert isinstance(add, int) and 0 <= add < 27 ** block_len
-	assert isinstance(mult, int) and 0 < mult < 27 ** block_len and egcd(mult, 27)[0] == 1 
+	check(block_len, add, mult) 
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
 	result = ''
 	for item in chop:
