@@ -1,28 +1,22 @@
-import base64
-import codecs
-import math
-import struct
+import base64, codecs, math, struct
 from random import SystemRandom
 
 # https://github.com/SSSaaS/sssa-python
 
 prime=2**256-189
 
-def random(self): return SystemRandom().randrange(prime)
+def random(): return SystemRandom().randrange(prime)
 
-def split_ints(self, secret):
+def split_ints(secret):
 	result = []
 	working, byte_object = None, None
-	try:
-		byte_object = bytes(secret, "utf8")
-	except:
-		byte_object = bytes(secret)
+	try: byte_object = bytes(secret, "utf8")
+	except: byte_object = bytes(secret)
 	text = codecs.encode(byte_object, 'hex_codec').decode('utf8') + "00"*(32 - (len(byte_object) % 32))
-	for i in range(0, int(len(text)/64)):
-		result.append(int(text[i*64:(i+1)*64], 16))
+	for i in range(0, int(len(text)/64)): result.append(int(text[i*64:(i+1)*64], 16))
 	return result
 
-def merge_ints(self, secrets):
+def merge_ints(secrets):
 	result = ""
 	for secret in secrets:
 		hex_data = hex(secret)[2:].replace("L", "")
@@ -36,13 +30,13 @@ def merge_ints(self, secrets):
 		return codecs.decode(byte_object, 'hex_codec').rstrip("\00\x00")
 	pass
 
-def evaluate_polynomial(self, coefficients, value):
+def evaluate_polynomial(coefficients, value):
 	result = 0
 	for coefficient in reversed(coefficients):
 		result *= value; result += coefficient; result %= prime
 	return result
 
-def to_base64(self, number):
+def to_base64(number):
 	tmp = hex(number)[2:].replace("L", "")
 	tmp = "0"*(64 - len(tmp)) + tmp
 	try: tmp = bytes(tmp, "utf8")
@@ -59,7 +53,7 @@ def to_base64(self, number):
 		print(hex(codecs.decode(tmp, 'hex_codec')))
 	return result
 
-def from_base64(self, number):
+def from_base64(number):
 	byte_number = number
 	try: byte_number = bytes(byte_number, "utf8")
 	except: byte_number = bytes(byte_number)
@@ -68,14 +62,14 @@ def from_base64(self, number):
 	except: tmp = bytes(tmp)
 	return int(codecs.encode(tmp, 'hex_codec'), 16)
 
-def gcd(self, a, b):
+def gcd(a, b):
 	if b == 0: return [a, 1, 0]
 	else:
 		n, c = int(math.floor(a*1.0/b)), a % b
 		r = gcd(b, c)
 		return [r[0], r[2], r[1] - r[2]*n]
 
-def mod_inverse(self, number):
+def mod_inverse(number):
 		remainder = (gcd(prime, number % prime))[2]
 		if number < 0: remainder *= -1
 		return (prime + remainder) % prime
@@ -84,7 +78,7 @@ def mod_inverse(self, number):
 
 prime = 2**256-189
 
-def create(self, minimum, shares, raw):
+def create(minimum, shares, raw):
 	if (shares < minimum):
 		return
 	secret = split_ints(raw)
@@ -110,7 +104,7 @@ def create(self, minimum, shares, raw):
 			result[i] += to_base64(y)
 	return result
 
-def combine(self, shares):
+def combine(shares):
 	secrets = []
 	for index,share in enumerate(shares):
 		if len(share) % 88 != 0: return
