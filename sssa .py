@@ -124,9 +124,7 @@ class sssa:
             for i in range(0, count):
                 cshare = share[i*88:(i+1)*88]
                 secrets[index].append([self.util.from_base64(cshare[0:44]), self.util.from_base64(cshare[44:88])])
-
         secret = [0] * len(secrets[0])
-
         for part_index,part in enumerate(secret):
             for share_index,share in enumerate(secrets):
                 origin, originy = share[part_index][0], share[part_index][1]
