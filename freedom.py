@@ -514,3 +514,15 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	result = list(result)
 	shuffle(result)
 	return "".join(result)
+
+################################################################################
+
+def multiline():
+	print("Enter as many lines of text as needed.")
+	print("When done, enter '>' on a line by itself.")
+	buffer = []
+	while True:
+	    line = input()
+	    if line == ">": break
+	    buffer.append(line)
+	return "\n".join(buffer)
