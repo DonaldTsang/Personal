@@ -71,8 +71,9 @@ def affine_de(integer, block_len, add, mult): # decrypts integer using affine
 
 def check(block_len, add, mult):
 	assert isinstance(block_len, int) and block_len > 0
-	assert isinstance(add, int) and 0 <= add < 27 ** block_len
-	assert isinstance(mult, int) and 0 < mult < 27 ** block_len and egcd(mult, 27)[0] == 1 
+	max = 27 ** block_len
+	assert isinstance(add, int) and 0 <= add < max
+	assert isinstance(mult, int) and 1 <= mult < max and egcd(mult, 27)[0] == 1 
 
 def encrypt(string, block_len, add, mult): # encrypts hylian
 	assert isinstance(string, str)
