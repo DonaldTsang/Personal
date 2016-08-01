@@ -118,8 +118,7 @@ class sssa:
     def combine(self, shares):
         secrets = []
         for index,share in enumerate(shares):
-            if len(share) % 88 != 0:
-                return
+            if len(share) % 88 != 0: return
             count = int(len(share) / 88)
             secrets.append([])
             for i in range(0, count):
@@ -130,10 +129,8 @@ class sssa:
 
         for part_index,part in enumerate(secret):
             for share_index,share in enumerate(secrets):
-                origin = share[part_index][0]
-                originy = share[part_index][1]
-                numerator = 1
-                denominator = 1
+                origin, originy = share[part_index][0], share[part_index][1]
+                numerator, denominator = 1, 1
                 for product_index,product in enumerate(secrets):
                     if product_index != share_index:
                         current = product[part_index][0]
