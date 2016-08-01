@@ -9,7 +9,7 @@ from random import SystemRandom
 class utils:
     prime = 0
 
-    def __init__(self, prime=115792089237316195423570985008687907853269984665640564039457584007913129639747):
+    def __init__(self, prime=2**256-189):
         self.prime = prime
 
     def random(self):
@@ -113,7 +113,7 @@ class utils:
 ################################################################################
 
 class sssa:
-    prime = 115792089237316195423570985008687907853269984665640564039457584007913129639747
+    prime = 2**256-189
     util = utils()
 
     def create(self, minimum, shares, raw):
