@@ -181,8 +181,7 @@ def point_to_share_string(point, charset, num_leading_zeros):
 		raise ValueError(
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
-	x_string = int_to_charset(x, charset)
-	y_string = int_to_charset(y, charset)
+	x_string, y_string = int_to_charset(x, charset), int_to_charset(y, charset)
 	share_string = x_string + '-' + y_string
 	if num_leading_zeros != 0:
 		share_string += '-' + int_to_charset(num_leading_zeros, charset)
@@ -193,7 +192,7 @@ def share_string_to_point(share_string, charset):
 	# share should be in the format "01-d051080de7..."
 	if '-' in charset:
 		raise ValueError(
-			'The character "-" cannot be in the supplied charset.')
+			'The character "-" cannot be in the charset.')
 	if not isinstance(share_string, str):
 		raise ValueError('Share format is invalid.')
 	num_leading_zeros = None
@@ -205,8 +204,7 @@ def share_string_to_point(share_string, charset):
 		raise ValueError('Share format is invalid.')
 	if (set(x_string) - set(charset)) or (set(y_string) - set(charset)):
 		raise ValueError("Share has characters that aren't in the charset.")
-	x = charset_to_int(x_string, charset)
-	y = charset_to_int(y_string, charset)
+	x, y = charset_to_int(x_string, charset), charset_to_int(y_string, charset)
 	if num_leading_zeros:
 		num_leading_zeros = charset_to_int(num_leading_zeros, charset)
 	return (x, y), num_leading_zeros
