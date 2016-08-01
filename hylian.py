@@ -22,8 +22,7 @@ def en(integer, block_len): # encode integer into text
 	if integer == 0: return " " * self.limit
 	result=""
 	while integer != 0:
-		integer, char = divmod(integer, 27)
-		result += hylian[char]
+		integer, char = divmod(integer, 27); result += hylian[char]
 	return result.ljust(block_len, " ")
 
 def de(string, block_len): # decode text into integer
@@ -32,8 +31,7 @@ def de(string, block_len): # decode text into integer
 	assert bool(re.fullmatch("[A-PR-Z. ]{1,%d}" % block_len, string))
 	result, string = 0, string[::-1].lstrip(" ")
 	for char in string:
-		result *= 27
-		result += hylian.index(char)
+		result *= 27; result += hylian.index(char)
 	assert result < 27 ** block_len, "Error: number error"
 	return result
 
@@ -48,18 +46,20 @@ def modinv(a, m): # multiplicative modular inverse
 	if g != 1: raise Exception('modular inverse does not exist')
 	else: return x % m
 
+def affine_check(block_len, add, mult):
+	assert isinstance(block_len, int) and block_len > 0
+	max = 27 ** block_len
+	assert isinstance(add, int) and 0 <= add < max
+	assert isinstance(mult, int) and 0 < mult < max and egcd(mult, 27)[0] == 1 
+
 def affine_en(integer, block_len, add, mult): # encrypts integer using affine
 	assert isinstance(integer, int)
-	assert isinstance(block_len, int) and block_len > 0
-	assert isinstance(add, int) and 0 <= add < 27 ** block_len
-	assert isinstance(mult, int) and 0 < mult < 27 ** block_len and egcd(mult, 27)[0] == 1 
+	affine_check(block_len, add, mult)
 	return (integer * mult + add) % (27 ** block_len)
 
 def affine_de(integer, block_len, add, mult): # decrypts integer using affine
 	assert isinstance(integer, int)
-	assert isinstance(block_len, int) and block_len > 0
-	assert isinstance(add, int) and 0 <= add < 27 ** block_len
-	assert isinstance(mult, int) and 0 < mult < 27 ** block_len and egcd(mult, 27)[0] == 1 
+	affine_check(block_len, add, mult)
 	result = (integer - add) % (27 ** block_len)
 	return result * modinv(mult, 27 ** block_len) % (27 ** block_len)
 
