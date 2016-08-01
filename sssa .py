@@ -4,6 +4,8 @@ import math
 import struct
 from random import SystemRandom
 
+# https://github.com/SSSaaS/sssa-python
+
 class utils:
     prime = 0
 
