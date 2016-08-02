@@ -228,7 +228,6 @@ class SS():
 			else: break
 		secret_int = charset_to_int(secret_string, self.secret_charset)
 		points = secret_int_to_points(secret_int, share_threshold, num_shares)
-		print(points)
 		maxim = 0
 		for point in points:
 			if point[1] > maxim: maxim = point[1]
