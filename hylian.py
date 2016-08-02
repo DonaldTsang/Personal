@@ -136,7 +136,7 @@ def layout_en(message=''):
 	if message == '': print('type message with no newline'); message = input()
 	message_clean = rectangle(message)
 	return first_line + "\n" + second_line + "\n" + \
-		"\n" + message_clean + last_line
+		+ message_clean + last_line + "\n"
 
 def multiline():
 	print("Enter as many lines of text as needed.")
@@ -150,9 +150,9 @@ def multiline():
 
 def layout_de(message=''):
 	if message == '': message = multiline()
-	message_pure = message.rstrip("\n").split("\n")
-	return "".join(message_pure).rstrip(last_line) \
-		.lstrip(first_line + second_line)
+	message_pure = message.rstrip("\n").rstrip(last_line)
+		.lstrip(first_line + "\n" + second_line + "\n")
+	return "".join(message_pure.split("\n"))
 
 ################################################################################
 
