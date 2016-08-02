@@ -1,3 +1,5 @@
+from math import ceil, log
+
 def calculate_mersenne_primes():
 	# Returns all the mersenne primes with less than 500 digits.
 	mersenne_prime_exponents = [
@@ -169,7 +171,7 @@ def points_to_secret_int(points, prime=None):
 	secret_int = free_coefficient  # the secret int is the free coefficient
 	return secret_int
 
-def point_to_share_string(point, charset, num_leading_zeros):
+def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 	# Convert a point (a tuple of two integers) into a share string - that is,
 	# a representation of the point that uses the charset provided.
 	# point should be in the format (1, 4938573982723...)
@@ -182,7 +184,7 @@ def point_to_share_string(point, charset, num_leading_zeros):
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
 	x_string, y_string = int_to_charset(x, charset), int_to_charset(y, charset)
-	share_string = x_string + '-' + y_string
+	share_string = x_string.rjust(n, charset[0]) + '-' + y_string.rjust(char_count, charset[0])
 	if num_leading_zeros != 0:
 		share_string += '-' + int_to_charset(num_leading_zeros, charset)
 	return share_string
@@ -226,10 +228,16 @@ class SS():
 			else: break
 		secret_int = charset_to_int(secret_string, self.secret_charset)
 		points = secret_int_to_points(secret_int, share_threshold, num_shares)
+		print(points)
+		maxim = 0
+		for point in points:
+			if point[1] > maxim: maxim = point[1]
+		char_count = ceil(log(maxim, len(self.share_charset)))
+		n = ceil(log(num_shares, len(self.share_charset)))
 		shares = []
 		for point in points:
 			share_string = point_to_share_string(
-				point, self.share_charset, num_leading_zeros)
+				point, n, char_count, self.share_charset, num_leading_zeros)
 			shares.append(share_string)
 		return shares
 
