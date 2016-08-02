@@ -175,18 +175,18 @@ def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 	# Convert a point (a tuple of two integers) into a share string - that is,
 	# a representation of the point that uses the charset provided.
 	# point should be in the format (1, 4938573982723...)
-	if '-' in charset:
+	if '~' in charset:
 		raise ValueError(
-			'The character "_" cannot be in the supplied charset.')
+			'The character "~" cannot be in the supplied charset.')
 	if not (isinstance(point, tuple) and len(point) == 2 and
 			isinstance(point[0], int) and isinstance(point[1], int)):
 		raise ValueError(
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
 	x_string, y_string = int_to_charset(x, charset), int_to_charset(y, charset)
-	share_string = x_string.rjust(n, charset[0]) + '-' + y_string.rjust(char_count, charset[0])
+	share_string = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
 	if num_leading_zeros != 0:
-		share_string += '-' + int_to_charset(num_leading_zeros, charset)
+		share_string += '~' + int_to_charset(num_leading_zeros, charset)
 	return share_string
 
 def share_string_to_point(share_string, charset):
@@ -198,10 +198,10 @@ def share_string_to_point(share_string, charset):
 	if not isinstance(share_string, str):
 		raise ValueError('Share format is invalid.')
 	num_leading_zeros = None
-	if share_string.count('-') == 1:
-		x_string, y_string = share_string.split('-')
-	elif share_string.count('-') == 2:
-		x_string, y_string, num_leading_zeros = share_string.split('-')
+	if share_string.count('~') == 1:
+		x_string, y_string = share_string.split('~')
+	elif share_string.count('~') == 2:
+		x_string, y_string, num_leading_zeros = share_string.split('~')
 	else:
 		raise ValueError('Share format is invalid.')
 	if (set(x_string) - set(charset)) or (set(y_string) - set(charset)):
@@ -257,7 +257,7 @@ class SS():
 b16 = string.hexdigits[0:16]
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
-	"0123456789+/"
+	"0123456789-_"
 unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 	"abcdefghijklmnopqrstuvwxyz"
 ascii = string.printable # cannot be used for share_charset
