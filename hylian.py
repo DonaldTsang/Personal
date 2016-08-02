@@ -125,15 +125,18 @@ def triple_hylian_simple(): # creates small keys for triple hylain cipher
 
 ################################################################################
 
-def hylian_layout_en(message=''):
+first_line = "------BEGIN GGR MESSAGE------"
+second_line = "Version: DDMoe v.1.4.88 (Heil.OS)"
+last_line = "------END GGR MESSGAE------"
+
+def rectangle(message):
+	return "\n".join([message[i:i+81] for i in range(0, len(message), 81)] + [""])
+
+def layout_en(message=''):
 	if message == '': print('type message with no newline'); message = input()
-	message_chop = [message[i:i+81] for i in range(0, len(message), 81)] + [""]
-	message_clean = "\n".join(message_chop)
-	return "------BEGIN GGR MESSAGE------\n" + \
-		"Version: DDMoe v.1.4.88 (Heil.OS)\n" + \
-		"\n" + \
-		message_clean + \
-		"------END GGR MESSGAE------"
+	message_clean = rectangle(message)
+	return first_line + "\n" + second_line + "\n" + \
+		"\n" + message_clean + last_line
 
 def multiline():
 	print("Enter as many lines of text as needed.")
@@ -145,8 +148,28 @@ def multiline():
 	    buffer.append(line)
 	return "\n".join(buffer)
 
-def hylian_layout_de(message=''):
+def layout_de(message=''):
 	if message == '': message = multiline()
 	message_pure = message.rstrip("\n").split("\n")
-	return "".join(message_pure).rstrip("------END GGR MESSGAE------") \
-		.lstrip("------BEGIN GGR MESSAGE------Version: DDMoe v.1.4.88 (Heil.OS)")
+	return "".join(message_pure).rstrip(last_line) \
+		.lstrip(first_line + second_line)
+
+################################################################################
+
+def tri_en(message, l=' ', r=' ', n=1):
+	assert n in [1, 2], "n is not one or two"
+	counter, result = n, ""
+	while message != "" or counter > 82 - n:
+		assert counter > 82 - n
+		printer, message = message[0:counter], message[counter:]
+		s = (81 - counter) // 2
+		result += (s * l + printer.ljust(counter, " ") + s * r + "\n")
+		counter += 2
+	return result
+
+def tri_de(message):
+	lister = message.split("\n")
+	for i range(0, len(lister)):
+		s = 40 - i
+		lister[i] = lister[i][s:-s]
+	return "".join(lister)
