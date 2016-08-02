@@ -253,7 +253,7 @@ b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
 	"0123456789+/"
 unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 	"abcdefghijklmnopqrstuvwxyz"
-string = string.printable # cannot be used for share_charset
+ascii = string.printable # cannot be used for share_charset
 
 if __name__ == '__main__':
 	import argparse
@@ -268,7 +268,7 @@ if __name__ == '__main__':
 	sub_recover.add_parser("recover", action="store_true", default=False
 		help="Recover password from multiplr sub-passwords")
 	sub_recover.add_argument("share_list", type=list)
-	parser.add_argument("secret_charset", choices=["b16", "b32", "b64", "unix", "string"],
+	parser.add_argument("secret_charset", choices=["b16", "b32", "b64", "unix", "ascii"],
 		default="b16", help="Encoding system of password")
 	parser.add_argument("share_charset", choices=["b16", "b32", "b64", "unix"],
 		default="b16", help="Encoding system of sub-passwords")
