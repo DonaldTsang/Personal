@@ -125,19 +125,6 @@ def triple_hylian_simple(): # creates small keys for triple hylain cipher
 
 ################################################################################
 
-first_line = "------BEGIN GGR MESSAGE------"
-second_line = "Version: DDMoe v.1.4.88 (Heil.OS)"
-last_line = "------END GGR MESSGAE------"
-
-def rectangle(message):
-	return "\n".join([message[i:i+81] for i in range(0, len(message), 81)] + [""])
-
-def layout_en(message=''):
-	if message == '': print('type message with no newline'); message = input()
-	message_clean = rectangle(message)
-	return first_line + "\n" + second_line + "\n" + \
-		+ message_clean + last_line + "\n"
-
 def multiline():
 	print("Enter as many lines of text as needed.")
 	print("When done, enter '>' on a line by itself.")
@@ -148,28 +135,61 @@ def multiline():
 	    buffer.append(line)
 	return "\n".join(buffer)
 
-def layout_de(message=''):
-	if message == '': message = multiline()
-	message_pure = message.rstrip("\n").rstrip(last_line)
-		.lstrip(first_line + "\n" + second_line + "\n")
-	return "".join(message_pure.split("\n"))
+################################################################################
+
+first_line = "------BEGIN GGR MESSAGE------"
+second_line = "Version: DDMoe v.1.4.88 (Heil.OS)"
+last_line = "------END GGR MESSGAE------"
 
 ################################################################################
 
-def tri_en(message, l=' ', r=' ', n=1):
+def rectangle(message):
+	return "\n".join([message[i:i+81] for i in range(0, len(message), 81)] + [""])
+
+def layout_en(message=''):
+	if message == '': print('type message with no newline'); message = input()
+	message_clean = rectangle(message)
+	return first_line + "\n" + second_line + "\n" + \
+		message_clean + last_line + "\n"
+
+def newline_remove(message):
+	return "".join(message.split("\n"))
+
+def layout_de(message=''):
+	if message == '': message = multiline()
+	message_pure = message.rstrip("\n").rstrip(last_line) \
+		.lstrip(first_line + "\n" + second_line + "\n")
+	return newline_remove(message_pure)
+
+################################################################################
+
+def tri_en(message, n=1, l=' ', r=' '):
 	assert n in [1, 2], "n is not one or two"
 	counter, result = n, ""
-	while message != "" or counter > 82 - n:
-		assert counter > 82 - n
+	while message != "":
+		assert counter < 82 - n
 		printer, message = message[0:counter], message[counter:]
 		s = (81 - counter) // 2
 		result += (s * l + printer.ljust(counter, " ") + s * r + "\n")
 		counter += 2
 	return result
 
-def tri_de(message):
+def triangle_en(message=''):
+	if message == '': print('type message with no newline'); message = input()
+	message_clean = tri_en(message)
+	return first_line + "\n" + second_line + "\n" + \
+		message_clean + last_line + "\n"
+
+def tri_de(message, n=1):
+	assert n in [1, 2], "n is not one or two"
 	lister = message.split("\n")
-	for i range(0, len(lister)):
-		s = 40 - i
+	for i in range(0, len(lister)):
+		s = (41 - n) - i
 		lister[i] = lister[i][s:-s]
 	return "".join(lister)
+
+def triangle_de(message=''):
+	if message == '': message = multiline()
+	message_pure = message.rstrip("\n").rstrip(last_line) \
+		.lstrip(first_line + "\n" + second_line + "\n")
+	return tri_de(message_pure)
