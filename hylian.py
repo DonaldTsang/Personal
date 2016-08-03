@@ -4,6 +4,7 @@ hylian = ' ABCDEFGHIJKLMNOPRSTUVWXYZ.'
 
 def format_message(message, replace=" "):
 	message = message.upper()
+	message = re.sub("Q", "KW", message)
 	message = re.sub("0", "ZERO" + replace, message)
 	message = re.sub("1", "ONE" + replace, message)
 	message = re.sub("2", "TWO" + replace, message)
@@ -143,23 +144,23 @@ last_line = "------END GGR MESSGAE------"
 
 ################################################################################
 
-def rectangle(message):
+def rect_en(message):
 	return "\n".join([message[i:i+81] for i in range(0, len(message), 81)] + [""])
 
-def layout_en(message=''):
+def rectangle_en(message=''):
 	if message == '': print('type message with no newline'); message = input()
-	message_clean = rectangle(message)
+	message_clean = rect.en(message)
 	return first_line + "\n" + second_line + "\n" + \
 		message_clean + last_line + "\n"
 
-def newline_remove(message):
+def rect_de(message):
 	return "".join(message.split("\n"))
 
-def layout_de(message=''):
+def rectangle_de(message=''):
 	if message == '': message = multiline()
 	message_pure = message.rstrip("\n").rstrip(last_line) \
 		.lstrip(first_line + "\n" + second_line + "\n")
-	return newline_remove(message_pure)
+	return rect_de(message_pure)
 
 ################################################################################
 
@@ -193,3 +194,5 @@ def triangle_de(message=''):
 	message_pure = message.rstrip("\n").rstrip(last_line) \
 		.lstrip(first_line + "\n" + second_line + "\n")
 	return tri_de(message_pure)
+
+################################################################################
