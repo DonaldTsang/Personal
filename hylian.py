@@ -4,6 +4,7 @@ hylian = ' ABCDEFGHIJKLMNOPRSTUVWXYZ.'
 
 def format_message(message, replace=" "):
 	message = message.upper()
+	message = re.sub("[,:;]", ".", message)
 	message = re.sub("Q", "KW", message)
 	message = re.sub("0", "ZERO" + replace, message)
 	message = re.sub("1", "ONE" + replace, message)
