@@ -201,10 +201,10 @@ def triangle_de(message=''):
 ################################################################################
 
 def formats(message='', code='en', shape='tri', wrap=True):
-	assert isinstance(message, str)
-	assert code in ['en', 'de']
-	assert shape in ['tri', 'rect']
-	assert isinstance(wrap, bool)
+	assert isinstance(message, str), "Message is not string"
+	assert code in ['en', 'de'], "Coding is not 'en' or 'de'"
+	assert shape in ['tri', 'rect'], "Shape is not 'tri' or 'rect'"
+	assert isinstance(wrap, bool), "Wrapping is not True or False"
 	if code == 'en':
 		if shape == 'tri':
 			if wrap == True: return triangle_en(message)
