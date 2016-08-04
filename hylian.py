@@ -2,20 +2,20 @@ import re
 
 hylian = ' ABCDEFGHIJKLMNOPRSTUVWXYZ.'
 
-def format_message(message, replace=" "):
+def format_message(message, suffix=" ", prefix=""):
 	message = message.upper()
 	message = re.sub("[,:;]", ".", message)
 	message = re.sub("Q", "KW", message)
-	message = re.sub("0", "ZERO" + replace, message)
-	message = re.sub("1", "ONE" + replace, message)
-	message = re.sub("2", "TWO" + replace, message)
-	message = re.sub("3", "THREE" + replace, message)
-	message = re.sub("4", "FOUR" + replace, message)
-	message = re.sub("5", "FIVE" + replace, message)
-	message = re.sub("6", "SIX" + replace, message)
-	message = re.sub("7", "SEVEN" + replace, message)
-	message = re.sub("8", "EIGHT" + replace, message)
-	message = re.sub("9", "NINE" + replace, message)
+	message = re.sub("0", prefix + "ZERO" + suffix, message)
+	message = re.sub("1",  prefix +"ONE" + suffix, message)
+	message = re.sub("2", prefix + "TWO" + suffix, message)
+	message = re.sub("3", prefix + "THREE" + suffix, message)
+	message = re.sub("4", prefix + "FOUR" + suffix, message)
+	message = re.sub("5", prefix + "FIVE" + suffix, message)
+	message = re.sub("6", prefix + "SIX" + suffix, message)
+	message = re.sub("7", prefix + "SEVEN" + suffix, message)
+	message = re.sub("8", prefix + "EIGHT" + suffix, message)
+	message = re.sub("9", prefix + "NINE" + suffix, message)
 	return re.sub("[^A-PR-Z. ]", "", message)
 
 def en(integer, block_len): # encode integer into text
