@@ -91,6 +91,7 @@ def decrypt(string, block_len, add, mult): # decrypts hylian
 	assert isinstance(string, str)
 	check(block_len, add, mult) 
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
+	assert len(chop[len(chop)-1]) == block_len
 	result = ''
 	for item in chop:
 		part = en(affine_de(de(item, block_len),block_len, add, mult), block_len)
