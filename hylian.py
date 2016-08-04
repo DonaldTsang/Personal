@@ -233,22 +233,22 @@ def triangle_de(message=''):
 
 ################################################################################
 
-def formats(message='', code='en', shape='tri', wrap=True):
+def formats(message="", code="en", shape="tri", wrap=True):
 	assert isinstance(message, str), "Message is not string"
-	assert code in ['en', 'de'], "Coding is not 'en' or 'de'"
-	assert shape in ['tri', 'rect'], "Shape is not 'tri' or 'rect'"
+	assert code in ["en", "de"], "Coding is not 'en' or 'de'"
+	assert shape in ["tri", "rect"], "Shape is not 'tri' or 'rect'"
 	assert isinstance(wrap, bool), "Wrapping is not True or False"
-	if code == 'en':
-		if shape == 'tri':
+	if code == "en":
+		if shape == "tri":
 			if wrap == True: return triangle_en(message)
 			elif wrap == False: return tri_en(message)
-		elif shape == 'rect':
+		elif shape == "rect":
 			if wrap == True: return rectangle_en(message)
 			elif wrap == False: return rect_en(message)
-	elif code == 'de':
-		if shape == 'tri':
+	elif code == "de":
+		if shape == "tri":
 			if wrap == True: return triangle_de(message)
 			elif wrap == False: return tri_de(message)
-		elif shape == 'rect':
+		elif shape == "rect":
 			if wrap == True: return rectangle_de(message)
 			elif wrap == False: return rect_de(message)
