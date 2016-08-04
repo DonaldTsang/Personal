@@ -1,6 +1,6 @@
 import re
 
-hylian = ' ABCDEFGHIJKLMNOPRSTUVWXYZ.'
+hylian = " ABCDEFGHIJKLMNOPRSTUVWXYZ."
 
 def format_message(message, suffix=" ", prefix=""):
 	message = message.upper()
@@ -81,7 +81,7 @@ def encrypt(string, block_len, add, mult): # encrypts hylian
 	assert isinstance(string, str)
 	check(block_len, add, mult)
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
-	result = ''
+	result = ""
 	for item in chop:
 		part = en(affine_en(de(item, block_len),block_len, add, mult), block_len)
 		result += part
@@ -92,11 +92,11 @@ def decrypt(string, block_len, add, mult): # decrypts hylian
 	check(block_len, add, mult) 
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
 	assert len(chop[len(chop)-1]) == block_len
-	result = ''
+	result = ""
 	for item in chop:
 		part = en(affine_de(de(item, block_len),block_len, add, mult), block_len)
 		result += part
-	return result.rstrip(' ')
+	return result.rstrip(" ")
 
 ################################################################################
 
