@@ -133,8 +133,6 @@ def charset_to_int(s, charset):
 
 ################################################################################
 
-import string
-
 def secret_int_to_points(secret_int, point_threshold, num_points, prime=None):
 	# Split a secret integer into shares (pair of integers or x,y coords).
 	# Sample points of a random polynomial with y intercept equal to secret int.
@@ -252,6 +250,8 @@ class SS():
 			leading_zeros = self.secret_charset[0] * num_leading_zeros
 			secret_string = leading_zeros + secret_string
 		return secret_string
+
+import string
 
 b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
