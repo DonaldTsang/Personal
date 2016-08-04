@@ -145,8 +145,10 @@ last_line = "------END GGR MESSGAE------"
 
 ################################################################################
 
-def rect_en(message):
-	return "\n".join([message[i:i+81] for i in range(0, len(message), 81)] + [""])
+def rect_en(message, n=1):
+	assert n in [1, 2], "n is not one or two"
+	x = 82 - i
+	return "\n".join([message[i:i+x] for i in range(0, len(message), x)] + [""])
 
 def rectangle_en(message=''):
 	if message == '': print('type message with no newline'); message = input()
@@ -197,3 +199,31 @@ def triangle_de(message=''):
 	return tri_de(message_pure)
 
 ################################################################################
+
+def formats(message='', code='en', shape='tri', wrap=True):
+	assert isinstance(message, str)
+	assert code in ['en', 'de']
+	assert shape in ['tri', 'rect']
+	assert isinstance(wrap, bool)
+	if code == 'en':
+		if shape == 'tri':
+			if wrap == True:
+				return
+			elif wrap == False:
+				return
+		elif shape == 'rect':
+			if wrap == True:
+				return
+			elif wrap == False:
+				return
+	elif code == 'de':
+		if shape == 'tri':
+			if wrap == True:
+				return
+			elif wrap == False:
+				return
+		elif shape == 'rect':
+			if wrap == True:
+				return
+			elif wrap == False:
+				return
