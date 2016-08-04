@@ -7,7 +7,7 @@ def format_message(message, suffix=" ", prefix=""):
 	message = re.sub("[,:;]", ".", message)
 	message = re.sub("Q", "KW", message)
 	message = re.sub("0", prefix + "ZERO" + suffix, message)
-	message = re.sub("1",  prefix +"ONE" + suffix, message)
+	message = re.sub("1", prefix + "ONE" + suffix, message)
 	message = re.sub("2", prefix + "TWO" + suffix, message)
 	message = re.sub("3", prefix + "THREE" + suffix, message)
 	message = re.sub("4", prefix + "FOUR" + suffix, message)
@@ -81,7 +81,6 @@ def encrypt(string, block_len, add, mult): # encrypts hylian
 	assert isinstance(string, str)
 	check(block_len, add, mult)
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
-	chop[len(chop)-1] = chop[len(chop)-1].ljust(block_len)
 	result = ''
 	for item in chop:
 		part = en(affine_en(de(item, block_len),block_len, add, mult), block_len)
@@ -92,7 +91,6 @@ def decrypt(string, block_len, add, mult): # decrypts hylian
 	assert isinstance(string, str)
 	check(block_len, add, mult) 
 	chop = [string[i:i+block_len] for i in range(0, len(string), block_len)]
-	chop[len(chop)-1] = chop[len(chop)-1].ljust(block_len)
 	result = ''
 	for item in chop:
 		part = en(affine_de(de(item, block_len),block_len, add, mult), block_len)
