@@ -207,23 +207,15 @@ def formats(message='', code='en', shape='tri', wrap=True):
 	assert isinstance(wrap, bool)
 	if code == 'en':
 		if shape == 'tri':
-			if wrap == True:
-				return
-			elif wrap == False:
-				return
+			if wrap == True: return triangle_en(message)
+			elif wrap == False: return tri_en(message)
 		elif shape == 'rect':
-			if wrap == True:
-				return
-			elif wrap == False:
-				return
+			if wrap == True: return rectangle_en(message)
+			elif wrap == False: return rect_en(message)
 	elif code == 'de':
 		if shape == 'tri':
-			if wrap == True:
-				return
-			elif wrap == False:
-				return
+			if wrap == True: return triangle_de(message)
+			elif wrap == False: return tri_de(message)
 		elif shape == 'rect':
-			if wrap == True:
-				return
-			elif wrap == False:
-				return
+			if wrap == True: return rectangle_de(message)
+			elif wrap == False: return rect_de(message)
