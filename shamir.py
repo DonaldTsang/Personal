@@ -253,7 +253,7 @@ class SS():
 			secret_string = leading_zeros + secret_string
 		return secret_string
 
-b16 = string.hexdigits[0:16]
+b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
 	"0123456789+/"
