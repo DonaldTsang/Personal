@@ -101,27 +101,35 @@ def decrypt(string, block_len, add, mult): # decrypts hylian
 
 from random import randint
 
-def hylian_gen(block_len): # create key for single hylian cipher
+def hy_gen(block_len): # create key for single hylian cipher
 	add = randint(0, 27 ** block_len - 1)
 	mult_1 = randint(0, 27 ** (block_len - 1) - 1) * 27
 	mult_2 = [1,2,4,5,7,8,10,11,13,14,16,17,19,20,22,23,25,26][randint(0, 17)]
 	return [block_len, add, mult_1 + mult_2]
 
-def triple_hylian(): # creates large keys for triple hylain cipher
-	hyrule = [2, 2, 2]
-	while egcd(egcd(hyrule[0], hyrule[1])[0], hyrule[2])[0] != 1:
+def hylian_gen(x): # creates large keys for triple hylain cipher
+	assert isinstance(x, int) and 1 <= x <= 5
+	hyrule, e = [2] * x, 2
+	while e != 1:
 		block_pool, hyrule = list(range(9, 28)), []
-		for i in range(0, 3):
+		for i in range(0, x):
 			hyrule.append(block_pool.pop(randint(0,len(block_pool)-1)))
+		e = hyrule[0]
+		for i in range(0, x):
+			e = egcd(e, hyrule[x])[0]
 	for i in range(0, 3): hyrule[i] = hylian_gen(hyrule[i])
 	return hyrule
 
-def triple_hylian_simple(): # creates small keys for triple hylain cipher
-	hyrule = [2, 2, 2]
-	while egcd(egcd(hyrule[0], hyrule[1])[0], hyrule[2])[0] != 1:
+def hylian_gen_simple(): # creates small keys for triple hylain cipher
+	assert isinstance(x, int) and 1 <= x <= 5
+	hyrule, egcd = [2] * x, 2
+	while egcd != 1:
 		block_pool, hyrule = list(range(3, 9)), []
-		for i in range(0, 3):
+		for i in range(0, x):
 			hyrule.append(block_pool.pop(randint(0,len(block_pool)-1)))
+		e = hyrule[0]
+		for i in range(0, x):
+			e = egcd(e, hyrule[x])[0]
 	for i in range(0, 3): hyrule[i] = hylian_gen(hyrule[i])
 	return hyrule
 
