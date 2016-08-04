@@ -21,7 +21,7 @@ def format_message(message, suffix=" ", prefix=""):
 def en(integer, block_len): # encode integer into text
 	assert isinstance(integer, int), "Error: message not integer"
 	assert 0 <= integer < 27 ** block_len, "Error: number out of range"
-	if integer == 0: return " " * self.limit
+	if integer == 0: return " " * block_len
 	result=""
 	while integer != 0:
 		integer, char = divmod(integer, 27); result += hylian[char]
@@ -95,7 +95,7 @@ def decrypt(string, block_len, add, mult): # decrypts hylian
 	for item in chop:
 		part = en(affine_de(de(item, block_len),block_len, add, mult), block_len)
 		result += part
-	return result
+	return result.rstrip(' ')
 
 ################################################################################
 
