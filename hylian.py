@@ -116,20 +116,21 @@ def hylian_gen(x): # creates large keys for triple hylain cipher
 			hyrule.append(block_pool.pop(randint(0,len(block_pool)-1)))
 		e = hyrule[0]
 		for i in range(0, x):
-			e = egcd(e, hyrule[x])[0]
+			e = egcd(e, hyrule[i])[0]
 	for i in range(0, 3): hyrule[i] = hylian_gen(hyrule[i])
 	return hyrule
 
-def hylian_gen_simple(): # creates small keys for triple hylain cipher
+def hylian_gen_simple(x): # creates small keys for triple hylain cipher
 	assert isinstance(x, int) and 1 <= x <= 5
 	hyrule, egcd = [2] * x, 2
 	while egcd != 1:
-		block_pool, hyrule = list(range(3, 9)), []
+		block_pool, hyrule = list(range(3, 10)), []
 		for i in range(0, x):
 			hyrule.append(block_pool.pop(randint(0,len(block_pool)-1)))
+		print(hyrule)
 		e = hyrule[0]
 		for i in range(0, x):
-			e = egcd(e, hyrule[x])[0]
+			e = egcd(e, hyrule[i])[0]
 	for i in range(0, 3): hyrule[i] = hylian_gen(hyrule[i])
 	return hyrule
 
