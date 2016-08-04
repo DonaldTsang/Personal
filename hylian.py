@@ -155,7 +155,7 @@ last_line = "------END GGR MESSGAE------"
 
 def rect_en(message, n=1):
 	assert n in [1, 2], "n is not one or two"
-	x = 82 - i
+	x = 82 - n
 	return "\n".join([message[i:i+x] for i in range(0, len(message), x)] + [""])
 
 def rectangle_en(message=''):
