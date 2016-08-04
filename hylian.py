@@ -135,6 +135,30 @@ def hylian_gen_simple(x): # creates small keys for triple hylain cipher
 
 ################################################################################
 
+def multi_encrypt(string, array):
+	assert isinstance(string, str)
+	assert isinstance(array, list)
+	for i in array:
+		assert isinstance(i[0], int)
+		assert isinstance(i[1], int)
+		assert isinstance(i[2], int)
+	for i in range(0, len(array)):
+		string = encrypt(string, array[i][0], array[i][1], array[i][2])
+	return string
+
+def multi_decrypt(string, array):
+	assert isinstance(string, str)
+	assert isinstance(array, list)
+	for i in array:
+		assert isinstance(i[0], int)
+		assert isinstance(i[1], int)
+		assert isinstance(i[2], int)
+	for i in range(len(array)-1, -1, -1):
+		string = decrypt(string, array[i][0], array[i][1], array[i][2])
+	return string
+
+################################################################################
+
 def multiline():
 	print("Enter as many lines of text as needed.")
 	print("When done, enter '>' on a line by itself.")
