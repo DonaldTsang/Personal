@@ -528,3 +528,34 @@ def multiline():
 	return "\n".join(buffer)
 
 ################################################################################
+
+from binascii import hexlify
+
+def hex2cjk(x):
+	assert isinstance(x, int)
+	assert 0x0 <= x <= 0xffff
+	if 0x0 <= x <= 0xfff: x-=0x0; x += 0x3400
+	elif 0x1000 <= x <= 0x5fff: x-=0x1000; x += 0x4e00
+	elif 0x6000 <= x <= 0xffff: x-=0x6000; x += 0x20000
+	return chr(x)
+
+def cjk2hex(x):
+	assert isinstance(x, str); x = ord(x)
+	if 0x3400 <= x <= 0x43ff: x -= 0x3400; x += 0x0
+	elif 0x4e00 <= x <= 0x9dff: x-= 0x4e00; x += 0x1000
+	elif 0x20000 <= x <= 0x29fff: x-= 0x20000; x += 0x6000
+	else: assert False, "Character not correct"
+	return x
+
+def cjk_en(byte):
+	assert isinstance(byte, bytes)
+	if len(byte) % 2 == 1: byte += b"\x00"
+	result = ""
+	for i in range(0, len(byte), 2): result += hex2cjk(int(hexlify(byte[i:i+2]), 16))
+	return result
+
+def cjk_de(string):
+	assert isinstance(string, str)
+	result = b""
+	for char in string: result += bytes(list(divmod(cjk2hex(char), 256)))
+	return result
