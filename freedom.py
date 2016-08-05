@@ -544,3 +544,16 @@ def cjk2hex(x):
 	elif 0x20000 <= x <= 0x29fff: x-= 0x20000
 	else: assert False, "Character not correct"
 	return x
+
+def trans_cjk_en(byte):
+	assert isinstance(byte, bytes)
+	if len(byte) % 2 == 1: byte += b'\x00'
+	result = ''
+	for i in range(0, len(byte)//2): result += hex2cjk(byte[2*i:2*i+1])
+	return result
+
+def trans_cjk_de(string):
+	assert isinstance(string, str)
+	result = b''
+	for char in string: result += cjk2hex(char)
+	return result
