@@ -526,3 +526,21 @@ def multiline():
 	    if line == ">": break
 	    buffer.append(line)
 	return "\n".join(buffer)
+
+################################################################################
+
+def hex2cjk(x):
+	assert isinstance(x, int)
+	assert 0x0 <= x <= 0xffff
+	if 0x0 <= x <= 0xfff: x += 0x3400
+	elif 0x1000 <= x <= 0x5fff: x += 0x4e00
+	elif 0x6000 <= x <= 0xffff: x += 0x20000
+	return chr(x)
+
+def cjk2hex(x):
+	assert isinstance(x, str); x = ord(x)
+	if 0x3400 <= x <= 0x43ff: x -= 0x3400
+	elif 0x4e00 <= x <= 0x9dff: x-= 0x4e00
+	elif 0x20000 <= x <= 0x29fff: x-= 0x20000
+	else: assert False, "Character not correct"
+	return x
