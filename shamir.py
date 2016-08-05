@@ -306,7 +306,8 @@ class SS_string():
 		self.share_charset = share_charset
 
 	def split(self, secret_string, share_threshold, num_shares):
-		secret_string = hexlify(secret_string.encode('utf-8')).decode('utf-8').upper()
+		if isinstance(secret_string, str): secret_string = secret_string.encode('utf-8')
+		secret_string = hexlify(secret_string).decode('utf-8').upper()
 		num_leading_zeros = 0
 		for secret_char in secret_string:
 			if secret_char == b16[0]: num_leading_zeros += 1
@@ -325,7 +326,8 @@ class SS_string():
 			shares.append(share_string)
 		return shares
 
-	def recover(self, shares):
+	def recover(self, shares, mode='str'):
+		assert mode in ['str', 'bytes']
 		num_leading_zeros = None
 		points = []
 		for share in shares:
@@ -337,8 +339,9 @@ class SS_string():
 		if num_leading_zeros:
 			leading_zeros = b16[0] * num_leading_zeros
 			secret_string = leading_zeros + secret_string
-		secret_string = unhexlify(secret_string).decode('utf-8')
-		return secret_string
+		secret_string = unhexlify(secret_string)
+		if mode == 'str': return secret_string.decode('utf-8')
+		elif mode == 'bytes': return secret_string
 
 b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
