@@ -306,7 +306,7 @@ class SS_string():
 		self.share_charset = share_charset
 
 	def split(self, secret_string, share_threshold, num_shares):
-		secret_string = hexlify(secret_string.encode('utf-8'))
+		secret_string = hexlify(secret_string.encode('utf-8')).decode('utf-8')
 		num_leading_zeros = 0
 		for secret_char in secret_string:
 			if secret_char == b16[0]: num_leading_zeros += 1
