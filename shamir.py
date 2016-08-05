@@ -351,6 +351,13 @@ url = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
 	"0123456789-_"
 unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 	"abcdefghijklmnopqrstuvwxyz"
+xxcode = "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"  + \
+	"abcdefghijklmnopqrstuvwxyz"
+uucode = " !\"#$%&'()*+,-./0123456789:;<=>?@" + \
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
+binhex = "!\"#$%&'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`" + \
+	"abcdefhijklmpqr"
+options = [b16, b32, b64, url, unix, xxcode, uucode, binhex]
 
 if __name__ == '__main__':
 	import argparse
@@ -365,9 +372,9 @@ if __name__ == '__main__':
 	sub_recover.add_parser("recover", action="store_true", default=False
 		help="Recover password from multiplr sub-passwords")
 	sub_recover.add_argument("share_list", type=list)
-	parser.add_argument("secret_charset", choices=["b16", "b32", "b64", "url", "unix"],
+	parser.add_argument("secret_charset", choices=options,
 		default="b16", help="Encoding system of password")
-	parser.add_argument("share_charset", choices=["b16", "b32", "b64", "url", "unix"],
+	parser.add_argument("share_charset", choices=options,
 		default="b16", help="Encoding system of sub-passwords")
 	args = parser.parse_args()
 	SS_new = SS(secret_charset, share_charset)
