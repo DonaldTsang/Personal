@@ -294,6 +294,52 @@ class SS():
 			secret_string = leading_zeros + secret_string
 		return secret_string
 
+from binascii import hexlify, unhexlify
+
+class SS_string():
+	""" Creates a secret sharer, which can convert from a secret string to a
+		list of shares and vice versa. The splitter is initialized with the
+		character set of the secrets and the character set of the shares that
+		it expects to be dealing with.
+	"""
+	def __init__(self, share_charset):
+		self.share_charset = share_charset
+
+	def split(self, secret_string, share_threshold, num_shares):
+		secret_string = hexlify(secret_string.encode('utf-8'))
+		num_leading_zeros = 0
+		for secret_char in secret_string:
+			if secret_char == b16[0]: num_leading_zeros += 1
+			else: break
+		secret_int = charset_to_int(secret_string, b16)
+		points = secret_int_to_points(secret_int, share_threshold, num_shares)
+		maxim = 0
+		for point in points:
+			if point[1] > maxim: maxim = point[1]
+		char_count = ceil(log(maxim, len(self.share_charset)))
+		n = ceil(log(num_shares, len(self.share_charset)))
+		shares = []
+		for point in points:
+			share_string = point_to_share_string(
+				point, n, char_count, self.share_charset, num_leading_zeros)
+			shares.append(share_string)
+		return shares
+
+	def recover(self, shares):
+		num_leading_zeros = None
+		points = []
+		for share in shares:
+			point, num_leading_zeros = share_string_to_point(
+				share, self.share_charset)
+			points.append(point)
+		secret_int = points_to_secret_int(points)
+		secret_string = int_to_charset(secret_int, b16)
+		if num_leading_zeros:
+			leading_zeros = b16[0] * num_leading_zeros
+			secret_string = leading_zeros + secret_string
+		secret_string = unhexlify(secret_string).decode('utf-8')
+		return secret_string
+
 b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
