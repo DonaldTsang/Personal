@@ -179,10 +179,10 @@ def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 		raise ValueError(
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
-	x_string, y_string = int_to_charset(x, charset), int_to_charset(y, charset)
+	x_string, y_string = int_to_charset(x,  b16), int_to_charset(y, charset)
 	share_string = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
 	if num_leading_zeros != 0:
-		share_string += '~' + int_to_charset(num_leading_zeros, charset)
+		share_string += '~' + int_to_charset(num_leading_zeros, b16)
 	return share_string
 
 def share_string_to_point(share_string, charset):
@@ -202,9 +202,9 @@ def share_string_to_point(share_string, charset):
 		raise ValueError('Share format is invalid.')
 	if (set(x_string) - set(charset)) or (set(y_string) - set(charset)):
 		raise ValueError("Share has characters that aren't in the charset.")
-	x, y = charset_to_int(x_string, charset), charset_to_int(y_string, charset)
+	x, y = charset_to_int(x_string, b16), charset_to_int(y_string, charset)
 	if num_leading_zeros:
-		num_leading_zeros = charset_to_int(num_leading_zeros, charset)
+		num_leading_zeros = charset_to_int(num_leading_zeros, b16)
 	return (x, y), num_leading_zeros
 
 class SS():
