@@ -6,8 +6,7 @@ def calculate_mersenne_primes():
 		2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279]
 	primes = []
 	for exp in mersenne_prime_exponents:
-		prime = 1
-		for i in range(exp): prime *= 2
+		prime = 1; prime <<= exp
 		prime -= 1; primes.append(prime)
 	return primes
 
