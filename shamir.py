@@ -10,6 +10,16 @@ def calculate_mersenne_primes():
 		prime -= 1; primes.append(prime)
 	return primes
 
+def calculate_thabit_primes():
+	thabit_prime_exponents = [
+		0, 1, 2, 3, 4, 6, 7, 11, 18, 34, 38, 43, 55, 64, 76, 94, 103, 
+			143, 206, 216, 306, 324, 391, 458, 470, 827, 1274]
+	primes = []
+	for exp in thabit_prime_exponents:
+		prime = 3  << exp
+		prime -= 1; primes.append(prime)
+	return primes
+
 SMALLEST_0065BIT_PRIME = (2**64 + 13)
 SMALLEST_0081BIT_PRIME = (2**80 + 13)
 SMALLEST_0097BIT_PRIME = (2**96 + 61)
@@ -29,7 +39,7 @@ SMALLEST_0897BIT_PRIME = (2**896 + 993)
 SMALLEST_1025BIT_PRIME = (2**1024 + 643)
 SMALLEST_PRIMES = [
 	SMALLEST_0257BIT_PRIME, SMALLEST_0321BIT_PRIME, SMALLEST_0385BIT_PRIME]
-STANDARD_PRIMES = calculate_mersenne_primes() + SMALLEST_PRIMES
+STANDARD_PRIMES = calculate_mersenne_primes() + calculate_thabit_primes() + SMALLEST_PRIMES
 STANDARD_PRIMES.sort()
 
 def get_large_enough_prime(batch):
