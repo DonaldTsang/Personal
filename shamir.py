@@ -151,8 +151,7 @@ def modular_lagrange_interpolation(x, points, prime):
 
 def int_to_charset(val, charset):
 	# Turn a non-negative integer into a string.
-	if not val >= 0:
-		raise ValueError('"val" must be a non-negative integer.')
+	if not val >= 0: raise ValueError('"val" must be a +ve int or 0')
 	if val == 0: return charset[0]
 	output = ""
 	while val > 0:
