@@ -160,11 +160,17 @@ def int_to_charset(val, charset):
 	# reverse the characters in the output and return
 	return output[::-1]
 
+def int_to_charset_reverse(val, charset):
+	return int_to_charset(val, charset)[::-1]
+
 def charset_to_int(s, charset):
 	# Turn a string into a non-negative integer.
 	output = 0
 	for char in s: output *= len(charset); output += charset.index(char)
 	return output
+
+def charset_reverse_to_int(s, charset):
+	return charset_to_int(s[::-1], charset)
 
 ################################################################################
 
