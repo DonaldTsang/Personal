@@ -225,9 +225,9 @@ def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 def share_string_to_point(share_string, charset):
 	# Convert a share string to a point (a tuple of integers).
 	# share should be in the format "01-d051080de7..."
-	if '-' in charset:
+	if '~' in charset:
 		raise ValueError(
-			'The character "-" cannot be in the charset.')
+			'The character "~" cannot be in the charset.')
 	if not isinstance(share_string, str):
 		raise ValueError('Share format is invalid.')
 	num_leading_zeros = None
