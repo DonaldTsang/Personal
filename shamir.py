@@ -225,8 +225,7 @@ def share_string_to_point(share_string, charset):
 	# Convert a share string to a point (a tuple of integers).
 	# share should be in the format "01-d051080de7..."
 	if '~' in charset:
-		raise ValueError(
-			'The character "~" cannot be in the charset.')
+		raise ValueError('The character "~" cannot be in the charset.')
 	if not isinstance(share_string, str):
 		raise ValueError('Share format is invalid.')
 	num_leading_zeros = None
@@ -393,25 +392,3 @@ uucode = " !\"#$%&'()*+,-./0123456789:;<=>?@" + \
 binhex = "!\"#$%&'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`" + \
 	"abcdefhijklmpqr"
 options = [b16, b32, b64, url, unix, xxcode, uucode, binhex]
-
-if __name__ == '__main__':
-	import argparse
-	parser = argparse.ArgumentParser(description='Shamir Secret Sharer')
-	sub_split = parser.add_subparsers()
-	sub_split.add_parser("split", action="store_true", default=False
-		help="Split password into multiple sub-passwords")
-	sub_split.add_argument("password", type=str)
-	sub_split.add_argument("share_threshold", type=int)
-	sub_split.add_argument("num_shares", type=int)
-	sub_recover = parser.add_subparsers()
-	sub_recover.add_parser("recover", action="store_true", default=False
-		help="Recover password from multiplr sub-passwords")
-	sub_recover.add_argument("share_list", type=list)
-	parser.add_argument("secret_charset", choices=options,
-		default="b16", help="Encoding system of password")
-	parser.add_argument("share_charset", choices=options,
-		default="b16", help="Encoding system of sub-passwords")
-	args = parser.parse_args()
-	SS_new = SS(secret_charset, share_charset)
-	if args.split == True: print(SS_new.split(password, share_threshold, num_shares))
-	elif args.recover == True: print(SS_new.recover(share_list))
