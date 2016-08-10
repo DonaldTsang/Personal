@@ -2,7 +2,7 @@ import re
 
 hylian = " ABCDEFGHIJKLMNOPRSTUVWXYZ."
 
-def format_message(message, suffix=" ", prefix=""):
+def formessage(message, suffix=" ", prefix=""):
 	message = message.upper()
 	message = re.sub("[,:;]", ".", message)
 	message = re.sub("Q", "KW", message)
@@ -260,13 +260,13 @@ def bacon(message="", x=3, shape="tri", wrap=True):
 	assert shape in ["tri", "rect"], "Shape is not 'tri' or 'rect'"
 	assert isinstance(wrap, bool), "Wrapping is not True or False"
 	password = hylian_gen(x)
-	message = multi_encrypt(format_message(message, "en", shape, wrap), password)
+	message = formats(multi_encrypt(formessage(message), password), "en", shape, wrap))
 	print(password)
 	print(message)
 
-def daggot(message="", password, shape="tri", wrap=True):
+def daggot(message="", password=[], shape="tri", wrap=True):
 	assert isinstance(message, str), "Message is not string"
 	assert shape in ["tri", "rect"], "Shape is not 'tri' or 'rect'"
 	assert isinstance(wrap, bool), "Wrapping is not True or False"
-	message = format_message(multi_decrypt(message, password), "de", shape, wrap)
+	message = multi_decrypt(formats(message, "de", shape, wrap), password)
 	print(message)
