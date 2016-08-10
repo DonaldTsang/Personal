@@ -56,14 +56,17 @@ function tri_to_hex (str) { // convert triangles to hex
 
 function encode () {
 	x = document.getElementById('en_input').value
-	document.getElementById('en_output').value = hex_to_tri(ascii_to_hex(encode_utf8(x)))}
+	y = hex_to_tri(ascii_to_hex(encode_utf8(x)))
+	document.getElementById('en_output').value = y}
 
 function decode () {
 	x = document.getElementById('de_input').value
-	document.getElementById('de_output').value = decode_utf8(hex_to_ascii(tri_to_hex(x)))}
+	y = decode_utf8(hex_to_ascii(tri_to_hex(x)))
+	document.getElementById('de_output').value = y}
 
 function move () {
-	document.getElementById('de_input').value = document.getElementById('en_output').value}
+	x = document.getElementById('en_output').value
+	document.getElementById('de_input').value = x}
 
 </script>
 </head>
