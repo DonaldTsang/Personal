@@ -6,30 +6,24 @@
 <title>Triangle Translator</title>
 <script>
 function encode_utf8 (s) { // converts string to utf-8 escapes and ascii
-	return unescape(encodeURIComponent(s));
-}
+	return unescape(encodeURIComponent(s))}
 
 function decode_utf8 (s) { // converts utf-8 escapes and ascii to string
-	return decodeURIComponent(escape(s));
-}
+	return decodeURIComponent(escape(s))}
 
 function ascii_to_hex (str) { // converts ascii character to hex value
 	var arr1 = [];  
 	for (var n = 0, l = str.length; n < l; n ++) {
 		var hex = Number(str.charCodeAt(n)).toString(16);
-		arr1.push(hex);
-	}
-	return arr1.join('');
-}
+		arr1.push(hex)}
+	return arr1.join('')}
 
 function hex_to_ascii (str1) { // converts hex value to ascii character
 	var hex  = str1.toString();
 	var str = '';
 	for (var n = 0; n < hex.length; n += 2) {
-		str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-	}
-	return str;
-}
+		str += String.fromCharCode(parseInt(hex.substr(n, 2), 16))}
+	return str}
 
 function en (int) { // convert single integer to triangles
 	if ((0 <= int) && (int <= 7)) {
@@ -37,9 +31,7 @@ function en (int) { // convert single integer to triangles
 	} else if ((8 <= int) && (int <= 15)) {
 		return String.fromCodePoint(int - 0x8 + 0x25bc)
 	} else {
-		return '='
-	}
-}
+		return '='}}
 
 function de (str) { // convert triangles to single integer
 	x = str.charCodeAt(0)
@@ -48,39 +40,31 @@ function de (str) { // convert triangles to single integer
 	} else if ((0x25bc <= x) && (x <= 0x25c3)) {
 		return x - 0x25bc + 0x8
 	} else {
-		return '='
-	}
-}
+		return '='}}
 
 function hex_to_tri (str) { // convert hex to triangles
 	var str1 = ''
 	for (var i = 0; i < str.length; i++) {
-		str1 += en(parseInt(str.charAt(i), 16))
-	}
-	return str1
-}
+		str1 += en(parseInt(str.charAt(i), 16))}
+	return str1}
 
 function tri_to_hex (str) { // convert triangles to hex
 	var str1 = ''
 	for (var i = 0; i < str.length; i++) {
-		str1 += de(str.charAt(i)).toString(16)
-	}
-	return str1
-}
+		str1 += de(str.charAt(i)).toString(16)}
+	return str1}
 
 function encode () {
 	x = document.getElementById('en_input').value
-	document.getElementById('en_output').value = hex_to_tri(ascii_to_hex(encode_utf8(x)))
-}
+	document.getElementById('en_output').value = hex_to_tri(ascii_to_hex(encode_utf8(x)))}
 
 function decode () {
 	x = document.getElementById('de_input').value
-	document.getElementById('de_output').value = decode_utf8(hex_to_ascii(tri_to_hex(x)))
-}
+	document.getElementById('de_output').value = decode_utf8(hex_to_ascii(tri_to_hex(x)))}
 
 function move () {
-	document.getElementById('de_input').value = document.getElementById('en_output').value
-}
+	document.getElementById('de_input').value = document.getElementById('en_output').value}
+
 </script>
 </head>
 <body>
