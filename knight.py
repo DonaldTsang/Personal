@@ -13,7 +13,7 @@ class Direct(object): # Encode a sense of direction
 NNW, NNE, SSW, SSE = Direct(-1, -2), Direct(1, -2), Direct(-1, 2), Direct(1, 2)
 WSW, WNW, ESE, ENE = Direct(-2, 1), Direct(-2, -1), Direct(2, 1), Direct(2, -1)
 
-def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
+def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"0": NNW, "1": NNE, "2": SSW, "3": SSE,
         "4": WSW, "5":WNW, "6":ESE, "7":ENE}
 	for character in octo(fingerprint)[1:]:
@@ -43,7 +43,7 @@ def chop(string, length): # chop string into blocks
 
 ################################################################################
 
-class Size(object):
+class Size_knight(object):
 	def __init__(self, a, b, c):
 		self.a, self.b, self.c = a, b, c # bishop starts in the center of the room
 		self.start_position_0 = (a, c)
