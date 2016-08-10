@@ -15,7 +15,7 @@ WSW, WNW, ESE, ENE = Direct(-2, 1), Direct(-2, -1), Direct(2, 1), Direct(2, -1)
 
 def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"0": NNW, "1": NNE, "2": SSW, "3": SSE,
-        "4": WSW, "5":WNW, "6":ESE, "7":ENE}
+        "4": WSW, "5": WNW, "6": ESE, "7": ENE}
 	for character in octo(fingerprint)[1:]:
 		direction = direction_lookup[character]
 		yield direction
