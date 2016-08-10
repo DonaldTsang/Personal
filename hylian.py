@@ -255,7 +255,7 @@ def formats(message="", code="en", shape="tri", wrap=True):
 
 ################################################################################
 
-def bacon(message="", x=3 shape="tri", wrap=True):
+def bacon(message="", x=3, shape="tri", wrap=True):
 	assert isinstance(message, str), "Message is not string"
 	assert shape in ["tri", "rect"], "Shape is not 'tri' or 'rect'"
 	assert isinstance(wrap, bool), "Wrapping is not True or False"
