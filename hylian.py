@@ -303,21 +303,13 @@ class Chaocipher:
 				raise Exception("Right side missing '%s'" % char)
 
 	def permute(self, idx):
-		# Permute the left
-		# Step 1: Rotate idx to zenith
 		for cnt2 in range(idx):
 			self.left.append(self.left.pop(0))
-		# Step 2 and 3: extract zenith +1
 		char = self.left.pop(1)
-		# Step 4: Insert at nadir
-		self.left.insert(13, char);
-		# Permute the right
-		# Step 1 and 2: rotate idx to zenith-1
+		self.left.insert(13, char)
 		for cnt2 in range(idx+1):
 			self.right.append(self.right.pop(0))
-		# Step 3 and 4: remove zenith + 2
 		char = self.right.pop(2)
-		# Step 5: insert at nadir
 		self.right.insert(13, char)
 
 	def crypt(self, text, mode):
@@ -326,7 +318,7 @@ class Chaocipher:
 		for cnt in range(len(src)):
 			char = src[cnt]
 			if self.alphabet.find(char) < 0:
-				#print "Ignoring character '%s'" % char
+				print("Ignoring character '%s'" % char)
 				continue
 			if mode == "de":
 				idx = self.left.index(char)
