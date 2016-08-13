@@ -3,7 +3,7 @@ import re
 def octo(fingerprint): # convert hexadecimal into octal
 	assert bool(re.fullmatch("[0-9A-Fa-f]{64}", fingerprint))
 	fingerprint = oct(int(fingerprint, 16))[2:].zfill(86)
-	return fingerprint[0], fingerprint[1:]
+	return int(fingerprint[0]), fingerprint[1:]
 
 ################################################################################
 
@@ -47,8 +47,7 @@ def chop(string, length): # chop string into blocks
 class Size_knight(object):
 	def __init__(self, a, b, c):
 		self.a, self.b, self.c = a, b, c # bishop starts in the center of the room
-		self.start_position_0 = (a, c)
-		self.start_position_1 = (a + b + 1, c)
+		self.start_position_0, self.start_position_1 = (a, c), (a + b + 1, c)
 		self.room_dimensions = (2 * a + b + 2, 2 * c + 1)
 		self.border = "+" + "-" * self.room_dimensions[0] + "+\n"
 
@@ -68,7 +67,7 @@ class Size_knight(object):
 		room = Counter()
 		position_0 = self.start_position_0
 		position_1 = self.start_position_1
-		ticker = int(octo(fingerprint)[0])
+		ticker = octo(fingerprint)[0]
 		for direction in directions_from_fingerprint_knight(fingerprint):
 			if ticker == 0:
 				position_0 = Size_knight.move(position_0, direction, self)
@@ -79,8 +78,8 @@ class Size_knight(object):
 				room[position_1] += 1  # drop coin
 				ticker = 0
 		# mark start and end positions
-		[room[self.start_position_0], room[self.start_position_1]] = [coin_value_start_position] * 2
-		[room[position_0], room[position_1]] = [coin_value_end_position] * 2
+		room[self.start_position_0], room[self.start_position_1] = [coin_value_start_position] * 2
+		room[position_0], room[position_1] = [coin_value_end_position] * 2
 		return room
 
 	def display_room(room, self):
