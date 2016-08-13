@@ -68,13 +68,13 @@ class Size_knight(object):
 		position_0 = self.start_position_0
 		position_1 = self.start_position_1
 		ticker = int(octo(fingerprint)[0])
-		for direction in directions_from_fingerprint(fingerprint):
+		for direction in directions_from_fingerprint_knight(fingerprint):
 			if ticker == 0:
-				position_0 = Size.move(position_0, direction, self)
+				position_0 = Size_knight.move(position_0, direction, self)
 				room[position_0] += 1  # drop coin
 				ticker = 1
 			elif ticker == 1:
-				position_1 = Size.move(position_1, direction, self)
+				position_1 = Size_knight.move(position_1, direction, self)
 				room[position_1] += 1  # drop coin
 				ticker = 0
 		# mark start and end positions
@@ -97,12 +97,12 @@ class Size_knight(object):
 		return "".join(room_as_strings())
 
 	def db(fingerprint, self):
-		room = Size.stumble_around(fingerprint, self)
-		return Size.display_room(room, self)
+		room = Size_knight.stumble_around(fingerprint, self)
+		return Size_knight.display_room(room, self)
 
 	def db_tops(fingerprint, self): # db but without the bottom frame
-		room = Size.stumble_around(fingerprint, self)
-		return Size.display_room(room, self)[:-(self.room_dimensions[0]+3)]
+		room = Size_knight.stumble_around(fingerprint, self)
+		return Size_knight.display_room(room, self)[:-(self.room_dimensions[0]+3)]
 
 	def db_multiple(fingerprint, self): # Vertically stacked drunken_bishop
 		finger = [i for i in chop(fingerprint, 64)]
