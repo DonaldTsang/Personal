@@ -106,15 +106,15 @@ class Size_knight(object):
 
 	def db_multiple(fingerprint, self): # Vertically stacked drunken_bishop
 		finger = [i for i in chop(fingerprint, 64)]
-		picture = [Size.db_tops(i, self) for i in finger]
+		picture = [Size_knight.db_tops(i, self) for i in finger]
 		return "".join(picture) + self.border
 
 	def db_scrape(fingerprint, self): # remove last character of each line
-		room = Size.db_multiple(fingerprint, self).split("\n")[:-1]
+		room = Size_knight.db_multiple(fingerprint, self).split("\n")[:-1]
 		return [item[:-1] for item in room]
 
 	def db_merge(list, self): # combine multiple vertical ascii frames
-		super_list = [Size.db_scrape(item, self) for item in list]
+		super_list = [Size_knight.db_scrape(item, self) for item in list]
 		output = [""] * len(super_list[0])
 		for y in range(len(super_list[0])):
 			for x in range(len(super_list)):
