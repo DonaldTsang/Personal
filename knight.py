@@ -2,7 +2,8 @@ import re
 
 def octo(fingerprint): # convert hexadecimal into octal
 	assert bool(re.fullmatch("[0-9A-Fa-f]{64}", fingerprint))
-	return oct(int(fingerprint, 16))[2:].zfill(86)
+	fingerprint = oct(int(fingerprint, 16))[2:].zfill(86)
+	return fingerprint[0], fingerprint[1:]
 
 ################################################################################
 
@@ -15,8 +16,8 @@ WSW, WNW, ESE, ENE = Direct(-2, 1), Direct(-2, -1), Direct(2, 1), Direct(2, -1)
 
 def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"0": NNW, "1": NNE, "2": SSW, "3": SSE,
-        "4": WSW, "5": WNW, "6": ESE, "7": ENE}
-	for character in octo(fingerprint)[1:]:
+		"4": WSW, "5": WNW, "6": ESE, "7": ENE}
+	for character in octo(fingerprint)[1]:
 		direction = direction_lookup[character]
 		yield direction
 
@@ -78,10 +79,8 @@ class Size_knight(object):
 				room[position_1] += 1  # drop coin
 				ticker = 0
 		# mark start and end positions
-		room[self.start_position_0] = coin_value_start_position
-		room[self.start_position_1] = coin_value_start_position
-		room[position_0] = coin_value_end_position
-		room[position_1] = coin_value_end_position
+		[room[self.start_position_0], room[self.start_position_1]] = [coin_value_start_position] * 2
+		[room[position_0], room[position_1]] = [coin_value_end_position] * 2
 		return room
 
 	def display_room(room, self):
