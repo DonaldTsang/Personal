@@ -1,0 +1,47 @@
+Sustainability Patterns
+Infrastructure Pattern: Infrastructure always come before projects
+Grace Hopper Pattern: It is always time to start a hackerspace
+Community Pattern: IRC for discussion, Wiki for Docs, Mailing List for "bussiness"
+Critical Mass Pattern: 2 idea man, 2 more to get work done, aim to recruit 10
+Strong Personalities Pattern: It need people with experience in building structures
+
+Independence Patterns
+Landlord and Neighbourhood Pattern: Find uninterested landlord & cool neighbours
+Roommate Anti-Pattern: Don’t let anyone live in hackerspace
+Séparée Pattern: Use curtains/doors/walls to create seperate rooms
+Kitchen Pattern: Fridge for Club-Mate/pizza & equiptment to cook real food
+Coziness Pattern: Furniture, ambient light/stereo, projector & games
+Shower Pattern: Shower & washing machines for guests to clean up
+Membership Fees Pattern: Collect fees regularaly & make no exceptions
+	Have 3 months of rent on accounts & elect a totalitarian treasurer
+Sponsoring Anti_Pattern: Never ever depend on external sponsors
+
+Regularity Patterns
+Plenum and Tuesday Pattern: Have meetings with agenda, goals & minutes every Tuesday
+OpenChaos Pattern: Have monthly public talk/workshop & announce in local time
+	Invite visitors to regular meetings & don’t tell the weirdos about them
+U23 Pattern: Recruit through a challenge couse that span several weeks
+	Overwhelm them with problems from hacking & let them solve it in teams
+	Prepare for the challenge & tutor them but give them room to experiment
+	Retire after team-building & let the smartest of the young run the space
+Sine Curve Pattern: Peak enthusiasm has a cycle of 4 years
+
+Conflict Resolution Patterns
+Consensus Pattern: Don’t take votes & discuss until everyone agrees
+Democracy Pattern: Do take votes & the strongest minority wins
+Command Pattern: Order people to clean up & always participate
+Sudo Leadership Pattern: Don't have ranks & use leadership temporarily
+Responsibility Pattern: Take pride in your volunteer work
+	When you realise you can't do the job anymore, hand it over
+Debate Culture Pattern: Make people with social skills lead the discussion
+	Learn from them & learn not to interrupt others
+Bikeshed Anti-Pattern: Identify trivial discussion & end them
+	If you suggest something that anyone can build they will discuss
+Private Talk Pattern: Talk to the trouble-maker in private & listen
+
+Creative Chaos Patterns
+Old Hardware Pattern: Create a pile to put old unused hardware for people to take
+	Announce three times before throwing the rest away
+Key Pattern: Hand out keys with deposit & track them & have a good lock
+	Building an electronic locking system is cool but cause problems
+Club Mate Pattern: Buy a box of Club-Mate to raise funds & give good impressions
