@@ -65,8 +65,7 @@ class Size_knight(object):
 	def stumble_around(fingerprint, self):
 		from collections import Counter
 		room = Counter()
-		position_0 = self.start_position_0
-		position_1 = self.start_position_1
+		position_0, position_1 = self.start_position_0, self.start_position_1
 		ticker = octo(fingerprint)[0]
 		for direction in directions_from_fingerprint_knight(fingerprint):
 			if ticker == 0:
