@@ -621,19 +621,22 @@ class Size_knight(object):
 			output[y] += output[y][0]
 		return "\n".join(output) + "\n"
 
-nights = Size_knight(7, 7, 6)
+night_0 = Size_knight(7, 7, 6)
+night_1 = Size_knight(5, 11, 6)
 
-def db_knight(passwd, num): # creates rectangles based on hashes
+def db_knight(passwd, num, k=0): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	assert isinstance(passwd, bytes), "input not bytes"
 	assert num in [1, 2, 3], "Error: num ivalid"
+	assert k in [0, 1], "Error: k invalid"
 	sha_256 = hashlib.sha256(passwd).hexdigest()
 	sha_512 = hashlib.sha512(passwd).hexdigest()
 	finger = ""
 	if num == 1: finger = sha_256
 	elif num == 2: finger = sha_512
 	elif num == 3: finger = sha_256 + sha_512
-	return Size_knight.db_merge(chop(finger, 64), nights)
+	if k == 0: return Size_knight.db_merge(chop(finger, 64), night_0)
+	if k == 1: return Size_knight.db_merge(chop(finger, 64), night_1)
 
 ################################################################################
 
