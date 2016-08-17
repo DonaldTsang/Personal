@@ -667,6 +667,6 @@ def cjk_en(byte):
 
 def cjk_de(string):
 	assert isinstance(string, str)
-	result = b""
-	for char in string: result += bytes(list(divmod(cjk2hex(char), 256)))
-	return result
+	result = []
+	for char in string: result += list(divmod(cjk2hex(char), 256))
+	return bytes(result)
