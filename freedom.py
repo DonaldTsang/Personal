@@ -494,7 +494,7 @@ def db_supreme(passwd): # combines base69 and drunken bishop into one picture
 
 ################################################################################
 
-from random import randint, shuffle
+from random import randrange, shuffle
 
 def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	assert isinstance(total, int) and total > 0
@@ -511,14 +511,12 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	royale = up_char + low_char + num_char + chars
 	rest = total - upcase - lowcase - numbers - others
 	result = ""
-	for i in range(upcase): result += up_char[randint(0, 25)]
-	for i in range(lowcase): result += low_char[randint(0, 25)]
-	for i in range(numbers): result += num_char[randint(0, 9)]
-	for i in range(others): result += chars[randint(0, len(chars)-1)]
-	for i in range(rest): result += royale[randint(0, len(royale)-1)]
-	result = list(result)
-	shuffle(result)
-	return "".join(result)
+	for i in range(upcase): result += up_char[randrange(26)]
+	for i in range(lowcase): result += low_char[randrange(26)]
+	for i in range(numbers): result += num_char[randrange(10)]
+	for i in range(others): result += chars[randrange(len(chars))]
+	for i in range(rest): result += royale[randrange(len(royale))]
+	result = list(result); shuffle(result); return "".join(result)
 
 ################################################################################
 
