@@ -302,11 +302,18 @@ def bit_pairs(binary): # convert a word into little-endian bit pairs
 			yield "".join(pair)
 	return list(all_pairs(iter(binary)))[::-1]
 
+def octo(fingerprint): # convert hexadecimal into octal
+	assert bool(re.fullmatch("[0-9A-Fa-f]{64}", fingerprint))
+	fingerprint = oct(int(fingerprint, 16))[2:].zfill(86)
+	return int(fingerprint[0]), fingerprint[1:]
+
 class Direct(object): # Encode a sense of direction
 	def __init__(self, dx, dy):
 		self.dx, self.dy = dx, dy
 
 NW, NE, SW, SE = Direct(-1, -1), Direct(1, -1), Direct(-1, 1), Direct(1, 1)
+NNW, NNE, SSW, SSE = Direct(-1, -2), Direct(1, -2), Direct(-1, 2), Direct(1, 2)
+WSW, WNW, ESE, ENE = Direct(-2, 1), Direct(-2, -1), Direct(2, 1), Direct(2, -1)
 
 def directions_from_fingerprint(fingerprint): # convert fingerprint into direction
 	direction_lookup = {"00": NW, "01": NE, "10": SW, "11": SE}
@@ -316,6 +323,13 @@ def directions_from_fingerprint(fingerprint): # convert fingerprint into directi
 		for bit_pair in bit_pairs(binary):
 			direction = direction_lookup[bit_pair]
 			yield direction
+
+def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into direction
+	direction_lookup = {"0": NNW, "1": NNE, "2": SSW, "3": SSE,
+		"4": WSW, "5": WNW, "6": ESE, "7": ENE}
+	for character in octo(fingerprint)[1]:
+		direction = direction_lookup[character]
+		yield direction
 
 ################################################################################
 
@@ -417,8 +431,7 @@ class Size(object):
 			output[y] += output[y][0]
 		return "\n".join(output) + "\n"
 
-small = Size(8, 4, 16)
-large = Size(11, 6, 32)
+small, large = Size(8, 4, 16), Size(11, 6, 32)
 
 ################################################################################
 
@@ -529,23 +542,6 @@ def multiline():
 
 ################################################################################
 
-import re
-
-def octo(fingerprint): # convert hexadecimal into octal
-	assert bool(re.fullmatch("[0-9A-Fa-f]{64}", fingerprint))
-	fingerprint = oct(int(fingerprint, 16))[2:].zfill(86)
-	return int(fingerprint[0]), fingerprint[1:]
-
-NNW, NNE, SSW, SSE = Direct(-1, -2), Direct(1, -2), Direct(-1, 2), Direct(1, 2)
-WSW, WNW, ESE, ENE = Direct(-2, 1), Direct(-2, -1), Direct(2, 1), Direct(2, -1)
-
-def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into direction
-	direction_lookup = {"0": NNW, "1": NNE, "2": SSW, "3": SSE,
-		"4": WSW, "5": WNW, "6": ESE, "7": ENE}
-	for character in octo(fingerprint)[1]:
-		direction = direction_lookup[character]
-		yield direction
-
 class Size_knight(object):
 	def __init__(self, a, b, c):
 		self.a, self.b, self.c = a, b, c # bishop starts in the center of the room
@@ -621,8 +617,7 @@ class Size_knight(object):
 			output[y] += output[y][0]
 		return "\n".join(output) + "\n"
 
-night_0 = Size_knight(7, 7, 6)
-night_1 = Size_knight(5, 11, 6)
+night_0, night_1 = Size_knight(7, 7, 6), Size_knight(5, 11, 6)
 
 def db_knight(passwd, num, k=0): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
@@ -668,5 +663,5 @@ def cjk_en(byte):
 def cjk_de(string):
 	assert isinstance(string, str)
 	result = []
-	for char in string: result += list(divmod(cjk2hex(char), 256))
+	for char in string: x = cjk2hex(char); result += [x//256, x&255]
 	return bytes(result)
