@@ -5,7 +5,6 @@ import re
 # https://github.com/natmchugh/drunken-bishop/blob/master/drunken-bishop.py
 # https://github.com/atoponce/keyart/blob/master/keyart
 
-
 def chop(string, length): # chop string into blocks
 	return [string[i:i+length] for i in range(0, len(string), length)]
 
@@ -239,13 +238,6 @@ base63 = Codex(448, 63, 75, "[0-9A-Za-z_]{1,%d}", byte)
 base62 = Codex(256, 62, 43, "[0-9A-Za-z]{1,%d}", byte)
 base61 = Codex(160, 61, 27, "[0-9A-Za-y]{1,%d}", byte)
 base60 = Codex(112, 60, 19, "[0-9A-Za-x]{1,%d}", byte)
-
-################################################################################
-
-from textwrap import wrap
-
-def new_line(text, count): # split long string and add newline
-	return "\n".join(wrap(text, count))
 
 ################################################################################
 
@@ -529,6 +521,11 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	return "".join(result)
 
 ################################################################################
+
+from textwrap import wrap
+
+def new_line(text, count): # split long string and add newline
+	return "\n".join(wrap(text, count))
 
 def multiline():
 	print("Enter as many lines of text as needed.")
