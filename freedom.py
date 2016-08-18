@@ -11,6 +11,11 @@ def chop(string, length): # chop string into blocks
 def trim(string, length, char): # trim padding of a string
 	return string.rstrip(char).ljust(length, char)
 
+def insert(string, char, index): # insert string into another string
+	return string[:index] + char + string[index:]
+
+################################################################################
+
 class Codex(object):
 
 	def __init__(self, exp, base, limit, regex, byte_list):
@@ -85,8 +90,6 @@ class Codex(object):
 			result += [r]
 		result += [0] * (self.byte-len(result))
 		return bytes(result)
-
-################################################################################
 
 	def block_en(string, self): # encoding unicode into text
 		medium = Codex.en(Codex.u2i(string, self), self)
@@ -349,9 +352,6 @@ def db_fix(fingerprint): # add colons to fingerprints
 		return ":".join(chop(fingerprint, 2))
 	else: assert False, "Error: fingerprint is invalid"
 
-def chop(string, length): # chop string into blocks
-	return [string[i:i+length] for i in range(0, len(string), length)]
-
 ################################################################################
 
 class Size(object):
@@ -424,116 +424,6 @@ class Size(object):
 		return "\n".join(output) + "\n"
 
 small, large = Size(8, 4, 16), Size(11, 6, 32)
-
-################################################################################
-
-import hashlib
-
-def db_basic(passwd, num): # creates rectangles based on hashes
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	assert isinstance(passwd, bytes), "input not bytes"
-	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
-	md5 = hashlib.md5(passwd).hexdigest()
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_384 = hashlib.sha384(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	finger, constant = "", 0
-	if num == 1: finger = md5
-	elif num == 2: finger = sha_256
-	elif num == 3: finger = sha_384
-	elif num == 4: finger = sha_512
-	elif num == 6: finger = sha_256 + sha_512
-	elif num == 8: finger = md5 + sha_384 + sha_512
-	elif num == 9: finger = sha_256 + sha_384 + sha_512
-	if num in [1, 2, 3]: constant = 32
-	elif num in [4, 6, 8]: constant = 64
-	elif num == 9: constant = 96
-	return Size.db_merge(chop(finger, constant), small)
-
-def db_advanced(passwd, num): # creates rectangles based on hashes
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	assert isinstance(passwd, bytes), "input not bytes"
-	assert num in [1, 2, 3], "Error: num ivalid"
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	finger = ""
-	if num == 1: finger = sha_256
-	elif num == 2: finger = sha_512
-	elif num == 3: finger = sha_256 + sha_512
-	return Size.db_merge(chop(finger, 64), large)
-
-def db_combo(passwd):
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	assert isinstance(passwd, bytes), "input not bytes"
-	md5 = hashlib.md5(passwd).hexdigest()
-	sha_256 = hashlib.sha256(passwd).hexdigest()
-	sha_384 = hashlib.sha384(passwd).hexdigest()
-	sha_512 = hashlib.sha512(passwd).hexdigest()
-	top, bottom = md5 + sha_384, sha_256 + sha_512
-	return Size.db_merge(chop(top, 32), small)[:-74] + \
-		"+" + "-" * 17 + "+" + "-" * 5 + "+" + "-" * 11 + "+" + \
-		"-" * 11 + "+" + "-" * 5 + "+" + "-" * 17 + "+\n" + \
-		Size.db_merge(chop(bottom, 64), large)[74:]
-
-################################################################################
-
-def insert(string, char, index):
-	return string[:index] + char + string[index:]
-
-def db_supreme(passwd): # combines base69 and drunken bishop into one picture
-	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
-	assert isinstance(passwd, bytes), "input not bytes"
-	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
-	right = hashlib.sha384(passwd).hexdigest()
-	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
-	mid_l, mid_r = insert(mid[0], "0" * 32, 32), insert(mid[1], "0" * 32, 32)
-	image = db_merge([left, mid_l, mid_r, right], small).split("\n")
-	for i in range(0, 9):
-		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
-	return "\n".join(image)
-
-################################################################################
-
-from random import randrange, shuffle
-
-def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
-	assert isinstance(total, int) and total > 0
-	assert isinstance(upcase, int) and upcase >= 0
-	assert isinstance(lowcase, int) and lowcase >= 0
-	assert isinstance(numbers, int) and numbers >= 0
-	assert isinstance(others, int) and others >= 0
-	assert isinstance(chars, str)
-	assert total >= ( upcase + lowcase + numbers + others )
-	up_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	low_char = "abcdefghijklmnopqrstuvwxyz"
-	num_char = "0123456789"
-	chars = "+-_=.:/" if chars == '' else chars
-	royale = up_char + low_char + num_char + chars
-	rest = total - upcase - lowcase - numbers - others
-	result = ""
-	for i in range(upcase): result += up_char[randrange(26)]
-	for i in range(lowcase): result += low_char[randrange(26)]
-	for i in range(numbers): result += num_char[randrange(10)]
-	for i in range(others): result += chars[randrange(len(chars))]
-	for i in range(rest): result += royale[randrange(len(royale))]
-	result = list(result); shuffle(result); return "".join(result)
-
-################################################################################
-
-from textwrap import wrap
-
-def new_line(text, count): # split long string and add newline
-	return "\n".join(wrap(text, count))
-
-def multiline():
-	print("Enter as many lines of text as needed.")
-	print("When done, enter '>' on a line by itself.")
-	buffer = []
-	while True:
-	    line = input()
-	    if line == ">": break
-	    buffer.append(line)
-	return "\n".join(buffer)
 
 ################################################################################
 
@@ -614,6 +504,43 @@ class Size_knight(object):
 
 night_0, night_1 = Size_knight(7, 7, 6), Size_knight(5, 11, 6)
 
+################################################################################
+
+import hashlib
+
+def db_basic(passwd, num): # creates rectangles based on hashes
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	assert num in [1, 2, 3, 4, 6, 8, 9], "Error: num ivalid"
+	md5 = hashlib.md5(passwd).hexdigest()
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	finger, constant = "", 0
+	if num == 1: finger = md5
+	elif num == 2: finger = sha_256
+	elif num == 3: finger = sha_384
+	elif num == 4: finger = sha_512
+	elif num == 6: finger = sha_256 + sha_512
+	elif num == 8: finger = md5 + sha_384 + sha_512
+	elif num == 9: finger = sha_256 + sha_384 + sha_512
+	if num in [1, 2, 3]: constant = 32
+	elif num in [4, 6, 8]: constant = 64
+	elif num == 9: constant = 96
+	return Size.db_merge(chop(finger, constant), small)
+
+def db_advanced(passwd, num): # creates rectangles based on hashes
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	assert num in [1, 2, 3], "Error: num ivalid"
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	finger = ""
+	if num == 1: finger = sha_256
+	elif num == 2: finger = sha_512
+	elif num == 3: finger = sha_256 + sha_512
+	return Size.db_merge(chop(finger, 64), large)
+
 def db_knight(passwd, num, k=0): # creates rectangles based on hashes
 	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
 	assert isinstance(passwd, bytes), "input not bytes"
@@ -627,6 +554,84 @@ def db_knight(passwd, num, k=0): # creates rectangles based on hashes
 	elif num == 3: finger = sha_256 + sha_512
 	if k == 0: return Size_knight.db_merge(chop(finger, 64), night_0)
 	if k == 1: return Size_knight.db_merge(chop(finger, 64), night_1)
+
+################################################################################
+
+def db_combo(passwd):
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	md5 = hashlib.md5(passwd).hexdigest()
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_384 = hashlib.sha384(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	top, bottom = md5 + sha_384, sha_256 + sha_512
+	m5, m11, m17 = "+" + "-" * 5, "+" + "-" * 11, "+" + "-" * 17
+	return Size.db_merge(chop(top, 32), small)[:-74] + \
+		m17 + m5 + m11 + m11 + m5 + m17 + "+\n" + \
+		Size.db_merge(chop(bottom, 64), large)[74:]
+
+def db_tester(passwd):
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	sha_256 = hashlib.sha256(passwd).hexdigest()
+	sha_512 = hashlib.sha512(passwd).hexdigest()
+	finger = sha_256 + sha_512
+	return Size.db_merge(chop(finger, 64), large) + \
+		Size_knight.db_merge(chop(finger, 64), night_0) + \
+		Size_knight.db_merge(chop(finger, 64), night_1)
+
+def db_supreme(passwd): # combines base69 and drunken bishop into one picture
+	if isinstance(passwd, str): passwd = passwd.encode('utf-8')
+	assert isinstance(passwd, bytes), "input not bytes"
+	left = hashlib.md5(passwd).hexdigest() + hashlib.sha256(passwd).hexdigest()
+	right = hashlib.sha384(passwd).hexdigest()
+	mid = chop(hashlib.sha512(passwd).hexdigest(), 64)
+	mid_l, mid_r = insert(mid[0], "0" * 32, 32), insert(mid[1], "0" * 32, 32)
+	image = db_merge([left, mid_l, mid_r, right], small).split("\n")
+	for i in range(0, 9):
+		image[i+11] = image[i+11][:19] + pass_check(passwd)[i]+ image[i+11][54:]
+	return "\n".join(image)
+
+################################################################################
+
+from random import randrange, shuffle
+
+def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
+	assert isinstance(total, int) and total > 0
+	def checks(n): assert isinstance(n, int) and n >= 0
+	checks(upcase); checks(lowcase); checks(numbers); checks(others)
+	assert isinstance(chars, str)
+	assert total >= ( upcase + lowcase + numbers + others )
+	up_char = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	low_char = "abcdefghijklmnopqrstuvwxyz"
+	num_char = "0123456789"
+	chars = "+-_=.:/" if chars == '' else chars
+	royale = up_char + low_char + num_char + chars
+	rest = total - upcase - lowcase - numbers - others
+	result = ""
+	for i in range(upcase): result += up_char[randrange(26)]
+	for i in range(lowcase): result += low_char[randrange(26)]
+	for i in range(numbers): result += num_char[randrange(10)]
+	for i in range(others): result += chars[randrange(len(chars))]
+	for i in range(rest): result += royale[randrange(len(royale))]
+	result = list(result); shuffle(result); return "".join(result)
+
+################################################################################
+
+from textwrap import wrap
+
+def new_line(text, count): # split long string and add newline
+	return "\n".join(wrap(text, count))
+
+def multiline():
+	print("Enter as many lines of text as needed" + \
+		"When done, enter '>' on a line by itself.")
+	buffer = []
+	while True:
+	    line = input()
+	    if line == ">": break
+	    buffer.append(line)
+	return "\n".join(buffer)
 
 ################################################################################
 
@@ -658,5 +663,5 @@ def cjk_en(byte):
 def cjk_de(string):
 	assert isinstance(string, str)
 	result = []
-	for char in string: x = cjk2hex(char); result += [x//256, x&255]
+	for char in string: x = cjk2hex(char); result += [x // 256, x & 255]
 	return bytes(result)
