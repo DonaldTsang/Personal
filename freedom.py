@@ -303,8 +303,7 @@ def octo(fingerprint): # convert hexadecimal into octal
 	return int(fingerprint[0]), fingerprint[1:]
 
 class Direct(object): # Encode a sense of direction
-	def __init__(self, dx, dy):
-		self.dx, self.dy = dx, dy
+	def __init__(self, dx, dy): self.dx, self.dy = dx, dy
 
 NW, NE, SW, SE = Direct(-1, -1), Direct(1, -1), Direct(-1, 1), Direct(1, 1)
 NNW, NNE, SSW, SSE = Direct(-1, -2), Direct(1, -2), Direct(-1, 2), Direct(1, 2)
@@ -329,7 +328,7 @@ def directions_from_fingerprint_knight(fingerprint): # convert fingerprint into 
 ################################################################################
 
 # encode start and end positions
-coin_value_start_position, coin_value_end_position = 20, 21
+coin_start_position, coin_end_position = 20, 21
 
 def coin(value): # Display the ascii representation of a coin
 	return {
@@ -338,8 +337,8 @@ def coin(value): # Display the ascii representation of a coin
 		5: "*", 6: "B", 7: "O", 8: "X", 9: "@",
 		10: "%", 11: "&", 12: "#", 13: "/", 14: "^",
 		15: "f", 16: "M", 17: "W", 18: "Z", 19: "?",
-		coin_value_start_position: "S",
-		coin_value_end_position: "E",
+		coin_start_position: "S",
+		coin_end_position: "E",
 	}.get(value, "!")
 
 ################################################################################
@@ -380,8 +379,8 @@ class Size(object):
 			position = Size.move(position, direction, self)
 			room[position] += 1  # drop coin
 		# mark start and end positions
-		room[self.start_position] = coin_value_start_position
-		room[position] = coin_value_end_position
+		room[self.start_position] = coin_start_position
+		room[position] = coin_end_position
 		return room
 
 	def display_room(room, self):
@@ -460,8 +459,8 @@ class Size_knight(object):
 				room[position_1] += 1  # drop coin
 				ticker = 0
 		# mark start and end positions
-		room[self.start_position_0], room[self.start_position_1] = [coin_value_start_position] * 2
-		room[position_0], room[position_1] = [coin_value_end_position] * 2
+		room[self.start_position_0], room[self.start_position_1] = [coin_start_position] * 2
+		room[position_0], room[position_1] = [coin_end_position] * 2
 		return room
 
 	def display_room(room, self):
