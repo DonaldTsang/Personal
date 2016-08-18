@@ -29,7 +29,6 @@ def multiline():
 	return "\n".join(buffer)
 
 ################################################################################
-################################################################################
 
 class Codex(object):
 
@@ -293,7 +292,6 @@ def shiftz(exp):
 	return base, limit
 """
 
-################################################################################
 ################################################################################
 
 def hex_byte_to_bin(hex_byte): # convert hex byte into a string of bits
@@ -630,7 +628,6 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	result = list(result); shuffle(result); return "".join(result)
 
 ################################################################################
-################################################################################
 
 from binascii import hexlify
 
@@ -663,7 +660,6 @@ def cjk_de(string):
 	for char in string: x = cjk2hex(char); result += [x // 256, x & 255]
 	return bytes(result)
 
-################################################################################
 ################################################################################
 
 from math import ceil, log
@@ -793,8 +789,7 @@ def int_to_charset(val, charset):
 	# reverse the characters in the output and return
 	return output[::-1]
 
-def int_to_charset_reverse(val, charset):
-	return int_to_charset(val, charset)[::-1]
+def int_to_charset_reverse(val, charset): return int_to_charset(val, charset)[::-1]
 
 def charset_to_int(s, charset):
 	# Turn a string into a non-negative integer.
@@ -802,8 +797,7 @@ def charset_to_int(s, charset):
 	for char in s: output *= len(charset); output += charset.index(char)
 	return output
 
-def charset_reverse_to_int(s, charset):
-	return charset_to_int(s[::-1], charset)
+def charset_reverse_to_int(s, charset): return charset_to_int(s[::-1], charset)
 
 ################################################################################
 
@@ -882,10 +876,9 @@ def share_string_to_point(share_string, charset):
 	return (x, y), num_leading_zeros
 
 """ Creates a secret sharer, which can convert from a secret string to a
-	list of shares and vice versa. The splitter is initialized with the
-	character set of the secrets and the character set of the shares that
-	it expects to be dealing with.
-"""
+	list of shares and vice versa. Splitter is initialized with
+	char_set of the secrets and char_set of the shares that
+	it expects to be dealing with."""
 
 class SS():
 	def __init__(self, secret_charset, share_charset):
@@ -933,54 +926,12 @@ def split_str(secret_string, share_charset, share_threshold, num_shares):
 	SS_class = SS(b16, share_charset)
 	return SS.split(SS_class, secret_string, share_threshold, num_shares)
 
-def recover_str(shares, share_charset, mode='str'):
+def recover_str(shares, share_charset, mode='str'): # need to fix
 	assert mode in ['str', 'bytes']
-	SS_class = (b16, share_charset)
+	SS_class = SS(b16, share_charset)
 	secret_string = unhexlify(recover(SS_class, shares))
 	if mode == 'str': return secret_string.decode('utf-8')
 	elif mode == 'bytes': return secret_string
-
-class SS_str():
-	def __init__(self, share_charset):
-		self.share_charset = share_charset
-
-	def split(self, secret_string, share_threshold, num_shares):
-		if isinstance(secret_string, str): secret_string = secret_string.encode('utf-8')
-		secret_string = hexlify(secret_string).decode('utf-8').upper()
-		num_leading_zeros = 0
-		for secret_char in secret_string:
-			if secret_char == b16[0]: num_leading_zeros += 1
-			else: break
-		secret_int = charset_to_int(secret_string, b16)
-		points = secret_int_to_points(secret_int, share_threshold, num_shares)
-		maxim = 0
-		for point in points:
-			if point[1] > maxim: maxim = point[1]
-		char_count = ceil(log(maxim, len(self.share_charset)))
-		n = ceil(log(num_shares, len(self.share_charset)))
-		shares = []
-		for point in points:
-			share_string = point_to_share_string(
-				point, n, char_count, self.share_charset, num_leading_zeros)
-			shares.append(share_string)
-		return shares
-
-	def recover(self, shares, mode='str'):
-		assert mode in ['str', 'bytes']
-		num_leading_zeros = None
-		points = []
-		for share in shares:
-			point, num_leading_zeros = share_string_to_point(
-				share, self.share_charset)
-			points.append(point)
-		secret_int = points_to_secret_int(points)
-		secret_string = int_to_charset(secret_int, b16)
-		if num_leading_zeros:
-			leading_zeros = b16[0] * num_leading_zeros
-			secret_string = leading_zeros + secret_string
-		secret_string = unhexlify(secret_string)
-		if mode == 'str': return secret_string.decode('utf-8')
-		elif mode == 'bytes': return secret_string
 
 b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
