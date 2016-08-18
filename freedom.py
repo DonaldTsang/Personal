@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import re
+from textwrap import wrap
 
 # https://github.com/natmchugh/drunken-bishop/blob/master/drunken-bishop.py
 # https://github.com/atoponce/keyart/blob/master/keyart
@@ -14,6 +15,20 @@ def trim(string, length, char): # trim padding of a string
 def insert(string, char, index): # insert string into another string
 	return string[:index] + char + string[index:]
 
+def new_line(text, count): # split long string and add newline
+	return "\n".join(wrap(text, count))
+
+def multiline():
+	print("Enter as many lines of text as needed" + \
+		"When done, enter '>' on a line by itself.")
+	buffer = []
+	while True:
+	    line = input()
+	    if line == ">": break
+	    buffer.append(line)
+	return "\n".join(buffer)
+
+################################################################################
 ################################################################################
 
 class Codex(object):
@@ -279,8 +294,7 @@ def shiftz(exp):
 """
 
 ################################################################################
-
-import re
+################################################################################
 
 def hex_byte_to_bin(hex_byte): # convert hex byte into a string of bits
 	assert bool(re.fullmatch("[0-9A-Fa-f]{2}", hex_byte))
@@ -616,22 +630,6 @@ def passwd_gen(total, upcase, lowcase, numbers, others = 0, chars = ''):
 	result = list(result); shuffle(result); return "".join(result)
 
 ################################################################################
-
-from textwrap import wrap
-
-def new_line(text, count): # split long string and add newline
-	return "\n".join(wrap(text, count))
-
-def multiline():
-	print("Enter as many lines of text as needed" + \
-		"When done, enter '>' on a line by itself.")
-	buffer = []
-	while True:
-	    line = input()
-	    if line == ">": break
-	    buffer.append(line)
-	return "\n".join(buffer)
-
 ################################################################################
 
 from binascii import hexlify
@@ -664,3 +662,325 @@ def cjk_de(string):
 	result = []
 	for char in string: x = cjk2hex(char); result += [x // 256, x & 255]
 	return bytes(result)
+
+################################################################################
+################################################################################
+
+from math import ceil, log
+
+def calculate_mersenne_primes():
+	# Returns all the mersenne primes with less than 500 digits.
+	mersenne_prime_exponents = [
+		2, 3, 5, 7, 13, 17, 19, 31, 61, 89, 107, 127, 521, 607, 1279]
+	primes = []
+	for exp in mersenne_prime_exponents:
+		prime = 1  << exp
+		prime -= 1; primes.append(prime)
+	return primes
+
+def calculate_thabit_primes():
+	thabit_prime_exponents = [
+		0, 1, 2, 3, 4, 6, 7, 11, 18, 34, 38, 43, 55, 64, 76, 94, 103, 
+			143, 206, 216, 306, 324, 391, 458, 470, 827, 1274]
+	primes = []
+	for exp in thabit_prime_exponents:
+		prime = 3  << exp
+		prime -= 1; primes.append(prime)
+	return primes
+
+SMALLEST_PRIMES = [(2**4 + 1), (2**5 + 5), (2**6 + 3),
+	(2**7 + 3), (2**8 + 1), (2**10 + 7),
+	(2**12 + 3), (2**14 + 27), (2**16 + 1),
+	(2**20 + 7), (2**24 + 43), (2**28 + 3),
+	(2**32 + 15), (2**40 + 15), (2**48 + 21),
+	(2**56 + 81), (2**64 + 13), (2**80 + 13),
+	(2**96 + 61), (2**112 + 25), (2**128 + 51),
+	(2**160 + 7), (2**192 + 133), (2**224 + 735),
+	(2**256 + 297), (2**320 + 27), (2**384 + 231),
+	(2**448 + 211), (2**512 + 75), (2**640 + 115),
+	(2**768 + 183), (2**896 + 993), (2**1024 + 643)]
+STANDARD_PRIMES = SMALLEST_PRIMES
+STANDARD_PRIMES.sort()
+
+def get_large_enough_prime(batch):
+	# Returns a prime number that is greater all the numbers in the batch.
+	# build a list of primes
+	primes = STANDARD_PRIMES
+	# find a prime that is greater than all the numbers in the batch
+	for prime in primes:
+		numbers_greater_than_prime = [i for i in batch if i > prime]
+		if len(numbers_greater_than_prime) == 0: return prime
+	return None
+
+################################################################################
+
+from random import randint
+
+def egcd(a, b):
+	if a == 0: return (b, 0, 1)
+	else:
+		g, y, x = egcd(b % a, a)
+		return (g, x - (b // a) * y, y)
+
+def xgcd(b, n):
+	x0, x1, y0, y1 = 1, 0, 0, 1
+	while n != 0:
+		q, b, n = b // n, n, b % n
+		x0, x1, y0, y1 = x1, x0 - q * x1, y1, y0 - q * y1
+	return  b, x0, y0
+
+def mod_inverse(k, prime):
+	k %= prime
+	if k < 0: r = egcd(prime, -k)[2]
+	else: r = egcd(prime, k)[2]
+	return (prime + r) % prime
+
+def random_polynomial(degree, intercept, upper_bound):
+	# Generates a random polynomial with positive coefficients.
+	if degree < 0: raise ValueError('Degree must be non-negative.')
+	coefficients = [intercept]
+	for i in range(degree):
+		random_coeff = randint(0, upper_bound-1)
+		coefficients.append(random_coeff)
+	return coefficients
+
+def get_polynomial_points(coefficients, num_points, prime):
+	# Calculates the first n polynomial points.
+	# [ (1, f(1)), (2, f(2)), ... (n, f(n)) ]
+	points = []
+	for x in range(1, num_points+1):
+		# start with x=1 and calculate the value of y
+		y = coefficients[0]
+		# calculate each term and add it to y, using modular math
+		for i in range(1, len(coefficients)):
+			exponentiation = (x**i) % prime
+			term = (coefficients[i] * exponentiation) % prime
+			y += term; y %= prime
+		# add the point to the list of points
+		points.append((x, y))
+	return points
+
+def modular_lagrange_interpolation(x, points, prime):
+	# break the points up into lists of x and y values
+	x_values, y_values = zip(*points)
+	# initialize f(x) and begin the calculation: f(x) = SUM( y_i * l_i(x) )
+	f_x = 0
+	for i in range(len(points)):
+		# evaluate the lagrange basis polynomial l_i(x)
+		numerator, denominator = 1, 1
+		for j in range(len(points)):
+			# don't compute a polynomial fraction if i equals j
+			if i == j: continue
+			# compute a fraction & update the existing numerator + denominator
+			numerator = (numerator * (x - x_values[j])) % prime
+			denominator = (denominator * (x_values[i] - x_values[j])) % prime
+		# get the polynomial from the numerator + denominator mod inverse
+		lagrange_polynomial = numerator * mod_inverse(denominator, prime)
+		# multiply the current y & the evaluated polynomial & add it to f(x)
+		f_x = (prime + f_x + (y_values[i] * lagrange_polynomial)) % prime
+	return f_x
+
+################################################################################
+
+def int_to_charset(val, charset):
+	# Turn a non-negative integer into a string.
+	if not val >= 0: raise ValueError('"val" must be a non-negative integer')
+	if val == 0: return charset[0]
+	output = ""
+	while val > 0:
+		val, digit = divmod(val, len(charset))
+		output += charset[digit]
+	# reverse the characters in the output and return
+	return output[::-1]
+
+def int_to_charset_reverse(val, charset):
+	return int_to_charset(val, charset)[::-1]
+
+def charset_to_int(s, charset):
+	# Turn a string into a non-negative integer.
+	output = 0
+	for char in s: output *= len(charset); output += charset.index(char)
+	return output
+
+def charset_reverse_to_int(s, charset):
+	return charset_to_int(s[::-1], charset)
+
+################################################################################
+
+def secret_int_to_points(secret_int, point_threshold, num_points, prime=None):
+	# Split a secret integer into shares (pair of integers or x,y coords).
+	# Sample points of a random polynomial with y intercept equal to secret int.
+	if point_threshold < 2:
+		raise ValueError("Threshold must be >= 2.")
+	if point_threshold > num_points:
+		raise ValueError("Threshold must be < the total number of points.")
+	if not prime:
+		prime = get_large_enough_prime([secret_int, num_points])
+		if not prime:
+			raise ValueError("Secret is too long for share calculation!")
+	coefficients = random_polynomial(point_threshold-1, secret_int, prime)
+	points = get_polynomial_points(coefficients, num_points, prime)
+	return points
+
+def points_to_secret_int(points, prime=None):
+	# Join int points into a secret int.
+	# Get the intercept of a random polynomial defined by the given points.
+
+	if not isinstance(points, list):
+		raise ValueError("Points must be in list form.")
+	for point in points:
+		if not isinstance(point, tuple) and len(point) == 2:
+			raise ValueError("Each point must be a tuple of two values.")
+		if not (isinstance(point[0], int) and isinstance(point[1], int)):
+			raise ValueError("Each value in the point must be an int.")
+	x_values, y_values = zip(*points)
+	if not prime:
+		prime = get_large_enough_prime(y_values)
+		if not prime:
+			raise ValueError("Error! Point is too large for share calculation!")
+	free_coefficient = modular_lagrange_interpolation(0, points, prime)
+	secret_int = free_coefficient  # the secret int is the free coefficient
+	return secret_int
+
+def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
+	# Convert a point (a tuple of two integers) into a share string - that is,
+	# a representation of the point that uses the charset provided.
+	# point should be in the format (1, 4938573982723...)
+	if '~' in charset:
+		raise ValueError(
+			'The character "~" cannot be in the supplied charset.')
+	if not (isinstance(point, tuple) and len(point) == 2 and
+			isinstance(point[0], int) and isinstance(point[1], int)):
+		raise ValueError(
+			'Point format is invalid. Must be a pair of integers.')
+	x, y = point
+	x_string, y_string = int_to_charset(x,  b16), int_to_charset(y, charset)
+	share_string = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
+	if num_leading_zeros != 0:
+		share_string += '~' + int_to_charset(num_leading_zeros, b16)
+	return share_string
+
+def share_string_to_point(share_string, charset):
+	# Convert a share string to a point (a tuple of integers).
+	# share should be in the format "01-d051080de7..."
+	if '~' in charset:
+		raise ValueError('The character "~" cannot be in the charset.')
+	if not isinstance(share_string, str):
+		raise ValueError('Share format is invalid.')
+	num_leading_zeros = None
+	if share_string.count('~') == 1:
+		x_string, y_string = share_string.split('~')
+	elif share_string.count('~') == 2:
+		x_string, y_string, num_leading_zeros = share_string.split('~')
+	else:
+		raise ValueError('Share format is invalid.')
+	if (set(x_string) - set(charset)) or (set(y_string) - set(charset)):
+		raise ValueError("Share has characters that aren't in the charset.")
+	x, y = charset_to_int(x_string, b16), charset_to_int(y_string, charset)
+	if num_leading_zeros:
+		num_leading_zeros = charset_to_int(num_leading_zeros, b16)
+	return (x, y), num_leading_zeros
+
+""" Creates a secret sharer, which can convert from a secret string to a
+	list of shares and vice versa. The splitter is initialized with the
+	character set of the secrets and the character set of the shares that
+	it expects to be dealing with.
+"""
+
+class SS():
+	def __init__(self, secret_charset, share_charset):
+		self.secret_charset = secret_charset
+		self.share_charset = share_charset
+
+	def split(self, secret_string, share_threshold, num_shares):
+		num_leading_zeros = 0
+		for secret_char in secret_string:
+			if secret_char == self.secret_charset[0]: num_leading_zeros += 1
+			else: break
+		secret_int = charset_to_int(secret_string, self.secret_charset)
+		points = secret_int_to_points(secret_int, share_threshold, num_shares)
+		maxim = 0
+		for point in points:
+			if point[1] > maxim: maxim = point[1]
+		char_count = ceil(log(maxim, len(self.share_charset)))
+		n = ceil(log(num_shares, len(self.share_charset)))
+		shares = []
+		for point in points:
+			share_string = point_to_share_string(
+				point, n, char_count, self.share_charset, num_leading_zeros)
+			shares.append(share_string)
+		return shares
+
+	def recover(self, shares):
+		num_leading_zeros = None
+		points = []
+		for share in shares:
+			point, num_leading_zeros = share_string_to_point(
+				share, self.share_charset)
+			points.append(point)
+		secret_int = points_to_secret_int(points)
+		secret_string = int_to_charset(secret_int, self.secret_charset)
+		if num_leading_zeros:
+			leading_zeros = self.secret_charset[0] * num_leading_zeros
+			secret_string = leading_zeros + secret_string
+		return secret_string
+
+from binascii import hexlify, unhexlify
+
+class SS_string():
+	def __init__(self, share_charset):
+		self.share_charset = share_charset
+
+	def split(self, secret_string, share_threshold, num_shares):
+		if isinstance(secret_string, str): secret_string = secret_string.encode('utf-8')
+		secret_string = hexlify(secret_string).decode('utf-8').upper()
+		num_leading_zeros = 0
+		for secret_char in secret_string:
+			if secret_char == b16[0]: num_leading_zeros += 1
+			else: break
+		secret_int = charset_to_int(secret_string, b16)
+		points = secret_int_to_points(secret_int, share_threshold, num_shares)
+		maxim = 0
+		for point in points:
+			if point[1] > maxim: maxim = point[1]
+		char_count = ceil(log(maxim, len(self.share_charset)))
+		n = ceil(log(num_shares, len(self.share_charset)))
+		shares = []
+		for point in points:
+			share_string = point_to_share_string(
+				point, n, char_count, self.share_charset, num_leading_zeros)
+			shares.append(share_string)
+		return shares
+
+	def recover(self, shares, mode='str'):
+		assert mode in ['str', 'bytes']
+		num_leading_zeros = None
+		points = []
+		for share in shares:
+			point, num_leading_zeros = share_string_to_point(
+				share, self.share_charset)
+			points.append(point)
+		secret_int = points_to_secret_int(points)
+		secret_string = int_to_charset(secret_int, b16)
+		if num_leading_zeros:
+			leading_zeros = b16[0] * num_leading_zeros
+			secret_string = leading_zeros + secret_string
+		secret_string = unhexlify(secret_string)
+		if mode == 'str': return secret_string.decode('utf-8')
+		elif mode == 'bytes': return secret_string
+
+b16 = "0123456789ABCDEF"
+b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
+	"0123456789+/"
+url = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" + \
+	"0123456789-_"
+unix = "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
+	"abcdefghijklmnopqrstuvwxyz"
+xxcode = "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"  + \
+	"abcdefghijklmnopqrstuvwxyz"
+uucode = " !\"#$%&'()*+,-./0123456789:;<=>?@" + \
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_"
+binhex = "!\"#$%&'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`" + \
+	"abcdefhijklmpqr"
+options = [b16, b32, b64, url, unix, xxcode, uucode, binhex]
