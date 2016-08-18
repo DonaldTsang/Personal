@@ -933,7 +933,7 @@ def split_str(secret_string, share_charset, share_threshold, num_shares):
 	SS_class = SS(b16, share_charset)
 	return SS.split(SS_class, secret_string, share_threshold, num_shares)
 
-def recover_str(shares, share_charset):
+def recover_str(shares, share_charset, mode='str'):
 	assert mode in ['str', 'bytes']
 	SS_class = (b16, share_charset)
 	secret_string = unhexlify(recover(SS_class, shares))
