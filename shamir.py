@@ -20,52 +20,17 @@ def calculate_thabit_primes():
 		prime -= 1; primes.append(prime)
 	return primes
 
-SMALLEST_0005BIT_PRIME = (2**4 + 1) #
-SMALLEST_0006BIT_PRIME = (2**5 + 5)
-SMALLEST_0007BIT_PRIME = (2**6 + 3)
-SMALLEST_0008BIT_PRIME = (2**7 + 3)
-SMALLEST_0009BIT_PRIME = (2**8 + 1) #
-SMALLEST_0011BIT_PRIME = (2**10 + 7)
-SMALLEST_0013BIT_PRIME = (2**12 + 3)
-SMALLEST_0015BIT_PRIME = (2**14 + 27)
-SMALLEST_0017BIT_PRIME = (2**16 + 1) #
-SMALLEST_0021BIT_PRIME = (2**20 + 7)
-SMALLEST_0025BIT_PRIME = (2**24 + 43)
-SMALLEST_0029BIT_PRIME = (2**28 + 3)
-SMALLEST_0033BIT_PRIME = (2**32 + 15) #
-SMALLEST_0041BIT_PRIME = (2**40 + 15)
-SMALLEST_0049BIT_PRIME = (2**48 + 21)
-SMALLEST_0057BIT_PRIME = (2**56 + 81)
-SMALLEST_0065BIT_PRIME = (2**64 + 13) #
-SMALLEST_0081BIT_PRIME = (2**80 + 13)
-SMALLEST_0097BIT_PRIME = (2**96 + 61)
-SMALLEST_0113BIT_PRIME = (2**112 + 25)
-SMALLEST_0129BIT_PRIME = (2**128 + 51) #
-SMALLEST_0161BIT_PRIME = (2**160 + 7)
-SMALLEST_0193BIT_PRIME = (2**192 + 133)
-SMALLEST_0225BIT_PRIME = (2**224 + 735)
-SMALLEST_0257BIT_PRIME = (2**256 + 297) #
-SMALLEST_0321BIT_PRIME = (2**320 + 27)
-SMALLEST_0385BIT_PRIME = (2**384 + 231)
-SMALLEST_0449BIT_PRIME = (2**448 + 211)
-SMALLEST_0513BIT_PRIME = (2**512 + 75) #
-SMALLEST_0641BIT_PRIME = (2**640 + 115)
-SMALLEST_0769BIT_PRIME = (2**768 + 183)
-SMALLEST_0897BIT_PRIME = (2**896 + 993)
-SMALLEST_1025BIT_PRIME = (2**1024 + 643) #
-
-SMALLEST_PRIMES = [
-	SMALLEST_0005BIT_PRIME, SMALLEST_0006BIT_PRIME, SMALLEST_0007BIT_PRIME,
-	SMALLEST_0008BIT_PRIME, SMALLEST_0009BIT_PRIME, SMALLEST_0011BIT_PRIME,
-	SMALLEST_0013BIT_PRIME, SMALLEST_0015BIT_PRIME, SMALLEST_0017BIT_PRIME,
-	SMALLEST_0021BIT_PRIME, SMALLEST_0025BIT_PRIME, SMALLEST_0029BIT_PRIME,
-	SMALLEST_0033BIT_PRIME, SMALLEST_0041BIT_PRIME, SMALLEST_0049BIT_PRIME,
-	SMALLEST_0057BIT_PRIME, SMALLEST_0065BIT_PRIME, SMALLEST_0081BIT_PRIME,
-	SMALLEST_0097BIT_PRIME, SMALLEST_0113BIT_PRIME, SMALLEST_0129BIT_PRIME,
-	SMALLEST_0161BIT_PRIME, SMALLEST_0193BIT_PRIME, SMALLEST_0225BIT_PRIME,
-	SMALLEST_0257BIT_PRIME, SMALLEST_0321BIT_PRIME, SMALLEST_0385BIT_PRIME,
-	SMALLEST_0449BIT_PRIME, SMALLEST_0513BIT_PRIME, SMALLEST_0641BIT_PRIME,
-	SMALLEST_0769BIT_PRIME, SMALLEST_0897BIT_PRIME, SMALLEST_1025BIT_PRIME]
+SMALLEST_PRIMES = [(2**4 + 1), (2**5 + 5), (2**6 + 3),
+	(2**7 + 3), (2**8 + 1), (2**10 + 7),
+	(2**12 + 3), (2**14 + 27), (2**16 + 1),
+	(2**20 + 7), (2**24 + 43), (2**28 + 3),
+	(2**32 + 15), (2**40 + 15), (2**48 + 21),
+	(2**56 + 81), (2**64 + 13), (2**80 + 13),
+	(2**96 + 61), (2**112 + 25), (2**128 + 51),
+	(2**160 + 7), (2**192 + 133), (2**224 + 735),
+	(2**256 + 297), (2**320 + 27), (2**384 + 231),
+	(2**448 + 211), (2**512 + 75), (2**640 + 115),
+	(2**768 + 183), (2**896 + 993), (2**1024 + 643)]
 STANDARD_PRIMES = SMALLEST_PRIMES
 STANDARD_PRIMES.sort()
 
@@ -248,55 +213,13 @@ def share_string_to_point(share_string, charset):
 		num_leading_zeros = charset_to_int(num_leading_zeros, b16)
 	return (x, y), num_leading_zeros
 
-class SS():
-	""" Creates a secret sharer, which can convert from a secret string to a
-		list of shares and vice versa. The splitter is initialized with the
-		character set of the secrets and the character set of the shares that
-		it expects to be dealing with.
-	"""
-	def __init__(self, secret_charset, share_charset):
-		self.secret_charset = secret_charset
-		self.share_charset = share_charset
-
-	def split(self, secret_string, share_threshold, num_shares):
-		num_leading_zeros = 0
-		for secret_char in secret_string:
-			if secret_char == self.secret_charset[0]: num_leading_zeros += 1
-			else: break
-		secret_int = charset_to_int(secret_string, self.secret_charset)
-		points = secret_int_to_points(secret_int, share_threshold, num_shares)
-		maxim = 0
-		for point in points:
-			if point[1] > maxim: maxim = point[1]
-		char_count = ceil(log(maxim, len(self.share_charset)))
-		n = ceil(log(num_shares, len(self.share_charset)))
-		shares = []
-		for point in points:
-			share_string = point_to_share_string(
-				point, n, char_count, self.share_charset, num_leading_zeros)
-			shares.append(share_string)
-		return shares
-
-	def recover(self, shares):
-		num_leading_zeros = None
-		points = []
-		for share in shares:
-			point, num_leading_zeros = share_string_to_point(
-				share, self.share_charset)
-			points.append(point)
-		secret_int = points_to_secret_int(points)
-		secret_string = int_to_charset(secret_int, self.secret_charset)
-		if num_leading_zeros:
-			leading_zeros = self.secret_charset[0] * num_leading_zeros
-			secret_string = leading_zeros + secret_string
-		return secret_string
+""" Creates a secret sharer, which can convert from a secret string to a
+	list of shares and vice versa. The splitter is initialized with the
+	character set of the secrets and the character set of the shares that
+	it expects to be dealing with.
+"""
 
 class SS():
-	""" Creates a secret sharer, which can convert from a secret string to a
-		list of shares and vice versa. The splitter is initialized with the
-		character set of the secrets and the character set of the shares that
-		it expects to be dealing with.
-	"""
 	def __init__(self, secret_charset, share_charset):
 		self.secret_charset = secret_charset
 		self.share_charset = share_charset
@@ -337,11 +260,6 @@ class SS():
 from binascii import hexlify, unhexlify
 
 class SS_string():
-	""" Creates a secret sharer, which can convert from a secret string to a
-		list of shares and vice versa. The splitter is initialized with the
-		character set of the secrets and the character set of the shares that
-		it expects to be dealing with.
-	"""
 	def __init__(self, share_charset):
 		self.share_charset = share_charset
 
