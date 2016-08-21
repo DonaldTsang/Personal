@@ -79,8 +79,7 @@ def mod_inverse(number):
 prime = 2**256-189
 
 def create(minimum, shares, raw):
-	if (shares < minimum):
-		return
+	if (shares < minimum): assert False, "shares should be bigger than minimum"
 	secret = split_ints(raw)
 	numbers = [0]
 	polynomial = []
