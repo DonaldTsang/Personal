@@ -1,4 +1,4 @@
-import base64, codecs, math, struct
+import base64, codecs, struct
 from random import SystemRandom
 
 # https://github.com/SSSaaS/sssa-python
