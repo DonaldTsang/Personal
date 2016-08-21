@@ -65,7 +65,7 @@ def from_base64(number):
 def gcd(a, b):
 	if b == 0: return [a, 1, 0]
 	else:
-		n, c = int(math.floor(a*1.0/b)), a % b
+		n, c = a//b, a % b
 		r = gcd(b, c)
 		return [r[0], r[2], r[1] - r[2]*n]
 
