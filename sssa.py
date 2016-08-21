@@ -123,3 +123,5 @@ def combine(shares):
 			working = ((originy * numerator * mod_inverse(denominator)) + prime)
 			secret[part_index] = (secret[part_index] + working) % prime
 	return merge_ints(secret)
+
+# A message of x bytes will create a share of (x//32+1)*88 characters
