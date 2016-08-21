@@ -85,16 +85,14 @@ def create(minimum, shares, raw):
 		polynomial.append([secret[i]])
 		for j in range(1, minimum):
 			value = random()
-			while value in numbers:
-				value = random()
+			while value in numbers: value = random()
 			numbers.append(value)
 			polynomial[i].append(value)
 	result = [""]*shares
 	for i in range(0, shares):
 		for j in range(0, len(secret)):
 			value = random()
-			while value in numbers:
-				value = random()
+			while value in numbers: value = random()
 			numbers.append(value)
 			y = evaluate_polynomial(polynomial[j], value)
 			result[i] += to_base64(value)
