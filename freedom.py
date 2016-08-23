@@ -849,28 +849,27 @@ def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
 	x_string, y_string = int_to_charset(x,  b16), int_to_charset(y, charset)
-	share_string = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
+	share_str = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
 	if num_leading_zeros != 0:
-		share_string += '~' + int_to_charset(num_leading_zeros, b16)
-	return share_string
+		share_str += '~' + int_to_charset(num_leading_zeros, b16)
+	return share_str
 
-def share_string_to_point(share_string, charset):
+def share_string_to_point(share_str, charset):
 	# Convert a share string to a point (a tuple of integers).
 	# share should be in the format "01~D051080DE7..."
 	if '~' in charset:
 		raise ValueError('The character "~" cannot be in the charset.')
-	if not isinstance(share_string, str):
+	if not isinstance(share_str, str):
 		raise ValueError('Share format is invalid.')
 	num_leading_zeros = None
-	if share_string.count('~') == 1:
-		x_string, y_string = share_string.split('~')
-	elif share_string.count('~') == 2:
-		x_string, y_string, num_leading_zeros = share_string.split('~')
-	else:
-		raise ValueError('Share format is invalid.')
-	if (set(x_string) - set(charset)) or (set(y_string) - set(charset)):
+	if share_str.count('~') == 1:
+		x_str, y_str = share_str.split('~')
+	elif share_str.count('~') == 2:
+		x_str, y_str, num_leading_zeros = share_str.split('~')
+	else: raise ValueError('Share format is invalid.')
+	if (set(x_str) - set(charset)) or (set(y_str) - set(charset)):
 		raise ValueError("Share has characters that aren't in the charset.")
-	x, y = charset_to_int(x_string, b16), charset_to_int(y_string, charset)
+	x, y = charset_to_int(x_str, b16), charset_to_int(y_str, charset)
 	if num_leading_zeros:
 		num_leading_zeros = charset_to_int(num_leading_zeros, b16)
 	return (x, y), num_leading_zeros
