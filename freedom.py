@@ -710,7 +710,7 @@ def get_large_enough_prime(batch):
 
 ################################################################################
 
-from random import randint
+from random import randrange
 
 def egcd(a, b):
 	if a == 0: return (b, 0, 1)
@@ -736,7 +736,7 @@ def random_polynomial(degree, intercept, upper_bound):
 	if degree < 0: raise ValueError('Degree must be non-negative.')
 	coefficients = [intercept]
 	for i in range(degree):
-		random_coeff = randint(0, upper_bound-1)
+		random_coeff = randrange(0, upper_bound)
 		coefficients.append(random_coeff)
 	return coefficients
 
