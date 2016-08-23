@@ -836,7 +836,7 @@ def points_to_secret_int(points, prime=None):
 	secret_int = free_coefficient  # the secret int is the free coefficient
 	return secret_int
 
-def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
+def point_to_share_str(point, n, char_count, charset, num_of_0):
 	# Convert a point (a tuple of two integers) into a share string - that is,
 	# a representation of the point that uses the charset provided.
 	# point should be in the format (1, 4938573982723...)
@@ -848,31 +848,28 @@ def point_to_share_string(point, n, char_count, charset, num_leading_zeros):
 		raise ValueError(
 			'Point format is invalid. Must be a pair of integers.')
 	x, y = point
-	x_string, y_string = int_to_charset(x,  b16), int_to_charset(y, charset)
-	share_str = x_string.rjust(n, charset[0]) + '~' + y_string.rjust(char_count, charset[0])
-	if num_leading_zeros != 0:
-		share_str += '~' + int_to_charset(num_leading_zeros, b16)
+	x_str, y_str = int_to_charset(x,  b16), int_to_charset(y, charset)
+	share_str = x_str.rjust(n, charset[0]) + '~' + y_str.rjust(char_count, charset[0])
+	if num_of_0 != 0:
+		share_str += '~' + int_to_charset(num_of_0, b16)
 	return share_str
 
-def share_string_to_point(share_str, charset):
+def share_str_to_point(share_str, charset):
 	# Convert a share string to a point (a tuple of integers).
 	# share should be in the format "01~D051080DE7..."
 	if '~' in charset:
 		raise ValueError('The character "~" cannot be in the charset.')
 	if not isinstance(share_str, str):
 		raise ValueError('Share format is invalid.')
-	num_leading_zeros = None
-	if share_str.count('~') == 1:
-		x_str, y_str = share_str.split('~')
-	elif share_str.count('~') == 2:
-		x_str, y_str, num_leading_zeros = share_str.split('~')
+	num_of_0 = None
+	if share_str.count('~') == 1: x_str, y_str = share_str.split('~')
+	elif share_str.count('~') == 2: x_str, y_str, num_of_0 = share_str.split('~')
 	else: raise ValueError('Share format is invalid.')
 	if (set(x_str) - set(charset)) or (set(y_str) - set(charset)):
 		raise ValueError("Share has characters that aren't in the charset.")
 	x, y = charset_to_int(x_str, b16), charset_to_int(y_str, charset)
-	if num_leading_zeros:
-		num_leading_zeros = charset_to_int(num_leading_zeros, b16)
-	return (x, y), num_leading_zeros
+	if num_of_0: num_of_0 = charset_to_int(num_of_0, b16)
+	return (x, y), num_of_0
 
 """ Creates a secret sharer, which can convert from a secret string to a
 	list of shares and vice versa. Splitter is initialized with
@@ -884,12 +881,12 @@ class SS():
 		self.secret_charset = secret_charset
 		self.share_charset = share_charset
 
-	def split(self, secret_string, share_threshold, num_shares):
-		num_leading_zeros = 0
-		for secret_char in secret_string:
-			if secret_char == self.secret_charset[0]: num_leading_zeros += 1
+	def split(self, secret_str, share_threshold, num_shares):
+		num_of_0 = 0
+		for secret_char in secret_str:
+			if secret_char == self.secret_charset[0]: num_of_0 += 1
 			else: break
-		secret_int = charset_to_int(secret_string, self.secret_charset)
+		secret_int = charset_to_int(secret_str, self.secret_charset)
 		points = secret_int_to_points(secret_int, share_threshold, num_shares)
 		maxim = 0
 		for point in points:
@@ -898,39 +895,39 @@ class SS():
 		n = ceil(log(num_shares, len(self.share_charset)))
 		shares = []
 		for point in points:
-			share_string = point_to_share_string(
-				point, n, char_count, self.share_charset, num_leading_zeros)
-			shares.append(share_string)
+			share_str = point_to_share_str(
+				point, n, char_count, self.share_charset, num_of_0)
+			shares.append(share_str)
 		return shares
 
 	def recover(self, shares):
-		num_leading_zeros = None
+		num_of_0 = None
 		points = []
 		for share in shares:
-			point, num_leading_zeros = share_string_to_point(
+			point, num_of_0 = share_str_to_point(
 				share, self.share_charset)
 			points.append(point)
 		secret_int = points_to_secret_int(points)
-		secret_string = int_to_charset(secret_int, self.secret_charset)
-		if num_leading_zeros:
-			leading_zeros = self.secret_charset[0] * num_leading_zeros
-			secret_string = leading_zeros + secret_string
-		return secret_string
+		secret_str = int_to_charset(secret_int, self.secret_charset)
+		if num_of_0:
+			leading_0 = self.secret_charset[0] * num_of_0
+			secret_str = leading_0 + secret_str
+		return secret_str
 
 from binascii import hexlify, unhexlify
 
-def split_str(secret_string, share_charset, share_threshold, num_shares):
-	if isinstance(secret_string, str): secret_string = secret_string.encode('utf-8')
-	secret_string = hexlify(secret_string).decode('utf-8').upper()
+def split_str(secret_str, share_charset, share_threshold, num_shares):
+	if isinstance(secret_str, str): secret_str = secret_str.encode('utf-8')
+	secret_str = hexlify(secret_str).decode('utf-8').upper()
 	SS_class = SS(b16, share_charset)
-	return SS.split(SS_class, secret_string, share_threshold, num_shares)
+	return SS.split(SS_class, secret_str, share_threshold, num_shares)
 
 def recover_str(shares, share_charset, mode='str'): # need to fix
 	assert mode in ['str', 'bytes']
 	SS_class = SS(b16, share_charset)
-	secret_string = unhexlify(recover(SS_class, shares))
-	if mode == 'str': return secret_string.decode('utf-8')
-	elif mode == 'bytes': return secret_string
+	secret_str = unhexlify(recover(SS_class, shares))
+	if mode == 'str': return secret_str.decode('utf-8')
+	elif mode == 'bytes': return secret_str
 
 b16 = "0123456789ABCDEF"
 b32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
