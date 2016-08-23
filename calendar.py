@@ -3,13 +3,14 @@ from datetime import datetime
 def calendar(year, month, day):
 	# First day of summer is always June 21
 	# First day of winter is always December 21
-	assert isinstance(year, int)
-	assert isinstance(month, int)
-	assert year >= 1935, "Fuhrer error"
-	assert 1 <= month <= 12, "month error"
-	assert 1 <= day, "day error"
-	if month in [1, 3, 5, 7, 8, 10, 12]: assert day <= 31, "day error"
-	elif month in [4, 6, 9, 11]: assert day <= 30, "day error"
+	assert isinstance(year, int) and year >= 1935, "Fuhrer error"
+	assert isinstance(month, int)and 1 <= month <= 12, "month error"
+	assert isinstance(day, int) and 1 <= day, "day error"
+	
+	if month in [1, 3, 5, 7, 8, 10, 12]:
+		assert day <= 31, "day error"
+	elif month in [4, 6, 9, 11]: 
+		assert day <= 30, "day error"
 	elif month == 2: # Gregorian calendar
 		if year % 400 == 0 or (year % 100 != 0 and year % 4 == 0):
 			assert day <= 29, "day error"
@@ -24,7 +25,8 @@ def calendar(year, month, day):
 	season, day_count = divmod(day_count, 91)
 	week_count, day_count = divmod(day_count, 7)
 	season = ["winter", "spring", "summer", "autumn"][season]
-	week_count += 1; day_count += 1
+	week_count += 1
+	day_count += 1
 	return year, season, week_count, day_count
 
 def today():
