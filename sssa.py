@@ -4,6 +4,8 @@ from random import SystemRandom
 # https://github.com/SSSaaS/sssa-python
 
 prime=2**256-189
+hex_len = ...
+b64_len = ((hex_len // 2 - 1) // 3 + 1) * 4
 
 def random(): return SystemRandom().randrange(prime)
 
