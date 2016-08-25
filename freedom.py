@@ -79,8 +79,7 @@ class Codex(object):
 		assert bool(re.fullmatch(self.regex % self.limit, string))
 		result, string = 0, string[::-1].lstrip("0")
 		for char in string:
-			result *= self.base
-			result += self.digit.index(char)
+			result *= self.base; result += self.digit.index(char)
 		assert result < self.bound, "Error: number error"
 		return result
 
@@ -90,8 +89,7 @@ class Codex(object):
 		assert len(string) <= (self.byte), "Error: string too long"
 		result, string = 0, string[::-1].lstrip(b'\x00')
 		for char in string:
-			result *= 256
-			result += char
+			result *= 256; result += char
 		return result
 
 	def i2u(integer, self): # decode integer into unicode
