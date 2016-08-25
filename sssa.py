@@ -4,8 +4,8 @@ from random import SystemRandom
 # https://github.com/SSSaaS/sssa-python
 
 prime=2**256-189
-hex_len = ...
-b64_len = ((hex_len // 2 - 1) // 3 + 1) * 4
+hex_len = 64
+b64_len = ((hex_len / 2 - 1) / 3 + 1) * 4
 
 def random(): return SystemRandom().randrange(prime)
 
@@ -14,15 +14,15 @@ def split_ints(secret):
 	working, byte_object = None, None
 	try: byte_object = bytes(secret, "utf8")
 	except: byte_object = bytes(secret)
-	text = codecs.encode(byte_object, 'hex_codec').decode('utf8') + "00"*(32 - (len(byte_object) % 32))
-	for i in range(0, int(len(text)/64)): result.append(int(text[i*64:(i+1)*64], 16))
+	text = codecs.encode(byte_object, 'hex_codec').decode('utf8') + "00"*(hex_len/2 - (len(byte_object) % (hex_len/2)))
+	for i in range(0, int(len(text)/hex_len)): result.append(int(text[i*hex_len:(i+1)*hex_len], 16))
 	return result
 
 def merge_ints(secrets):
 	result = ""
 	for secret in secrets:
-		hex_data = hex(secret)[2:].replace("L", "")
-		result += "0"*(64 - (len(hex_data))) + hex_data
+		hex_data = hex(secret)[2:]
+		result += "0"*(hex_len - (len(hex_data))) + hex_data
 	byte_object = None
 	try:
 		byte_object = bytes(result, "utf8")
@@ -39,12 +39,12 @@ def evaluate_polynomial(coefficients, value):
 	return result
 
 def to_base64(number):
-	tmp = hex(number)[2:].replace("L", "")
-	tmp = "0"*(64 - len(tmp)) + tmp
+	tmp = hex(number)[2:]
+	tmp = "0"*(hex_len - len(tmp)) + tmp
 	try: tmp = bytes(tmp, "utf8")
 	except: tmp = bytes(tmp)
-	result = str(base64.urlsafe_b64encode(b'\00'*(64 - len(tmp)) + codecs.decode(tmp, 'hex_codec')).decode('utf8'))
-	if len(result) != 44:
+	result = str(base64.urlsafe_b64encode(b'\00'*(hex_len - len(tmp)) + codecs.decode(tmp, 'hex_codec')).decode('utf8'))
+	if len(result) != b64_len/2:
 		print("error: result, tmp, number")
 		print(result)
 		print(len(result))
@@ -104,12 +104,12 @@ def create(minimum, shares, raw):
 def combine(shares):
 	secrets = []
 	for index,share in enumerate(shares):
-		if len(share) % 88 != 0: return
-		count = int(len(share) / 88)
+		if len(share) % b64_len != 0: return
+		count = int(len(share) / b64_len)
 		secrets.append([])
 		for i in range(0, count):
-			cshare = share[i*88:(i+1)*88]
-			secrets[index].append([from_base64(cshare[0:44]), from_base64(cshare[44:88])])
+			cshare = share[i*b64_len:(i+1)*b64_len]
+			secrets[index].append([from_base64(cshare[0:b64_len/2]), from_base64(cshare[b64_len/2:b64_len])])
 	secret = [0] * len(secrets[0])
 	for part_index,part in enumerate(secret):
 		for share_index,share in enumerate(secrets):
