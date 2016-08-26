@@ -714,7 +714,7 @@ def egcd(a, b):
 	if a == 0: return (b, 0, 1)
 	else:
 		g, y, x = egcd(b % a, a)
-		return (g, x - (b // a) * y, y)
+		return g, x - (b // a) * y, y
 
 def xgcd(b, n):
 	x0, x1, y0, y1 = 1, 0, 0, 1
@@ -723,7 +723,7 @@ def xgcd(b, n):
 		x0, x1, y0, y1 = x1, x0 - q * x1, y1, y0 - q * y1
 	return  b, x0, y0
 
-def mod_inverse(k, prime):
+def mod_inv(k, prime):
 	k %= prime
 	if k < 0: r = egcd(prime, -k)[2]
 	else: r = egcd(prime, k)[2]
@@ -769,7 +769,7 @@ def modular_lagrange_interpolation(x, points, prime):
 			numerator = (numerator * (x - x_values[j])) % prime
 			denominator = (denominator * (x_values[i] - x_values[j])) % prime
 		# get the polynomial from the numerator + denominator mod inverse
-		lagrange_polynomial = numerator * mod_inverse(denominator, prime)
+		lagrange_polynomial = numerator * mod_inv(denominator, prime)
 		# multiply the current y & the evaluated polynomial & add it to f(x)
 		f_x = (prime + f_x + (y_values[i] * lagrange_polynomial)) % prime
 	return f_x
@@ -964,7 +964,8 @@ def split_ints(secret):
 	byte_object = None
 	try: byte_object = bytes(secret, "utf8")
 	except: byte_object = bytes(secret)
-	text = codecs.encode(byte_object, 'hex_codec').decode('utf8') + "00"*(hex_len - (len(byte_object) % hex_len))
+	text = codecs.encode(byte_object, 'hex_codec').decode('utf8') + \
+		"00"*(hex_len - (len(byte_object) % hex_len))
 	for i in range(0, int(len(text)/(hex_len*2))):
 		result.append(int(text[i*hex_len*2:(i+1)*hex_len*2], 16))
 	return result
@@ -994,7 +995,8 @@ def to_base64(number):
 	tmp = "0"*(hex_len * 2 - len(tmp)) + tmp
 	try: tmp = bytes(tmp, "utf8")
 	except: tmp = bytes(tmp)
-	result = str(base64.urlsafe_b64encode(b'\00'*((hex_len * 2) - len(tmp)) + codecs.decode(tmp, 'hex_codec')).decode('utf8'))
+	result = str(base64.urlsafe_b64encode(b'\00'*((hex_len * 2) - len(tmp)) + \
+		codecs.decode(tmp, 'hex_codec')).decode('utf8'))
 	return result
 
 def from_base64(number):
@@ -1051,7 +1053,8 @@ def combine(shares):
 		secrets.append([])
 		for i in range(0, count):
 			cshare = share[i*b64_len*2:(i+1)*b64_len*2]
-			secrets[index].append([from_base64(cshare[0:b64_len]), from_base64(cshare[b64_len:b64_len*2])])
+			secrets[index].append([from_base64(cshare[0:b64_len]), \
+				from_base64(cshare[b64_len:b64_len*2])])
 	secret = [0] * len(secrets[0])
 	for part_index,part in enumerate(secret):
 		for share_index,share in enumerate(secrets):
