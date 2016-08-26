@@ -945,8 +945,7 @@ options = [b16, b32, b64, url, unix, xxcode, uucode, binhex]
 
 ################################################################################
 
-import base64
-import codecs
+import base64, codecs
 from random import SystemRandom
 
 table = {
