@@ -949,12 +949,12 @@ import base64, codecs
 from random import SystemRandom
 
 table = {
-256: 2**256-189, 32;
-512: 2**512-569, 64;
-768: 2**768-825, 96}
+256: (2**256-189, 32),
+512: (2**512-569, 64),
+768: (2**768-825, 96)}
 
 prime, hex_len = table[256]
-b64_len = ((hex_len // 2 - 1) // 3 + 1) * 4
+b64_len = ((hex_len - 1) // 3 + 1) * 4
 
 def random(): return SystemRandom().randrange(prime)
 
@@ -1046,7 +1046,7 @@ def combine(shares):
 	secrets = []
 	for index,share in enumerate(shares):
 		if len(share) % (b64_len * 2) != 0:
-			return
+			return "Error"
 		count = int(len(share) / (b64_len * 2))
 		secrets.append([])
 		for i in range(0, count):
