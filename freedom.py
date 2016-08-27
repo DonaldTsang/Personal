@@ -28,6 +28,9 @@ def multiline():
 	    buffer.append(line)
 	return "\n".join(buffer)
 
+def matrix(x):
+	return [list(item) for item in list(zip(*x))]
+
 ################################################################################
 
 class Codex(object):
@@ -423,14 +426,10 @@ class Size(object):
 		room = Size.db_multiple(fingerprint, self).split("\n")[:-1]
 		return [item[:-1] for item in room]
 
-	def db_merge(list, self): # combine multiple vertical ascii frames
-		super_list = [Size.db_scrape(item, self) for item in list]
-		output = [""] * len(super_list[0])
-		for y in range(len(super_list[0])):
-			for x in range(len(super_list)):
-				output[y] += super_list[x][y]
-			output[y] += output[y][0]
-		return "\n".join(output) + "\n"
+	def db_merge(list, self):
+		output = matrix([Size.db_scrape(item, self) for item in list])
+		output = "\n".join(["".join(item)+item[0][0] for item in output])+"\n"
+		return output
 
 small, large = Size(8, 4, 16), Size(11, 6, 32)
 
@@ -502,14 +501,10 @@ class Size_knight(object):
 		room = Size_knight.db_multiple(fingerprint, self).split("\n")[:-1]
 		return [item[:-1] for item in room]
 
-	def db_merge(list, self): # combine multiple vertical ascii frames
-		super_list = [Size_knight.db_scrape(item, self) for item in list]
-		output = [""] * len(super_list[0])
-		for y in range(len(super_list[0])):
-			for x in range(len(super_list)):
-				output[y] += super_list[x][y]
-			output[y] += output[y][0]
-		return "\n".join(output) + "\n"
+	def db_merge(list, self):
+		output = matrix([Size.db_scrape(item, self) for item in list])
+		output = "\n".join(["".join(item)+item[0][0] for item in output])+"\n"
+		return output
 
 night_0, night_1 = Size_knight(7, 7, 6), Size_knight(5, 11, 6)
 
