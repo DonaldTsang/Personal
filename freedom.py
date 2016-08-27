@@ -43,8 +43,8 @@ class Codex(object):
 		self.byte_list = byte_list # Byte shortening of a block
 		self.bound, self.byte = 2 ** self.exp, self.exp // 8
 
-	#        |000000000111111111122222222223333333|
-	#        |123456789012345678901234567890123456|
+	#       |000000000111111111122222222223333333|
+	#       |123456789012345678901234567890123456|
 	digit = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" + \
 		"abcdefghijklmnopqrstuvwxyz.-:+=^!/*?()[]@%$#"
 	#   |33344444444445555555555666666666677777777778|
@@ -70,7 +70,7 @@ class Codex(object):
 		assert isinstance(integer, int), "Error: message not integer"
 		assert 0 <= integer < self.bound, "Error: number out of range"
 		if integer == 0: return "0" * self.limit
-		result=""
+		result = ""
 		while integer != 0:
 			integer, char = divmod(integer, self.base)
 			result += self.digit[char]
