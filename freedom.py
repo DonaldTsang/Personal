@@ -713,20 +713,13 @@ def egcd(a, b):
 def xgcd(b, n):
 	x0, x1, y0, y1 = 1, 0, 0, 1
 	while n != 0:
-		q, n, b = divmod(b, n), n
+		(q, n), b = divmod(b, n), n
 		x0, x1, y0, y1 = x1, x0 - q * x1, y1, y0 - q * y1
 	return  b, x0, y0
 
-def gcd(a, b):
-	if b == 0: return [a, 1, 0]
-	else:
-		n, c = divmod(a, b)
-		r = gcd(b, c)
-		return [r[0], r[2], r[1] - r[2]*n]
-
 def mod_inv(k, prime):
 	k %= prime; k *= -1 if k < 0 else 1
-	return (prime + egcd(prime, -k)[2]) % prime
+	return (prime + egcd(prime, k)[2]) % prime
 
 ################################################################################
 
