@@ -376,7 +376,7 @@ class Size(object):
 
 	def move(position, direction, self): # returns new position given current condition
 		x, y = position
-		max_x, max_y = self.x * 2, self.y * 2
+		max_x, max_y = self.room_dimensions[0] - 1, self.room_dimensions[1] - 1
 		assert 0 <= x <= max_x, "Error: position of x out of range"
 		assert 0 <= y <= max_y, "Error: position of y out of range"
 		new_x, new_y = x + direction.dx, y + direction.dy
