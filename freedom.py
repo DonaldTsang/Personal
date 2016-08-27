@@ -720,10 +720,8 @@ def xgcd(b, n):
 	return  b, x0, y0
 
 def mod_inv(k, prime):
-	k %= prime
-	if k < 0: r = egcd(prime, -k)[2]
-	else: r = egcd(prime, k)[2]
-	return (prime + r) % prime
+	k %= prime; k *= -1 if k < 0 else 1
+	return (prime + egcd(prime, -k)[2]) % prime
 
 def random_polynomial(degree, intercept, upper_bound):
 	# Generates a random polynomial with positive coefficients.
@@ -1010,11 +1008,6 @@ def gcd(a, b):
 		r = gcd(b, c)
 		return [r[0], r[2], r[1] - r[2]*n]
 
-def mod_inverse(number):
-		remainder = (gcd(prime, number % prime))[2]
-		if number < 0: remainder *= -1
-		return (prime + remainder) % prime
-
 def create(minimum, shares, raw):
 	def magic(numbers):
 		value = random()
@@ -1057,6 +1050,6 @@ def combine(shares):
 					current = product[part_index][0]
 					numerator = (numerator * (-1 * current)) % prime
 					denominator = (denominator * (origin - current)) % prime
-			working = ((originy * numerator * mod_inverse(denominator)) + prime)
+			working = ((originy * numerator * mod_inv(denominator)) + prime)
 			secret[part_index] = (secret[part_index] + working) % prime
 	return merge_ints(secret)
