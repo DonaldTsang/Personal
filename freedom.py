@@ -682,7 +682,8 @@ def calculate_thabit_primes():
 		prime -= 1; primes.append(prime)
 	return primes
 
-SMALLEST_PRIMES = [(2**4 + 1), (2**5 + 5), (2**6 + 3),
+SMALLEST_PRIMES = [
+	(2**4 + 1), (2**5 + 5), (2**6 + 3),
 	(2**7 + 3), (2**8 + 1), (2**10 + 7),
 	(2**12 + 3), (2**14 + 27), (2**16 + 1),
 	(2**20 + 7), (2**24 + 43), (2**28 + 3),
@@ -949,11 +950,12 @@ import base64, codecs
 from random import SystemRandom
 
 table = {
-256: (2**256-189, 32),
-512: (2**512-569, 64),
-768: (2**768-825, 96)}
+256: 189, 320: 197, 384: 317,
+448: 203, 512: 569, 640: 305,
+768: 825, 896: 213, 1024: 105}
 
-prime, hex_len = table[256]
+x = 256
+prime, hex_len = 2 ** x - table[x], x // 8
 b64_len = ((hex_len - 1) // 3 + 1) * 4
 
 def random(): return SystemRandom().randrange(prime)
