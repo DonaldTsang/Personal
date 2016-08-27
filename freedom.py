@@ -976,7 +976,7 @@ def merge_ints(secrets):
 	result = ""
 	for secret in secrets:
 		hex_data = hex(secret)[2:]
-		result += "0"*(hex_len * 2 - (len(hex_data))) + hex_data
+		result += hex_data.rjust(hex_len * 2, "0")
 	byte_object = None
 	try:
 		byte_object = bytes(result, "utf8")
@@ -984,7 +984,6 @@ def merge_ints(secrets):
 	except:
 		byte_object = bytes(result)
 		return codecs.decode(byte_object, 'hex_codec').rstrip("\00\x00")
-	pass
 
 def evaluate_polynomial(coefficients, value):
 	result = 0
@@ -993,8 +992,7 @@ def evaluate_polynomial(coefficients, value):
 	return result
 
 def to_base64(number):
-	tmp = hex(number)[2:]
-	tmp = "0"*(hex_len * 2 - len(tmp)) + tmp
+	tmp = hex(number)[2:].rjust(hex_len * 2, "0")
 	try: tmp = bytes(tmp, "utf8")
 	except: tmp = bytes(tmp)
 	result = str(base64.urlsafe_b64encode(b'\00'*((hex_len * 2) - len(tmp)) + \
@@ -1028,11 +1026,8 @@ def create(minimum, shares, raw):
 		while value in numbers: value = random()
 		numbers.append(value)
 		return value, numbers
-	if (shares < minimum):
-		print("error")
-	secret = split_ints(raw)
-	numbers = [0]
-	polynomial = []
+	if (shares < minimum): print("error")
+	secret, numbers, polynomial = split_ints(raw), [0], []
 	for i in range(0, len(secret)):
 		polynomial.append([secret[i]])
 		for j in range(1, minimum):
