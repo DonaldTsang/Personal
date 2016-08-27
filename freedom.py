@@ -655,7 +655,7 @@ def cjk_en(byte):
 def cjk_de(string):
 	assert isinstance(string, str)
 	result = []
-	for char in string: x = cjk2hex(char); result += [x // 256, x & 255]
+	for char in string: x = cjk2hex(char); result += [x >> 8, x & 255]
 	return bytes(result)
 
 ################################################################################
