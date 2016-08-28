@@ -7,10 +7,8 @@ def calendar(year, month, day):
 	assert isinstance(month, int)and 1 <= month <= 12, "month error"
 	assert isinstance(day, int) and 1 <= day, "day error"
 	
-	if month in [1, 3, 5, 7, 8, 10, 12]:
-		assert day <= 31, "day error"
-	elif month in [4, 6, 9, 11]: 
-		assert day <= 30, "day error"
+	if month in [1, 3, 5, 7, 8, 10, 12]: assert day <= 31, "day error"
+	elif month in [4, 6, 9, 11]: assert day <= 30, "day error"
 	elif month == 2: # Gregorian calendar
 		if year % 400 == 0 or (year % 100 != 0 and year % 4 == 0):
 			assert day <= 29, "day error"
@@ -20,14 +18,12 @@ def calendar(year, month, day):
 	elif month == 2 and day == 29: return year, 'leap', -1, -1 # leap day
 	elif month == 8 and day == 30: return year, 'tera', 0, 0 # tera day
 	elif month == 8 and day == 31: return year, 'summer', 11, 1
-	else: day_count = [0, 11, 42, 70, 101, 131, 162, \
+	else: day_new = [0, 11, 42, 70, 101, 131, 162, \
 		192, 223, 253, 283, 314, 344][month] + day - 1
-	season, day_count = divmod(day_count, 91)
-	week_count, day_count = divmod(day_count, 7)
+	season, day_new = divmod(day_new, 91); week_new, day_new = divmod(day_new, 7)
 	season = ["winter", "spring", "summer", "autumn"][season]
-	week_count += 1
-	day_count += 1
-	return year, season, week_count, day_count
+	week_new += 1; day_new += 1
+	return year, season, week_new, day_new
 
 def today():
 	now = datetime.now()
