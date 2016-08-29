@@ -22,7 +22,7 @@ odd = [
 	'embezzle', 'enchanting', 'enrollment', 'enterprise', 
 	'equation', 'equipment', 'escapade', 'Eskimo', 
 	'everyday', 'examine', 'existence', 'exodus', 
-	fascinate', 'filament', 'finicky', 'forever', 
+	'fascinate', 'filament', 'finicky', 'forever', 
 	'fortitude', 'frequency', 'gadgetry', 'Galveston', 
 	'getaway', 'glossary', 'gossamer', 'graduate', 
 	'gravity', 'guitarist', 'hamburger', 'Hamilton', 
@@ -129,15 +129,13 @@ even = [
 	'Vulcan', 'waffle', 'wallet', 'watchword', 
 	'wayside', 'willow', 'woodlark', 'Zulu']
 	
-def split_twins(seq):
-	while seq: yield seq[:2]; seq = seq[2:]
-
-def convert_fingerprint(fp):
-	words = []
-	for idx, byte in enumerate(fp):
-		if idx % 2 == 0: words.append(even[byte])
-		else: words.append(odd[byte])
-	return words
-
 def hash_text(fp):
-	convert_fingerprint(split_by_2(fp))
+	def convert_fingerprint(fp):
+		words = []
+		for idx, byte in enumerate(fp):
+			byte = int(byte, 16)
+			words.append(even[byte] if idx % 2 == 0 else odd[byte])
+		return words
+	def split_twins(seq):
+		while seq: yield seq[:2]; seq = seq[2:]
+	return convert_fingerprint(split_twins(fp))
